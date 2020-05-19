@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 
 //middleware
 app.use(cors());
-//allows us to send/recieve json
+//allows us to send/receive json
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
@@ -23,7 +23,7 @@ mongoose
 const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
-})
+});
 
 //declare require and use of every route
 const gamesRouter = require('./routes/games');
