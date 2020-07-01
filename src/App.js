@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Navbar from "./components/navbar.component";
+import HomePage from "./components/homepage.component";
 import GamesList from "./components/games-list.component";
 import EditGame from "./components/edit-game.component";
 import CreateGame from "./components/create-game.component";
@@ -15,7 +16,8 @@ function App() {
       <div className="container">
         <Navbar />
         <br/>
-        <Route path="/" exact component={GamesList} />
+        <Route path="/" exact component={HomePage} />
+        <Route path="/gameslist" exact component={GamesList} />
         <Route path="/edit/:id" component={EditGame} />
         <Route path="/creategame" component={CreateGame} />
         <Route path="/team" component={CreateTeam} />
