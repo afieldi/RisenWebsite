@@ -27,6 +27,11 @@ async function saveGames(matchIds) {
 }
 
 async function saveGame(matchId) {
+    const games = await GameModel.find({gameId: matchId});
+    if (games.length > 0) {
+        // We already have this game in our db. Move on.
+        return;
+    }
     // TODO: change this to tourney
     await leagueApi.Match.gettingById(matchId).then(
         async gameData => {
@@ -229,14 +234,19 @@ async function verifyExistence(accountId, teamId) {
 }
 
 
-saveGames([
-    3478174506,
-    3478147318,
-    3475852754
-]).then(() => {
-    console.log("donezo")
-})
+// saveGames([
+//     3478174506,
+//     3478147318,
+//     3475852754
+// ]).then(() => {
+//     console.log("donezo")
+// })
 
-setTimeout(() => {
-    console.log("waitin");
-}, 10000);
+// setTimeout(() => {
+//     console.log("waitin");
+// }, 10000);
+
+
+module.exports = {
+    'saveGames': saveGames
+}

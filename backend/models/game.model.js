@@ -3,11 +3,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const gameSchema = new Schema({
-    id: {
-        type: Number,
-        autoIncrement: true,
-        primaryKey: true
-    },
     player: {type: Schema.Types.ObjectId, ref: 'Player', required: true },
     team: {type: Schema.Types.ObjectId, ref: 'Team', required: true },
     gameId: { type: Number },
