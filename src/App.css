@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.risenLogoClass {
+  text-align: center;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 400px;
+  height: 400px;
+}
