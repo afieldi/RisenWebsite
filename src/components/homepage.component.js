@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import Container from 'react-bootstrap/Container';
+import Jumbotron from 'react-bootstrap/Jumbotron';
 import "react-datepicker/dist/react-datepicker.css";
+import risenLogo from "../images/RE_TypeLogo_Shading.png";
+import "../App.css";
 
 export default class HomePage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            teamname: '',
-            duration: 0,
-            date: new Date(),
-            teams: []
-        };
+        this.state = {};
     }
 
     render() {
         return (
-            <div>
-                <h3>Welcome to Risen Esports!</h3>
-            </div>
+            <section>
+                <Container className="p-3">
+                    <img src={ risenLogo } className="risenLogoClass"/>
+                    <Jumbotron style={ outerJumboStyle }>
+                        <h1>Welcome to Risen Esports</h1>
+                    </Jumbotron>
+                </Container>
+            </section>
         )
     }
-}
+};
+
+// Outermost jumbotron style
+var outerJumboStyle = {
+    backgroundColor: `rgb(0, 25, 50)`,
+    opacity: 0.95
+};
