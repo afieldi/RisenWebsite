@@ -46,7 +46,7 @@ router.route('/brief').get((req, res) => {
         },
         {
             $group: {
-                _id: "$playername.name",
+                _id: { player: "$playername.name", lane: "$lane" },
                 avg_kills: { $avg: "$kills" },
                 avg_deaths: { $avg: "$deaths" },
                 avg_assists: { $avg: "$assists" },

@@ -9,9 +9,12 @@ import EditGame from "./components/edit-game.component";
 import CreateGame from "./components/create-game.component";
 import CreateTeam from "./components/create-team.component";
 import Test from "./components/test.component";
+import Overview from "./components/overview-stats.component";
+
 
 function App() {
   return (
+    
     <Router>
       <div className="container">
         <Navbar />
@@ -22,6 +25,7 @@ function App() {
         <Route path="/creategame" component={CreateGame} />
         <Route path="/team" component={CreateTeam} />
         <Route path="/test" component={Test} />
+        <Route path="/stats" component={Overview} />
       </div>
     </Router>
   );
