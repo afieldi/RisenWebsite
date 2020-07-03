@@ -3,10 +3,21 @@ const PlayerModel = require('../models/player.model');
 const GameModel = require('../models/game.model');
 const mongoose = require('mongoose');
 
-
-router.route('/player/:id').get((req, res) => {
+router.route('/player/id/:id').get((req, res) => {
     GameModel.find({player: mongoose.Types.ObjectId(req.params.id)}).then(games => {
         res.json(games);
+    }, (err) => {
+        res.status(404).json("Error: " + err);
+    });
+});
+
+router.route('/player/name/:id').get((req, res) => {
+    PlayerModel.findOne({name: req.params.id}).then((player) => {
+        GameModel.find({player: player._id}).then(games => {
+            res.json(games);
+        }, (err) => {
+            res.status(404).json("Error: " + err);
+        });
     }, (err) => {
         res.status(404).json("Error: " + err);
     });
