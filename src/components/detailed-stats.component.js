@@ -7,6 +7,8 @@ import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { customRound } from '../Helpers';
 
+let champMap = require('../data/champions_map.json')
+
 
 export default class DetailedStats extends Component {
 
@@ -21,7 +23,7 @@ export default class DetailedStats extends Component {
     }
 
     loadPlayerData(playerName) {
-        let url = "http://localhost:5000/stats/player/" + playerName
+        let url = "http://localhost:5000/stats/player/name/" + playerName
         fetch(url).then((data) => {
             // console.log(data.json());
             data.json().then(data => {
@@ -166,7 +168,7 @@ export default class DetailedStats extends Component {
                                             this.state.filteredData.map((datum) => {
                                                 return (
                                                     <tr>
-                                                        <td>{datum["championId"]}</td>
+                                                        <td>{champMap[datum["championId"]]}</td>
                                                         <td>{datum["win"] ? "WIN" : "LOSS"}</td>
                                                         <td>{datum["kills"]}</td>
                                                         <td>{datum["deaths"]}</td>

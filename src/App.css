@@ -47,6 +47,13 @@
   height: 400px;
 }
 
+.risen-nav {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: #282c34;
+}
+
 .risen-main-background {
   background-color: #282c34dc;
   padding-bottom: 25px;

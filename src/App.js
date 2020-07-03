@@ -11,11 +11,12 @@ import CreateTeam from "./components/create-team.component";
 import Test from "./components/test.component";
 import Overview from "./components/overview-stats.component";
 import DetailedStats from "./components/detailed-stats.component";
-import backgroundImage from "./images/backgroundimage2.jpg";
+import backgroundImage from "./images/backgroundimage2dark.png";
 
 function App() {
   return (
-      <div style={ backgroundImageStyle }>
+      <div>
+        <div style={ backgroundImageStyle }></div>
         <Router>
           <div className="container risen-main-background">
             <RisenNavbar />
@@ -41,7 +42,8 @@ var backgroundImageStyle = {
   backgroundPosition: 'center',
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
-  position: 'absolute'
+  position: 'fixed',
+  zIndex: -10
 };
 
 export default App;
