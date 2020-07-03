@@ -46,3 +46,74 @@
   width: 400px;
   height: 400px;
 }
+
+.risen-main-background {
+  background-color: #282c34dc;
+  padding-bottom: 25px;
+  margin-top: 50px;
+}
+
+.risen-table {
+  border: black;
+  background-color: #201b17;
+  color: #fffef9;
+}
+
+.risen-table thead th {
+  border-bottom: 1px solid rgb(117, 117, 117);
+  /* TODO: Find a nicer font. This one sucks */
+  font-family: 'Courier New', Courier, monospace; 
+}
+
+.risen-table tbody td {
+  border-bottom: 1px solid rgb(117, 117, 117);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.center {
+  text-align: center;
+}
+
+.risen-radio input {
+  display: none;
+}
+
+.risen-radio img {
+  height: 100%;
+}
+
+input[type=radio]:checked + label::before {
+  background-color: red;
+}
+
+.risen-radio {
+  height: 50px;
+}
+
+td.clickable:hover {
+  filter: brightness(0.8);
+  cursor: pointer;
+}
+
+.risen-stats-block {
+  margin-bottom: 10px;
+}
+
+.risen-stats-header {
+  background-color: #1d1814;
+  width: 100%;
+  color: white;
+  margin-bottom: 5px;
+  padding: 10px 30px;
+}
+
+.risen-stats-body {
+  background-color: #201b17;
+  color: white;
+  padding: 10px 30px;
+}
+
+.risen-sub-label {
+  color: #d3d3d3;
+  font-size: .85em;
+}

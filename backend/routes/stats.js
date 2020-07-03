@@ -46,13 +46,14 @@ router.route('/brief').get((req, res) => {
         },
         {
             $group: {
-                _id: { player: "$playername.name", lane: "$lane" },
+                _id: { player: "$playername.name", lane: "$lane", playerId: "$player" },
                 avg_kills: { $avg: "$kills" },
                 avg_deaths: { $avg: "$deaths" },
                 avg_assists: { $avg: "$assists" },
                 avg_gold: { $avg: "$goldEarned" },
                 avg_cs: { $avg: "$totalMinionsKilled" },
                 avg_damage: { $avg: "$totalDamageDealtToChampions" },
+                wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
                 total_games: { $sum: 1 }
             }
         }
@@ -80,13 +81,14 @@ router.route('/brief/lane/:lane').get((req, res) => {
         },
         {
             $group: {
-                _id: "$playername.name",
+                _id: { player: "$playername.name", lane: "$lane", playerId: "$player" },
                 avg_kills: { $avg: "$kills" },
                 avg_deaths: { $avg: "$deaths" },
                 avg_assists: { $avg: "$assists" },
                 avg_gold: { $avg: "$goldEarned" },
                 avg_cs: { $avg: "$totalMinionsKilled" },
                 avg_damage: { $avg: "$totalDamageDealtToChampions" },
+                wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
                 total_games: { $sum: 1 }
             }
         }
