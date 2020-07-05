@@ -2,21 +2,25 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Navbar from "./components/navbar.component";
+import RisenNavbar from "./components/navbar.component";
 import HomePage from "./components/homepage.component";
 import GamesList from "./components/games-list.component";
 import EditGame from "./components/edit-game.component";
 import CreateGame from "./components/create-game.component";
 import CreateTeam from "./components/create-team.component";
 import Test from "./components/test.component";
-import backgroundImage from "./images/backgroundimage2.jpg";
+import Overview from "./components/overview-stats.component";
+import DetailedStats from "./components/detailed-stats.component";
+import AboutLeagues from "./components/about-leagues.component";
+import backgroundImage from "./images/backgroundimage2dark.png";
 
 function App() {
   return (
-      <div style={ backgroundImageStyle }>
+      <div>
+        <div style={ backgroundImageStyle }></div>
         <Router>
-          <div className="container">
-            <Navbar />
+          <div className="risen-main-background">
+            <RisenNavbar />
             <br/>
             <Route path="/" exact component={HomePage} />
             <Route path="/gameslist" exact component={GamesList} />
@@ -24,6 +28,10 @@ function App() {
             <Route path="/creategame" component={CreateGame} />
             <Route path="/team" component={CreateTeam} />
             <Route path="/test" component={Test} />
+            <Route path="/stats" component={Overview} />
+            <Route path="/detailed/:player" component={DetailedStats}></Route>
+            <Route path="/leagues/" component={AboutLeagues}></Route>
+            <Route path="/leagues/:league" component={AboutLeagues}></Route>
           </div>
         </Router>
       </div>
@@ -32,11 +40,13 @@ function App() {
 
 var backgroundImageStyle = {
   width: '100%',
-  height: '1600px',
+  minHeight: '100vh',
   backgroundImage: "url(" + backgroundImage + ")",
   backgroundPosition: 'center',
   backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat'
+  backgroundRepeat: 'no-repeat',
+  position: 'fixed',
+  zIndex: -10
 };
 
 export default App;

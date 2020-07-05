@@ -10,6 +10,11 @@ const teamSchema = new Schema({
         trim: true,
         minlength: 3
     },
+    teamshortname: {
+        type: String,
+        required: true
+    },
+    players: [{type: Schema.Types.ObjectId, ref: 'Player'}]
 }, {
     timestamps: true,
 });

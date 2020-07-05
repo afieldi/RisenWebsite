@@ -1,5 +1,6 @@
 const router = require('express').Router();
 let Game = require('../models/game.model');
+const matcher = require('../src/matches');
 
 router.route('/').get((req, res) => {
     Game.find()
@@ -21,6 +22,14 @@ router.route('/add').post((req, res) => {
     newGame.save()
         .then(() => res.json('Game added!'))
         .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/add/:gameid').post((req, res) => {
+  matcher.saveGames([req.params.gameid]).then(data => {
+    res.send("Game added");
+  }, (err) => {
+    res.status(400).json('Error: ' + err);
+  });
 });
 
 router.route('/:id').get((req, res) => {
