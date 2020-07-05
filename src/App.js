@@ -11,6 +11,7 @@ import CreateTeam from "./components/create-team.component";
 import Test from "./components/test.component";
 import Overview from "./components/overview-stats.component";
 import DetailedStats from "./components/detailed-stats.component";
+import AboutLeagues from "./components/about-leagues.component";
 import backgroundImage from "./images/backgroundimage2dark.png";
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
       <div>
         <div style={ backgroundImageStyle }></div>
         <Router>
-          <div className="container risen-main-background">
+          <div className="risen-main-background">
             <RisenNavbar />
             <br/>
             <Route path="/" exact component={HomePage} />
@@ -29,6 +30,8 @@ function App() {
             <Route path="/test" component={Test} />
             <Route path="/stats" component={Overview} />
             <Route path="/detailed/:player" component={DetailedStats}></Route>
+            <Route path="/leagues/" component={AboutLeagues}></Route>
+            <Route path="/leagues/:league" component={AboutLeagues}></Route>
           </div>
         </Router>
       </div>

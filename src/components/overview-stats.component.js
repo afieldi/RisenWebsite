@@ -26,9 +26,7 @@ export default class Overview extends Component {
         fetch(url).then((data) => {
             // console.log(data.json());
             data.json().then(data => {
-                console.log(data[0]._id.player[0])
                 data = this.sortData(data, "lane", "DESC");
-                console.log(data[0]._id.player[0]);
                 this.setState({
                     statData: data
                 });

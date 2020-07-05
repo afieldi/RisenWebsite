@@ -55,8 +55,8 @@
 }
 
 .risen-main-background {
-  background-color: #282c34dc;
-  padding-bottom: 25px;
+  /* background-color: #282c34dc; */
+  /* padding-bottom: 25px; */
   margin-top: 50px;
 }
 
@@ -89,8 +89,20 @@
   height: 100%;
 }
 
-input[type=radio]:checked + label::before {
-  background-color: red;
+.risen-button {
+  color: #fff;
+  background-color: #E4692B;
+  border: none;
+  border-radius: 300px;
+  font-weight: 700;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  padding: 15px 30px;
+  margin: 10px 5px;
+
+  /* Temp till better way to center is found */
+  left: 50%;
+  position: relative;
+  transform: translateX(-50%);
 }
 
 .risen-radio {
@@ -123,4 +135,24 @@ td.clickable:hover {
 .risen-sub-label {
   color: #d3d3d3;
   font-size: .85em;
+}
+
+.risen-body-text {
+  font-family: Merriweather, 'Helvetica Neue', Arial, sans-serif;
+}
+
+p.light {
+  color: rgba(255, 255, 255, .7);
+}
+
+hr.risen-light {
+  border-color: #fff;
+  max-width: 50px;
+  border-width: 3px;
+}
+
+hr.risen-dark {
+  border-color: black;
+  max-width: 50px;
+  border-width: 3px;
 }
