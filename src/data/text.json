@@ -2,6 +2,53 @@
     "home": {
         "whoAreWe": "We are an amateur esports organization that strives to bring competitive League of Legends to all skill levels. Started in March of 2017 by a soon-to-be college graduate named Travis Guyer, Risen eSports quickly grew. What started as two leagues of 10 teams each quickly became 4 leagues of varying size - for a total of 72 teams and over 400 players. With more growth on the horizon, Risen eSports continues to work hard to bring quality and fun to the community and players."
     },
+    "contact": {
+        "blurb": "Here is the information you need to get in contact with the appropriate person. Generally, we all use the same Risen email account (Risenbusiness@gmail.com), so it is best to include the party you intend to contact in the subject line. For example, \"[Bestrin] Missing Discord Role?\"\n\n If requiring a single person, or a more rapid response, either direct discord messages or sending a message in the #staff-help channel of the Risen Offical Discord is best.",
+        "people": [
+            {
+                "title": "President / Chief Technical Officer",
+                "name": "Travis \"Travyburr\" Guyer",
+                "responsibilities": "Business Inquiries, Technical Inquiries, general knowledge/questions",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "Travyburr#6119"
+            },
+            {
+                "title": "Champions League / Discord Moderation",
+                "name": "Brett \"Bestrin\"",
+                "responsibilities": "Champions & Alumnus inquiries, Discord issues, general questions",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "Bestrin#8881"
+            },
+            {
+                "title": "Graphic Design",
+                "name": "Corey \"Macros2308\"",
+                "responsibilities": "Graphic design inquiries",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "Macros2308#4233"
+            },
+            {
+                "title": "Stream/Broadcast Management",
+                "name": "Joe \"Randojoe\"",
+                "responsibilities": "General quetions, articles, events",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "Randojoe#6148"
+            },
+            {
+                "title": "Player Rosters",
+                "name": "Itchy Rat",
+                "responsibilities": "Roster inquiries and questions",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "itchy rat#3276"
+            },
+            {
+                "title": "Player Rosters",
+                "name": "Hurtnandez",
+                "responsibilities": "Roster inquiries and questions",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "hurtnandez#0009"
+            }
+        ]
+    },
     "leagues": {
         "rampage": {
             "prettyName": "Rampage Leagues",
@@ -23,7 +70,7 @@
                     "ranks":"Silver - Gold",
                     "peak":"Gold 1",
                     "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league.",
-                    "blurb": "Get 4 friends togeather and compete against other premade teams. Up to 10 players can sign-up on a single team."
+                    "blurb": "Get 4 friends together and compete against other premade teams. Up to 10 players can sign-up on a single team."
                 }
             ]
         },
@@ -64,7 +111,7 @@
                     "ranks":"Platinum - Diamond",
                     "peak":"Diamond 2",
                     "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league.",
-                    "blurb": "Get 4 friends togeather and compete against other premade teams. Up to 10 players can sign-up on a single team."
+                    "blurb": "Get 4 friends together and compete against other premade teams. Up to 10 players can sign-up on a single team."
                 }
             ]
         },
