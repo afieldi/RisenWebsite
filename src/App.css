@@ -61,9 +61,9 @@
 }
 
 .risen-table {
-  border: black;
+  /* border: black;
   background-color: #201b17;
-  color: #fffef9;
+  color: #fffef9; */
 }
 
 .risen-table thead th {
@@ -109,6 +109,7 @@
 
 .risen-radio {
   height: 50px;
+  border: black 1px solid;
 }
 
 td.clickable:hover {
@@ -121,21 +122,21 @@ td.clickable:hover {
 }
 
 .risen-stats-header {
-  background-color: #1d1814;
+  background-color: #d8d8d8;
   width: 100%;
-  color: white;
+  /* color: white; */
   margin-bottom: 5px;
   padding: 10px 30px;
 }
 
 .risen-stats-body {
-  background-color: #201b17;
-  color: white;
+  background-color: #fdfdfe;
+  /* color: white; */
   padding: 10px 30px;
 }
 
 .risen-sub-label {
-  color: #d3d3d3;
+  color: #7a7a7a;
   font-size: .85em;
 }
 

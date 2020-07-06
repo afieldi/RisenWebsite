@@ -96,22 +96,22 @@ export default class DetailedStats extends Component {
                         <div className="risen-stats-block">
                             <div className="risen-stats-header">
                                 <div className="btn-group risen-radio" data-toggle="buttons">
-                                    <label className="btn btn-dark">
+                                    <label className="btn btn-light" style={noMargin}>
                                         <input type="radio" name="options" id="option1" onClick={this.filterData.bind(this, "TOP")} />{this.getPositonalIcon("TOP")}
                                     </label>
-                                    <label className="btn btn-dark">
+                                    <label className="btn btn-light" style={noMargin}>
                                         <input type="radio" name="options" id="option2" onClick={this.filterData.bind(this, "JUNGLE")} />{this.getPositonalIcon("JUNGLE")}
                                     </label>
-                                    <label className="btn btn-dark">
+                                    <label className="btn btn-light" style={noMargin}>
                                         <input type="radio" name="options" id="option3" onClick={this.filterData.bind(this, "MIDDLE")} />{this.getPositonalIcon("MIDDLE")}
                                     </label>
-                                    <label className="btn btn-dark">
+                                    <label className="btn btn-light" style={noMargin}>
                                         <input type="radio" name="options" id="option4" onClick={this.filterData.bind(this, "BOTTOM")} />{this.getPositonalIcon("BOTTOM")}
                                     </label>
-                                    <label className="btn btn-dark">
+                                    <label className="btn btn-light" style={noMargin}>
                                         <input type="radio" name="options" id="option5" onClick={this.filterData.bind(this, "SUPPORT")} />{this.getPositonalIcon("SUPPORT")}
                                     </label>
-                                    <label className="btn btn-dark">
+                                    <label className="btn btn-light" style={noMargin}>
                                         <input type="radio" name="options" id="option5" onClick={this.filterData.bind(this, null)} />All
                                     </label>
                                 </div>
@@ -193,4 +193,9 @@ export default class DetailedStats extends Component {
             </div>
         );
     }
+}
+
+const noMargin = {
+    margin: '0',
+    lineHeight: '200%'
 }

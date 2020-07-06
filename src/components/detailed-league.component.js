@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiceOne } from '@fortawesome/free-solid-svg-icons';
-
-// Images
-import rampageImage from '../images/rampage.png'
-import dominateImage from '../images/dominate.png'
-import championsImage from '../images/champions.png'
-
 
 const staticText = require('../data/text.json'); 
 

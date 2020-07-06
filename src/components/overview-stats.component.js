@@ -80,26 +80,26 @@ export default class Overview extends Component {
         return (
             <div className="container">
                 <div className="btn-group risen-radio" data-toggle="buttons">
-                    <label className="btn btn-dark">
+                    <label className="btn btn-light">
                         <input type="radio" name="options" id="option1" onClick={this.getData.bind(this, "TOP")} />{this.getPositonalIcon("TOP")}
                     </label>
-                    <label className="btn btn-dark">
+                    <label className="btn btn-light">
                         <input type="radio" name="options" id="option2" onClick={this.getData.bind(this, "JUNGLE")} />{this.getPositonalIcon("JUNGLE")}
                     </label>
-                    <label className="btn btn-dark">
+                    <label className="btn btn-light">
                         <input type="radio" name="options" id="option3" onClick={this.getData.bind(this, "MIDDLE")} />{this.getPositonalIcon("MIDDLE")}
                     </label>
-                    <label className="btn btn-dark">
+                    <label className="btn btn-light">
                         <input type="radio" name="options" id="option4" onClick={this.getData.bind(this, "BOTTOM")} />{this.getPositonalIcon("BOTTOM")}
                     </label>
-                    <label className="btn btn-dark">
+                    <label className="btn btn-light">
                         <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, "SUPPORT")} />{this.getPositonalIcon("SUPPORT")}
                     </label>
-                    <label className="btn btn-dark">
+                    <label className="btn btn-light">
                         <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, null)} />All
                     </label>
                 </div>
-                <table className="table table-responsive-lg risen-table sticky-top">
+                <table className="table table-responsive-lg risen-table sticky-top table-light">
                     <thead>
                         <tr>
                         <th scope="col" className="center">Rank</th>
