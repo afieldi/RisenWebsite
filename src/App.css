@@ -100,9 +100,11 @@
   margin: 10px 5px;
 
   /* Temp till better way to center is found */
-  left: 50%;
+  /* left: 50%; */
+  display: block;
+  margin: auto;
   position: relative;
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
 }
 
 .risen-radio {
@@ -155,4 +157,16 @@ hr.risen-dark {
   border-color: black;
   max-width: 50px;
   border-width: 3px;
+}
+
+.dark-section {
+  background-color: #283652;
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
+.light-section {
+  background-color: #ffffff;
+  padding-top: 3em;
+  padding-bottom: 3em;
 }

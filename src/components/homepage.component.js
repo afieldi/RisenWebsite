@@ -30,17 +30,17 @@ export default class HomePage extends Component {
                         <div className="col-lg">
                             <div className="row">
                                 <div className="col-sm">
-                                    <Button className="risen-button btn-lg">Join the Discord</Button>
+                                    <a href="https://discord.com/invite/BwnnBsV"><Button className="risen-button btn-lg">Join the Discord</Button></a>
                                 </div>
                                 <div className="col-sm">
-                                    <Button className="risen-button btn-lg">Go to Twitch</Button>
+                                    <a href="https://www.twitch.tv/risen_esports"><Button className="risen-button btn-lg">Go to Twitch</Button></a>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg">
                             <div className="row">
                                 <div className="col-sm">
-                                    <Button className="risen-button btn-lg">Do something</Button>
+                                    <Link to="/leagues"><Button className="risen-button btn-lg">Our Leagues</Button></Link>
                                 </div>
                                 <div className="col-sm">
                                     <Button className="risen-button btn-lg">Do Something else</Button>
@@ -53,7 +53,7 @@ export default class HomePage extends Component {
                     <br></br>
                     <br></br>
                 </Container>
-                <div style={darkSection}>
+                <div className="dark-section">
                     <Container>
                         <h1 className="center text-light">Who Are We?</h1>
                         <hr className="risen-light"></hr>
@@ -62,7 +62,7 @@ export default class HomePage extends Component {
                         </p>
                     </Container>
                 </div>
-                <div style={lightSection}>
+                <div className="light-section">
                     <Container>
                         <h1 className="center text-dark">Why Us?</h1>
                         <hr className="risen-dark"></hr>
@@ -98,7 +98,7 @@ export default class HomePage extends Component {
                 <br></br>
                 <br></br>
                 <br></br>
-                <div style={darkSection}>
+                <div className="dark-section">
                     <Container>
                         <h1 className="center text-light">Our Leagues</h1>
                         <hr className="risen-light"></hr>
@@ -187,18 +187,6 @@ var outerJumboStyle = {
     color: 'white'
     // textTransform: 'uppercase',
 };
-
-var darkSection = {
-    backgroundColor: '#283652',
-    paddingTop: '3em',
-    paddingBottom: '3em'
-}
-
-var lightSection = {
-    backgroundColor: '#ffffff',
-    paddingTop: '3em',
-    paddingBottom: '3em'
-}
 
 var leaguesTablePrimary = {
     backgroundColor: '#E4692B'

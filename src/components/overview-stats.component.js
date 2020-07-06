@@ -99,7 +99,7 @@ export default class Overview extends Component {
                         <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, null)} />All
                     </label>
                 </div>
-                <table className="table risen-table">
+                <table className="table table-responsive-lg risen-table sticky-top">
                     <thead>
                         <tr>
                         <th scope="col" className="center">Rank</th>

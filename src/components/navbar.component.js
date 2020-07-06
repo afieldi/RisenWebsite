@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import $ from 'jquery';
 
 export default class Navbar extends Component {
 
@@ -18,20 +17,20 @@ export default class Navbar extends Component {
                 <Link to="/" className="nav-link">Home</Link>
               </li>
               <li className="navbar-item ml-auto">
-                <Link to="/games" className="nav-link">Games</Link>
-              </li>
-              <li className="navbar-item ml-auto">
-                <Link to="/creategame" className="nav-link">Create Game</Link>
-              </li>
-              <li className="navbar-item ml-auto">
-                <Link to="/team" className="nav-link">Create Team</Link>
-              </li>
-              <li className="navbar-item ml-auto">
-                <Link to="/test" className="nav-link">Test Page</Link>
+                <Link to="/leagues" className="nav-link">Leagues</Link>
               </li>
               <li className="navbar-item ml-auto">
                 <Link to="/stats" className="nav-link">Stats Page</Link>
               </li>
+              <li className="navbar-item ml-auto">
+                <Link to="/contact" className="nav-link">Contact Us</Link>
+              </li>
+              {/* <li className="navbar-item ml-auto">
+                <Link to="/team" className="nav-link">Create Team</Link>
+              </li>
+              <li className="navbar-item ml-auto">
+                <Link to="/test" className="nav-link">Test Page</Link>
+              </li> */}
             </ul>        
           </div>
         </div>
