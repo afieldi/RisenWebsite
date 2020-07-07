@@ -16,6 +16,7 @@ export default class Contact extends Component {
                         <h1 className="center text-dark">Need to Contact Us?</h1>
                         <hr className="risen-dark"></hr>
                         <p>{staticText.contact.blurb}</p>
+                        <hr></hr>
                         {
                             staticText.contact.people.map((person) => {
                                 return (

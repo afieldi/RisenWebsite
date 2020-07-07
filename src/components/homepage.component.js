@@ -79,7 +79,7 @@ export default class HomePage extends Component {
                                 <FontAwesomeIcon icon={faUsers} style={iconStyle}></FontAwesomeIcon>
                                 <br></br>
                                 <div>
-                                    <h2>Play Togeather</h2>
+                                    <h2>Play Together</h2>
                                     <p>Team up with your friends, and take down the competition!</p>
                                 </div>
                             </div>

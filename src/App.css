@@ -109,7 +109,12 @@
 
 .risen-radio {
   height: 50px;
-  border: black 1px solid;
+  /* border: black 1px solid; */
+}
+
+.risen-check:checked + .risen-radio-label {
+  background-color: blue;
+  display: block;
 }
 
 td.clickable:hover {
