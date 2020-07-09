@@ -1,8 +1,8 @@
+// require('dotenv').config();
 const { leagueApi } = require('./api');
 const { verifyPlayer } = require('./player')
 
 const mongoose = require('mongoose');
-// require('dotenv').config();
 
 // const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
 // mongoose
@@ -12,16 +12,15 @@ const mongoose = require('mongoose');
 //   console.log("MongoDB database connection established successfully");
 // });
 
+const roles = require('./roles');
 
 const GameModel = require('../models/game.model');
 const PlayerModel = require('../models/player.model');
 const TeamModel = require('../models/team.model');
 
-
 // This will be used later
 async function saveGames(matchIds) {
     for ( const matchId of matchIds ) {
-        console.log(matchId);
         await saveGame(matchId);
     }
 }
@@ -36,7 +35,8 @@ async function saveGame(matchId) {
     await leagueApi.Match.gettingById(matchId).then(
         async gameData => {
             const teams = await getTeams(gameData.participantIdentities);
-
+            const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            const laneAssignments = roles.getRoles(gameData, timeline);
             await gameData.participants.forEach(async (player, i) => {
                 const playerTeam = await verifyExistence(
                     gameData.participantIdentities[i].player.accountId,
@@ -107,16 +107,12 @@ async function saveGame(matchId) {
                     csDiff10: player.timeline.csDiffPerMinDeltas["0-10"] ? player.timeline.csDiffPerMinDeltas["0-10"] * 10 : 0,
                     csDiff20: player.timeline.csDiffPerMinDeltas["10-20"] ? player.timeline.csDiffPerMinDeltas["10-20"] * 10 : 0,
                     csDiff30: player.timeline.csDiffPerMinDeltas["20-30"] ? player.timeline.csDiffPerMinDeltas["20-30"] * 10 : 0,
-                    lane: player.timeline.lane,
+                    lane: laneAssignments[i + 1],
                 
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-                
-                // console.log(gameEntry);
-                // await gameEntry.save();
             });
-            console.log("done");
         },
         (error) => {
             console.log(error.message);
@@ -173,14 +169,9 @@ async function getTeams(participants) {
     const teams1 = await PlayerModel.find(
         { 'accountId': { "$in": ids } }
     );
-    
-    console.log(ids);
-    console.log(teams1);
 
     const team1 = getTeam(teams1);
-        
-    console.log(team1)
-   
+           
     // participants has already been spliced
     ids = participantsCopy.map((p) => {
         return p.player.accountId;
