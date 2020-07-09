@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { NavDropdown } from 'react-bootstrap';
 
 export default class Navbar extends Component {
 
@@ -7,11 +8,11 @@ export default class Navbar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top risen-nav">
         <div className="container">
-          <Link to="/" className="navbar-brand">Risen Esports</Link>
-          <button className="navbar-toggler navbar-toggler-right collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <button className="navbar-toggler navbar-toggler-left collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collpase navbar-collapse" id="navbarSupportedContent">
+          <Link to="/" className="navbar-brand">Risen Esports</Link>
+          <div className="navbar-collapse collapse" id="navbarResponsive">
             <ul className="navbar-nav mr-auto nav-fill w-100">
               <li className="navbar-item ml-auto">
                 <Link to="/" className="nav-link">Home</Link>
@@ -20,17 +21,14 @@ export default class Navbar extends Component {
                 <Link to="/leagues" className="nav-link">Leagues</Link>
               </li>
               <li className="navbar-item ml-auto">
-                <Link to="/stats" className="nav-link">Stats Page</Link>
+                <Link to="/stats" className="nav-link">Player Stats</Link>
+              </li>
+              <li className="navbar-item ml-auto">
+                <Link to="/teams" className="nav-link">Team Stats</Link>
               </li>
               <li className="navbar-item ml-auto">
                 <Link to="/contact" className="nav-link">Contact Us</Link>
               </li>
-              {/* <li className="navbar-item ml-auto">
-                <Link to="/team" className="nav-link">Create Team</Link>
-              </li>
-              <li className="navbar-item ml-auto">
-                <Link to="/test" className="nav-link">Test Page</Link>
-              </li> */}
             </ul>        
           </div>
         </div>

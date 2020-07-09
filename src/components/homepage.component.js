@@ -43,7 +43,7 @@ export default class HomePage extends Component {
                                     <Link to="/leagues"><Button className="risen-button btn-lg">Our Leagues</Button></Link>
                                 </div>
                                 <div className="col-sm">
-                                    <Button className="risen-button btn-lg">Do Something else</Button>
+                                    <Link to="/contact"><Button className="risen-button btn-lg">Contact</Button></Link>
                                 </div>
                             </div>
                         </div>

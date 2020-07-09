@@ -97,14 +97,9 @@
   font-weight: 700;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   padding: 15px 30px;
-  margin: 10px 5px;
-
-  /* Temp till better way to center is found */
-  /* left: 50%; */
   display: block;
-  margin: auto;
+  margin: 10px auto;
   position: relative;
-  /* transform: translateX(-50%); */
 }
 
 .risen-radio {
@@ -117,7 +112,7 @@
   display: block;
 }
 
-td.clickable:hover {
+.clickable:hover {
   filter: brightness(0.8);
   cursor: pointer;
 }
@@ -127,7 +122,8 @@ td.clickable:hover {
 }
 
 .risen-stats-header {
-  background-color: #d8d8d8;
+  background-color: #f5ebdce1;
+  border: 2px solid #afa9a2;
   width: 100%;
   /* color: white; */
   margin-bottom: 5px;
@@ -136,6 +132,7 @@ td.clickable:hover {
 
 .risen-stats-body {
   background-color: #fdfdfe;
+  border: 2px solid #afa9a2;
   /* color: white; */
   padding: 10px 30px;
 }

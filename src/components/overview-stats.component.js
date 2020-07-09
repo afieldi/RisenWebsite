@@ -12,7 +12,8 @@ export default class Overview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            statData: []
+            statData: [],
+            filteredData: []
         }
         this.getData();
     }
@@ -28,9 +29,23 @@ export default class Overview extends Component {
             data.json().then(data => {
                 data = this.sortData(data, "lane", "DESC");
                 this.setState({
-                    statData: data
+                    statData: data,
+                    filteredData: data
                 });
             });
+        })
+    }
+
+    filterLane(lane) {
+        let laneData;
+        if(lane) {
+            laneData = this.state.statData.filter(item => item._id.lane === lane)
+        }
+        else {
+            laneData = this.state.statData;
+        }
+        this.setState({
+            filteredData: laneData
         })
     }
 
@@ -81,25 +96,25 @@ export default class Overview extends Component {
             <div className="container">
                 <div className="btn-group risen-radio" data-toggle="buttons">
                     <label className="btn btn-light">
-                        <input type="radio" name="options" id="option1" onClick={this.getData.bind(this, "TOP")} />{this.getPositonalIcon("TOP")}
+                        <input type="radio" name="options" id="option1" onClick={this.filterLane.bind(this, "TOP")} />{this.getPositonalIcon("TOP")}
                     </label>
                     <label className="btn btn-light">
-                        <input type="radio" name="options" id="option2" onClick={this.getData.bind(this, "JUNGLE")} />{this.getPositonalIcon("JUNGLE")}
+                        <input type="radio" name="options" id="option2" onClick={this.filterLane.bind(this, "JUNGLE")} />{this.getPositonalIcon("JUNGLE")}
                     </label>
                     <label className="btn btn-light">
-                        <input type="radio" name="options" id="option3" onClick={this.getData.bind(this, "MIDDLE")} />{this.getPositonalIcon("MIDDLE")}
+                        <input type="radio" name="options" id="option3" onClick={this.filterLane.bind(this, "MIDDLE")} />{this.getPositonalIcon("MIDDLE")}
                     </label>
                     <label className="btn btn-light">
-                        <input type="radio" name="options" id="option4" onClick={this.getData.bind(this, "BOTTOM")} />{this.getPositonalIcon("BOTTOM")}
+                        <input type="radio" name="options" id="option4" onClick={this.filterLane.bind(this, "BOTTOM")} />{this.getPositonalIcon("BOTTOM")}
                     </label>
                     <label className="btn btn-light">
-                        <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, "SUPPORT")} />{this.getPositonalIcon("SUPPORT")}
+                        <input type="radio" name="options" id="option5" onClick={this.filterLane.bind(this, "SUPPORT")} />{this.getPositonalIcon("SUPPORT")}
                     </label>
                     <label className="btn btn-light">
-                        <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, null)} />All
+                        <input type="radio" name="options" id="option5" onClick={this.filterLane.bind(this, null)} />All
                     </label>
                 </div>
-                <table className="table table-responsive-lg risen-table sticky-top table-light">
+                <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
                     <thead>
                         <tr>
                         <th scope="col" className="center">Rank</th>
@@ -117,7 +132,7 @@ export default class Overview extends Component {
                     </thead>
                     <tbody>
                         {
-                            this.state.statData.map((item, index) => {
+                            this.state.filteredData.map((item, index) => {
                                 return (
                                     <tr>
                                         <td scope="row" className="risen-datum center">{index + 1}</td>
