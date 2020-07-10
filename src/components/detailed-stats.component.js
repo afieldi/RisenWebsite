@@ -8,6 +8,7 @@ import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { customRound } from '../Helpers';
 import { Button, Dropdown } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
+import CombatStats from './personalStats/combatStats.component';
 
 let champMap = require('../data/champions_map.json')
 
@@ -144,18 +145,23 @@ export default class DetailedStats extends Component {
             
             {/* Basic Stats */}
             <nav>
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Basic Stats</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Combat</a>
-                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Income</a>
+              <div>
+                <h1>{this.state.playerName}</h1>
+              </div>
+              <div className="nav nav-tabs" id="nav-tab" role="tablist" style={navStyle}>
+                <a className="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Basic Stats</a>
+                <a className="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Combat</a>
+                <a className="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Income</a>
               </div>
             </nav>
-            <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div className="tab-content" id="nav-tabContent">
+              <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                 <BasicStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></BasicStats>
               </div>
-              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-              <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+              <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <CombatStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></CombatStats>
+              </div>
+              <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
             </div>
             
           </div>
@@ -163,4 +169,9 @@ export default class DetailedStats extends Component {
       </section>
     );
   }
+}
+
+const navStyle = {
+  alignItems: "flex-end",
+  justifyContent: "flex-end"
 }

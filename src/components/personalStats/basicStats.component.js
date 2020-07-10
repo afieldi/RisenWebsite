@@ -137,6 +137,8 @@ export default class BasicStats extends Component {
         $(window).on('click', function() {
           $('.dropdown-menu').slideUp();
         });
+
+        // $('[data-toggle="tooltip"]').tooltip()
     }
 
     handleGameCheck(option) {
@@ -153,7 +155,7 @@ export default class BasicStats extends Component {
                 <div className="row">
                     <div className="col">
                         <div className="risen-stats-block">
-                        <div className="risen-stats-header"><h1>{this.state.playerName}</h1></div>
+                        <div className="risen-stats-header"><h3>General Stats</h3></div>
                         <div className="risen-stats-body">
                             <div className="row">
                             <div className="col-sm">
@@ -179,9 +181,9 @@ export default class BasicStats extends Component {
                     </div>
 
                     {/* Advanced game by game */}
-                    <div className="row">
-                        <div className="col-md-8">
-                            <div className="risen-stats-block">
+                <div className="row">
+                    <div className="col-md-8">
+                        <div className="risen-stats-block">
                             <div className="risen-stats-header">
                                 <div className="row">
                                     <div className="col">
@@ -248,52 +250,54 @@ export default class BasicStats extends Component {
                                 </tbody>
                                 </table>
                             </div>
-                            </div>
-                        </div>
-                        <div className="col-md-4">
-                            <div className="risen-stats-block">
-                            <div className="risen-stats-header"><h3>Best Champs</h3></div>
-                            <div className="risen-stats-body">Coming Soon</div>
-                            </div>
                         </div>
                     </div>
+                    <div className="col-md-4">
+                        <div className="risen-stats-block">
+                            <div className="risen-stats-header"><h3>Best Champs</h3></div>
+                            <div className="risen-stats-body">Coming Soon</div>
+                        </div>
+                    </div>
+                </div>
 
-                    {/* Detailed overall stats */}
-                    <div className="row">
-                        <div className="col">
+                {/* Detailed overall stats */}
+                <div className="row">
+                    <div className="col">
+                        <div className="risen-stats-block">
                             <div className="risen-stats-header">
                                 <h3>Compare Stats</h3>
                             </div>
                             <div className="risen-stats-body">
-                            <div className="row">
-                                Add Player :<input id="playerName"></input>
-                                <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
-                            </div>
-                            <div className="row">
-                                <table className="table-light table table-responsive-md table-sm table-striped">
-                                    <tbody>
-                                        {
-                                            // Check to ensure comp data has length. It will once data for the player loads in
-                                            //   as the #0 spot will be the players.
-                                            this.state.compData.length ? 
-                                            Object.keys(this.state.compData[0]).map((key, index) => {
-                                            return (
-                                                <tr key={"CompDataRow" + index}>
-                                                <th>{key}</th>
-                                                {
-                                                    this.state.compData.map((player, index2) => {
-                                                    // I really should just make this a new component
-                                                    return (
-                                                        <td key={index2 + "compData"}>{player[key]}</td>
-                                                    )
-                                                    })
-                                                }
-                                                </tr>
-                                            )
-                                            }) : (<tr></tr>)
-                                        }
-                                    </tbody>
-                                </table>
+                                <div className="row">
+                                    Add Player :<input id="playerName"></input>
+                                    <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                </div>
+                                <div className="row">
+                                    <table className="table-light table table-responsive-md table-sm table-striped">
+                                        <tbody>
+                                            {
+                                                // Check to ensure comp data has length. It will once data for the player loads in
+                                                //   as the #0 spot will be the players.
+                                                this.state.compData.length ? 
+                                                Object.keys(this.state.compData[0]).map((key, index) => {
+                                                return (
+                                                    <tr key={"CompDataRow" + index}>
+                                                    <th>{key}</th>
+                                                    {
+                                                        this.state.compData.map((player, index2) => {
+                                                        // I really should just make this a new component
+                                                        return (
+                                                            <td key={index2 + "compData"}>{player[key]}</td>
+                                                        )
+                                                        })
+                                                    }
+                                                    </tr>
+                                                )
+                                                }) : (<tr></tr>)
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
