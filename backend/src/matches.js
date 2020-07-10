@@ -13,6 +13,7 @@ const mongoose = require('mongoose');
 // });
 
 const roles = require('./roles');
+const timelineAnalyizer = require('./timeline')
 
 const GameModel = require('../models/game.model');
 const PlayerModel = require('../models/player.model');
@@ -37,7 +38,8 @@ async function saveGame(matchId) {
             const teams = await getTeams(gameData.participantIdentities);
             const timeline = await leagueApi.Match.gettingTimelineById(matchId);
             const laneAssignments = roles.getRoles(gameData, timeline);
-            await gameData.participants.forEach(async (player, i) => {
+            const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
+            for (const [i, player] of Object.entries(gameData.participants)) {
                 const playerTeam = await verifyExistence(
                     gameData.participantIdentities[i].player.accountId,
                     i < 5 ? teams[0] : teams[1]
@@ -49,7 +51,7 @@ async function saveGame(matchId) {
                 }
 
                 // Burn this code
-                const gameEntry = await GameModel.create({
+                await GameModel.create({
                     player: playerTeam[0]._id,
                     team: playerTeam[1]._id,
                     gameId: matchId,
@@ -65,6 +67,18 @@ async function saveGame(matchId) {
                     assists: stats.assists,
                     champLevel: stats.champLevel,
                     win: stats.win,
+
+                    // Combat
+                    kills15: timelineStats[+i+1].kills15,
+                    killMap: timelineStats[+i+1].killMap,
+                    soloKills: timelineStats[+i+1].soloKills,
+                    gankKills: timelineStats[+i+1].gankKills,
+                    deaths15: timelineStats[+i+1].deaths15,
+                    deathMap: timelineStats[+i+1].deathMap,
+                    soloDeaths: timelineStats[+i+1].soloDeaths,
+                    gankDeaths: timelineStats[+i+1].gankDeaths,
+                    assists15: timelineStats[+i+1].assists15,
+                    assistMap: timelineStats[+i+1].assistMap,
                 
                     // Income
                     goldEarned: stats.goldEarned,
@@ -72,6 +86,7 @@ async function saveGame(matchId) {
                     neutralMinionsKilled: stats.neutralMinionsKilled,
                     neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle,
                     neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle,
+                    firstItemTime: timelineStats[+i+1].firstItemTime,
                 
                     // Damage
                     physicalDamageDealtToChampions: stats.physicalDamageDealtToChampions,
@@ -89,6 +104,8 @@ async function saveGame(matchId) {
                 
                     // Vision
                     visionScore: stats.visionScore,
+                    wardsPlaced15: timelineStats[+i+1].wardsPlaced15,
+                    wardsKilled15: timelineStats[+i+1].wardsKilled15,
                     wardsKilled: stats.wardsKilled,
                     visionWardsBoughtInGame: stats.visionWardsBoughtInGame,
                 
@@ -104,15 +121,16 @@ async function saveGame(matchId) {
                     pentaKills: stats.pentaKills,
                 
                     // Timeline
-                    csDiff10: player.timeline.csDiffPerMinDeltas["0-10"] ? player.timeline.csDiffPerMinDeltas["0-10"] * 10 : 0,
-                    csDiff20: player.timeline.csDiffPerMinDeltas["10-20"] ? player.timeline.csDiffPerMinDeltas["10-20"] * 10 : 0,
-                    csDiff30: player.timeline.csDiffPerMinDeltas["20-30"] ? player.timeline.csDiffPerMinDeltas["20-30"] * 10 : 0,
-                    lane: laneAssignments[i + 1],
+                    csDiff10: timelineStats[+i+1].CSD10,
+                    csDiff20: timelineStats[+i+1].CSD20,
+                    csDiff30: timelineStats[+i+1].CSD30,
+                    lane: laneAssignments[+i+1],
                 
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-            });
+
+            }
         },
         (error) => {
             console.log(error.message);
@@ -120,28 +138,12 @@ async function saveGame(matchId) {
     )
 }
 
-async function generatePlayers(participants) {
-    // await verifyExistence(participants[0].player.accountId, 1);
-    // await verifyExistence(participants[1].player.accountId, 1);
-    await verifyExistence(participants[2].player.accountId, 2);
-    await verifyExistence(participants[3].player.accountId, 2);
-    await verifyExistence(participants[4].player.accountId, 2);
-
-    // await verifyExistence(participants[5].player.accountId, 1);
-    // await verifyExistence(participants[6].player.accountId, 1);
-    await verifyExistence(participants[7].player.accountId, 3);
-    await verifyExistence(participants[8].player.accountId, 3);
-    await verifyExistence(participants[9].player.accountId, 3);
-}
 
 // Get the backend teams for participants
 // Participants is 10 length. first 5 are blue team, second 5 are red team
 // Returns [blueTeam, redTeam]
 async function getTeams(participants) {
     let participantsCopy = JSON.parse(JSON.stringify(participants));
-
-    // Remove later. Just gen's dummy data
-    // await generatePlayers(participants);
 
     function getTeam(members) {
         let teamCounter = {}
@@ -161,7 +163,6 @@ async function getTeams(participants) {
         return Object.keys(teamCounter).reduce((a, b) => teamCounter[a] > teamCounter[b] ? a : b);
     }
 
-    const players = await PlayerModel.find();
     let ids = participantsCopy.splice(0, 5).map((p) => {
         return p.player.accountId;
     });
@@ -225,13 +226,13 @@ async function verifyExistence(accountId, teamId) {
 }
 
 
-// saveGames([
-//     3478174506,
-//     3478147318,
-//     3475852754
-// ]).then(() => {
-//     console.log("donezo")
-// })
+saveGames([
+    3478174506,
+    3478147318,
+    3475852754
+]).then(() => {
+    console.log("donezo")
+});
 
 // setTimeout(() => {
 //     console.log("waitin");

@@ -19,12 +19,25 @@ const gameSchema = new Schema({
     champLevel: { type: Number },
     win: { type: Boolean },
 
+    // Combat
+    kills15: { type: Number },
+    killMap: { type: [[]] },
+    soloKills: { type: Number },
+    gankKills: { type: Number },
+    deaths15: { type: Number },
+    deathMap: { type: [[]] },
+    soloDeaths: { type: Number },
+    gankDeaths: { type: Number },
+    assists15: { type: Number },
+    assistMap: [[]],
+
     // Income
     goldEarned: { type: Number },
     totalMinionsKilled: { type: Number },
     neutralMinionsKilled: { type: Number },
     neutralMinionsKilledTeamJungle: { type: Number },
-    neutralMinionsKilledEnemyJungle: {type: Number },
+    neutralMinionsKilledEnemyJungle: { type: Number },
+    firstItemTime: { type: Number },
 
     // Damage
     physicalDamageDealtToChampions: { type: Number },
@@ -42,6 +55,8 @@ const gameSchema = new Schema({
 
     // Vision
     visionScore: { type: Number },
+    wardsPlaced15: { type: Number },
+    wardsKilled15: { type: Number },
     wardsKilled: { type: Number },
     visionWardsBoughtInGame: { type: Number },
 
@@ -65,11 +80,6 @@ const gameSchema = new Schema({
     // Computed
     damagePerGold: { type: Number },
 
-
-
-    // teamname: { type: String, required: true },
-    // duration: { type: Number, required: true },
-    // date: { type: Date, required: true },
 }, {
     timestamps: true,
 });
