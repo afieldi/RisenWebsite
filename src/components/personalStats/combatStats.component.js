@@ -50,7 +50,6 @@ export default class CombatStats extends Component {
             totals["Solo Kills"] += game.soloKills;
             totals["Gank Kills"] += game.gankKills;
         });
-        console.log(this.state.filteredData.length);
         if (type === "AVG"){
             for (const key of Object.keys(totals)) {
                 totals[key] = customRound(totals[key] / this.state.filteredData.length);
@@ -83,7 +82,6 @@ export default class CombatStats extends Component {
             totals["Solo Deaths"] += game.soloDeaths;
             totals["Gank Deaths"] += game.gankDeaths;
         });
-        console.log(this.state.filteredData.length);
         if (type === "AVG"){
             for (const key of Object.keys(totals)) {
                 totals[key] = customRound(totals[key] / this.state.filteredData.length);
@@ -100,7 +98,7 @@ export default class CombatStats extends Component {
         function addToDots(map, type="?", color="red") {
             let dots = [];
             for (const event of map) {
-                
+
                 dots.push([
                     customRound((event[0]/15000) * 100, 0).toString() + "%",
                     customRound((event[1]/15000) * 100, 0).toString() + "%",
@@ -108,19 +106,26 @@ export default class CombatStats extends Component {
                     event[2],
                     color
                 ]);
-                console.log(event);
             }
             return dots;
         }
 
+        let side = document.getElementById("mapSideSelect");
         let type = document.getElementById("mapType");
-        if (type == null) {
+
+        if (type === null || side === null) {
             return;
         }
         type = type.value;
+        side = side.value;
 
         let allDots = [];
         for (const game of this.state.filteredData) {
+            if ((game.teamId !== 100 && side === "BLUE") ||
+                (game.teamId !== 200 && side === "RED")) {
+                continue;
+            }
+
             if (type === "KILLS") {
                 allDots = allDots.concat(addToDots(game.killMap, "Kill", "blue"));
             }
@@ -135,11 +140,10 @@ export default class CombatStats extends Component {
             // All
             else {
                 allDots = allDots.concat(addToDots(game.killMap, "Kill", "blue"));
-                allDots = allDots.concat(addToDots(game.assistMap, "Assist", "red"));
-                allDots = allDots.concat(addToDots(game.deathMap, "Death", "green"));
+                allDots = allDots.concat(addToDots(game.assistMap, "Assist", "green"));
+                allDots = allDots.concat(addToDots(game.deathMap, "Death", "red"));
             }
         }
-        console.log(allDots);
         this.setState({
             dotLocations: allDots
         })
@@ -175,7 +179,11 @@ export default class CombatStats extends Component {
                                     <h3>Filters</h3>
                                 </div>
                                 <div className="risen-stats-body">
-                                    
+                                    <div className="row">
+                                        <div className="col">
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -258,7 +266,7 @@ export default class CombatStats extends Component {
                         <div className="col">
                             <div className="risen-stats-block">
                                 <div className="risen-stats-header">
-                                    <h3>Maps</h3>
+                                    <h3>Kill Map</h3>
                                 </div>
                                 <div className="risen-stats-body">
                                     <div className="row">
@@ -271,10 +279,18 @@ export default class CombatStats extends Component {
                                                 <Form.Group controlId="mapType" onChange={this.generateDots.bind(this)}>
                                                     <Form.Label>Map Type</Form.Label>
                                                     <Form.Control as="select">
-                                                    <option value="KILLS">Kills</option>
-                                                    <option value="DEATHS">Deaths</option>
-                                                    <option value="KA">Kills + Assists</option>
-                                                    <option value="ALL">All</option>
+                                                        <option value="KILLS">Kills</option>
+                                                        <option value="DEATHS">Deaths</option>
+                                                        <option value="KA">Kills + Assists</option>
+                                                        <option value="ALL">All</option>
+                                                    </Form.Control>
+                                                </Form.Group>
+                                                <Form.Group controlId="mapSideSelect" onChange={this.generateDots.bind(this)}>
+                                                    <Form.Label>Side</Form.Label>
+                                                    <Form.Control as="select" defaultValue="BOTH">
+                                                        <option value="BLUE">Blue</option>
+                                                        <option value="RED">Red</option>
+                                                        <option value="BOTH">Both</option>
                                                     </Form.Control>
                                                 </Form.Group>
                                                 <Form.Group controlId="formBasicRangeCustom">

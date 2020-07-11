@@ -11,7 +11,6 @@ export default class DotMap extends Component {
     }
 
     toTime(millis) {
-        console.log(millis)
         var minutes = Math.floor(millis / 60000);
         var seconds = ((millis % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
@@ -34,7 +33,6 @@ export default class DotMap extends Component {
                         this.state.dots.map((dot, i) => {
                             let curDotStyle = JSON.parse(JSON.stringify(dotStyle));
                             curDotStyle["left"] = dot[0];
-                            // <div style={curDotStyle} key={"dot-" + i}></div>
 
                             curDotStyle["bottom"] = dot[1];
                             curDotStyle["backgroundColor"] = dot[4];
