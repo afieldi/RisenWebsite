@@ -22,7 +22,13 @@ const TeamModel = require('../models/team.model');
 // This will be used later
 async function saveGames(matchIds) {
     for ( const matchId of matchIds ) {
-        await saveGame(matchId);
+        try {
+            await saveGame(matchId);
+            console.log("Saved game: " + matchId);
+        } catch (error) {
+            console.log(error);
+            console.log("Failed saving game: " + matchId);
+        }
     }
 }
 
@@ -129,7 +135,7 @@ async function saveGame(matchId) {
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-
+                console.log("Added game entry");
             }
         },
         (error) => {
@@ -227,9 +233,27 @@ async function verifyExistence(accountId, teamId) {
 
 
 saveGames([
-    3478174506,
-    3478147318,
-    3475852754
+    // 3478174506,
+    // 3478147318,
+    // 3475852754,
+    // 3491481463,
+    // 3491327570,
+    // 3491381927,
+    // 3491311607,
+    // 3491236217,
+    // 3491178375,
+    // 3491153010,
+    // 3490794102,
+    // 3490769912,
+    // 3490406651,
+    // 3490308718,
+    3490311851,
+    // 3490245081,
+    // 3490169087,
+    // 3490184363,
+    // 3490068881,
+    // 3490123843,
+    // 3489994608
 ]).then(() => {
     console.log("donezo")
 });
