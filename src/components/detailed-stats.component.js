@@ -9,6 +9,9 @@ import { customRound } from '../Helpers';
 import { Button, Dropdown } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
+import IncomeStats from "./personalStats/incomeStats.component";
+import VisionStats from "./personalStats/visionStats.component";
+
 
 let champMap = require('../data/champions_map.json')
 
@@ -149,19 +152,25 @@ export default class DetailedStats extends Component {
                 <h1>{this.state.playerName}</h1>
               </div>
               <div className="nav nav-tabs" id="nav-tab" role="tablist" style={navStyle}>
-                <a className="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Basic Stats</a>
-                <a className="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Combat</a>
-                <a className="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Income</a>
+                <a className="nav-item nav-link active" id="nav-basic-tab" data-toggle="tab" href="#nav-basic" role="tab" aria-controls="nav-basic" aria-selected="true">Basic Stats</a>
+                <a className="nav-item nav-link" id="nav-combat-tab" data-toggle="tab" href="#nav-combat" role="tab" aria-controls="nav-combat" aria-selected="false">Combat</a>
+                <a className="nav-item nav-link" id="nav-income-tab" data-toggle="tab" href="#nav-income" role="tab" aria-controls="nav-income" aria-selected="false">Income</a>
+                <a className="nav-item nav-link" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="false">Vision</a>
               </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
-              <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+              <div className="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
                 <BasicStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></BasicStats>
               </div>
-              <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <div className="tab-pane fade" id="nav-combat" role="tabpanel" aria-labelledby="nav-combat-tab">
                 <CombatStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></CombatStats>
               </div>
-              <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+              <div className="tab-pane fade" id="nav-income" role="tabpanel" aria-labelledby="nav-income-tab">
+                <IncomeStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></IncomeStats>
+              </div>
+              <div className="tab-pane fade" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
+                <VisionStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></VisionStats>
+              </div>
             </div>
             
           </div>

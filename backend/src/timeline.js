@@ -129,20 +129,20 @@ function getStats(timeline, playerRoles) {
             }
         }
 
-        for (let role of ["TOP", "JUNGLE", "MID", "BOTTOM", "SUPPORT"]) {
-            const ids = getPlayerIdsOfRole(playerRoles, role);
-            if (ids.length != 2) {
-                continue;
-            }
-            stats[ids[0]].CSD10 = stats[ids[0]].CS10 - stats[ids[1]].CS10;
-            stats[ids[1]].CSD10 = stats[ids[1]].CS10 - stats[ids[0]].CS10;
-
-            stats[ids[0]].CSD20 = stats[ids[0]].CS20 - stats[ids[1]].CS20;
-            stats[ids[1]].CSD20 = stats[ids[1]].CS20 - stats[ids[0]].CS20;
-
-            stats[ids[0]].CSD30 = stats[ids[0]].CS30 - stats[ids[1]].CS30;
-            stats[ids[1]].CSD30 = stats[ids[1]].CS30 - stats[ids[0]].CS30;
+    }
+    for (let role of ["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "SUPPORT"]) {
+        const ids = getPlayerIdsOfRole(playerRoles, role);
+        if (ids.length != 2) {
+            continue;
         }
+        stats[ids[0]].CSD10 = stats[ids[0]].CS10 - stats[ids[1]].CS10;
+        stats[ids[1]].CSD10 = stats[ids[1]].CS10 - stats[ids[0]].CS10;
+
+        stats[ids[0]].CSD20 = stats[ids[0]].CS20 - stats[ids[1]].CS20;
+        stats[ids[1]].CSD20 = stats[ids[1]].CS20 - stats[ids[0]].CS20;
+
+        stats[ids[0]].CSD30 = stats[ids[0]].CS30 - stats[ids[1]].CS30;
+        stats[ids[1]].CSD30 = stats[ids[1]].CS30 - stats[ids[0]].CS30;
     }
 
     return stats;

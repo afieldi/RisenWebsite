@@ -11,6 +11,10 @@ import { customRound } from '../Helpers';
 export default class Overview extends Component {
     constructor(props) {
         super(props);
+        this.filters = {
+            "lane": "",
+            "name": ""
+        }
         this.state = {
             statData: [],
             filteredData: []
@@ -36,17 +40,34 @@ export default class Overview extends Component {
         })
     }
 
-    filterLane(lane) {
-        let laneData;
-        if(lane) {
-            laneData = this.state.statData.filter(item => item._id.lane === lane)
+    filterLane() {
+        // let laneData;
+        if(this.filters.lane) {
+            this.state.filteredData = this.state.filteredData.filter(item => item._id.lane === this.filters.lane)
         }
         else {
-            laneData = this.state.statData;
+            this.state.filteredData = this.state.filteredData;
         }
-        this.setState({
-            filteredData: laneData
-        })
+        // this.setState({
+        //     filteredData: laneData
+        // });
+    }
+
+    filterName() {
+        let name = document.getElementById("nameFilter").value;
+        this.state.filteredData = this.state.filteredData.filter(item => item._id.player[0].startsWith(name));
+    }
+
+    filterData() {
+        // We can set it here without using the setState function because we want this:
+        //  1. To be sync
+        //  2. Not to reload the page. That will be done later
+        this.state.filteredData = JSON.parse(JSON.stringify(this.state.statData));
+        this.filterLane();
+        this.filterName();
+
+        // Reload state as the above functions change it
+        this.setState({});
     }
 
     sortData(data, attr, direction) {
@@ -94,25 +115,33 @@ export default class Overview extends Component {
     render() {
         return (
             <div className="container">
-                <div className="btn-group risen-radio" data-toggle="buttons">
-                    <label className="btn btn-light">
-                        <input type="radio" name="options" id="option1" onClick={this.filterLane.bind(this, "TOP")} />{this.getPositonalIcon("TOP")}
-                    </label>
-                    <label className="btn btn-light">
-                        <input type="radio" name="options" id="option2" onClick={this.filterLane.bind(this, "JUNGLE")} />{this.getPositonalIcon("JUNGLE")}
-                    </label>
-                    <label className="btn btn-light">
-                        <input type="radio" name="options" id="option3" onClick={this.filterLane.bind(this, "MIDDLE")} />{this.getPositonalIcon("MIDDLE")}
-                    </label>
-                    <label className="btn btn-light">
-                        <input type="radio" name="options" id="option4" onClick={this.filterLane.bind(this, "BOTTOM")} />{this.getPositonalIcon("BOTTOM")}
-                    </label>
-                    <label className="btn btn-light">
-                        <input type="radio" name="options" id="option5" onClick={this.filterLane.bind(this, "SUPPORT")} />{this.getPositonalIcon("SUPPORT")}
-                    </label>
-                    <label className="btn btn-light">
-                        <input type="radio" name="options" id="option5" onClick={this.filterLane.bind(this, null)} />All
-                    </label>
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="btn-group risen-radio" data-toggle="buttons">
+                            {/* TODO: Change these onClick functions */}
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col-md">
+                        <input type="text" id="nameFilter" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Player Name" onChange={this.filterData.bind(this)}></input>
+                    </div>
                 </div>
                 <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
                     <thead>

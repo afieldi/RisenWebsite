@@ -206,7 +206,7 @@ export default class BasicStats extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="risen-stats-body" style={{overflow: 'scroll'}}>
+                            <div className="risen-stats-body" style={{overflow: 'scroll', maxHeight: '500px'}}>
                                 <table className="table risen-table .table-responsive .table-striped">
                                 <thead>
                                     <tr>
