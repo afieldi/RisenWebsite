@@ -81,15 +81,25 @@ function getStats(timeline, playerRoles) {
                     break;
                 case "CHAMPION_KILL":
                     if (event.timestamp < 900000) { // 15 min
-                        stats[event.killerId].kills15 += 1;
+                        // This is hilarious. I forgot people get exectued
+                        // Sometimes the killer id is 0 which is obviously wrong. Participant ids are from 1-10
+                        // So I'm assume killerId 0 means they got exectued. Happened surprisingly often in my test case games
+                        if(event.killerId > 0) {
+                            stats[event.killerId].kills15 += 1;
+                        }
                         stats[event.victimId].deaths15 += 1;
                     }
 
-                    stats[event.killerId].killMap.push([event.position.x, event.position.y, event.timestamp]);
+                    if(event.killerId > 0) {
+                        stats[event.killerId].killMap.push([event.position.x, event.position.y, event.timestamp]);
+                    }
+
                     stats[event.victimId].deathMap.push([event.position.x, event.position.y, event.timestamp]);
 
                     if (event.assistingParticipantIds.length === 0) {
-                        stats[event.killerId].soloKills += 1;
+                        if(event.killerId > 0) {
+                            stats[event.killerId].soloKills += 1;
+                        }
                         stats[event.victimId].soloDeaths += 1;
                     }
                     else {
@@ -99,7 +109,9 @@ function getStats(timeline, playerRoles) {
                                 stats[id].assists15 += 1;
 
                                 if(playerRoles[id] === "JUNGLE") {
-                                    stats[event.killerId].gankKills += 1;
+                                    if(event.killerId > 0) {
+                                        stats[event.killerId].gankKills += 1;
+                                    }
                                     stats[event.victimId].gankDeaths += 1;
                                 }
                             }
