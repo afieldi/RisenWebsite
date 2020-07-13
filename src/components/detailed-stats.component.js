@@ -6,14 +6,15 @@ import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { customRound } from '../Helpers';
-import { Button, Dropdown } from "react-bootstrap";
+import { Button, Dropdown, Container, Form } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
 import IncomeStats from "./personalStats/incomeStats.component";
 import VisionStats from "./personalStats/visionStats.component";
 
 
-let champMap = require('../data/champions_map.json')
+let champMap = require('../data/champions_map.json');
+// let champions = require('../data/champions.json'); // oof. This is loading a lot of unneeded data
 
 export default class DetailedStats extends Component {
 
@@ -130,6 +131,23 @@ export default class DetailedStats extends Component {
     }
   }
 
+  performFilter() {
+    let filteredData = this.state.statData.filter(game => {
+      let championFilter = document.getElementById("championFilter").value;
+      if (championFilter.length > 0) {
+        if(!champMap[game.championId].startsWith(championFilter)) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+
+    this.setState({
+      filteredData: filteredData
+    });
+  }
+
   render() {
     return (
       <section>
@@ -138,13 +156,6 @@ export default class DetailedStats extends Component {
         <br></br> */}
         <div className="light-section">
           <div className="container">
-            {/* <div className="row">
-              <div className="col">
-                <div className="risen-stats-header">
-                  <h1>{this.state.playerName}</h1>
-                </div>
-              </div>
-            </div> */}
             
             {/* Basic Stats */}
             <nav>
@@ -159,6 +170,52 @@ export default class DetailedStats extends Component {
               </div>
             </nav>
             <div className="tab-content" id="nav-tabContent">
+              <Container>
+                <div className="row">
+                    <div className="col">
+                        <div className="risen-stats-block">
+                            <div className="risen-stats-header">
+                                <h3>Filters</h3>
+                            </div>
+                            <div className="risen-stats-body">
+                                <div className="row">
+                                    <div className="col">
+                                      <Form.Group controlId="championFilter">
+                                        <Form.Label>Champion</Form.Label>
+                                        <Form.Control as="input">
+                                        </Form.Control>
+                                      </Form.Group>
+                                    </div>
+                                    <div className="col">
+                                      <Form.Group controlId="durationFilter">
+                                        <Form.Label>Duration</Form.Label>
+                                        <Form.Control as="select">
+                                          <option>Any</option>
+                                          <option>20min</option>
+                                          <option>20-30min</option>
+                                          <option>>30min</option>
+                                        </Form.Control>
+                                      </Form.Group>
+                                    </div>
+                                    <div className="col">
+                                      <Form.Group controlId="resultFilter">
+                                        <Form.Label>Result</Form.Label>
+                                        <Form.Control as="select">
+                                          <option>Any</option>
+                                          <option>Win</option>
+                                          <option>Loss</option>
+                                        </Form.Control>
+                                      </Form.Group>
+                                    </div>
+                                    <div className="col">
+                                      <Button className="btn risen-button" onClick={this.performFilter.bind(this)}>FILTER</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </Container>
               <div className="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
                 <BasicStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></BasicStats>
               </div>

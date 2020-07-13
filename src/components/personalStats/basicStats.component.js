@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { customRound } from '../../Helpers';
-import { Button, Dropdown } from "react-bootstrap";
+import { Button, Dropdown, Container } from "react-bootstrap";
 import $ from 'jquery';
 
 let champMap = require('../../data/champions_map.json')
@@ -152,156 +152,158 @@ export default class BasicStats extends Component {
     render() {
         return (
             <section>
-                <div className="row">
-                    <div className="col">
-                        <div className="risen-stats-block">
-                        <div className="risen-stats-header"><h3>General Stats</h3></div>
-                        <div className="risen-stats-body">
-                            <div className="row">
-                            <div className="col-sm">
-                                <div className="center">{this.state.accumulatedStats["wr"]}%</div>
-                                <div className="center risen-sub-label">Winrate</div>
-                            </div>
-                            <div className="col-sm">
-                                <div className="center">{this.state.accumulatedStats["kda"]}</div>
-                                <div className="center risen-sub-label">KDA</div>
-                            </div>
-                            <div className="col-sm">
-                                <div className="center">{this.state.accumulatedStats["cs"]}</div>
-                                <div className="center risen-sub-label">CS/Min</div>
-                            </div>
-                            <div className="col-sm">
-                                <div className="center">{this.state.accumulatedStats["games"]}</div>
-                                <div className="center risen-sub-label">Games</div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-
-                    {/* Advanced game by game */}
-                <div className="row">
-                    <div className="col-md-8">
-                        <div className="risen-stats-block">
-                            <div className="risen-stats-header">
-                                <div className="row">
-                                    <div className="col">
-                                    <h3>Game Stats</h3>
-                                    </div>
-                                    <div className="col-3">
-                                    <Dropdown>
-                                        <Button className="dropdown-toggle risen-button" data-toggle="dropdown">STATS</Button>
-                                        <div className="dropdown-menu" style={gameDataDropDown}>
-                                        {
-                                            Object.keys(this.state.gameDataOptions).map((option, index) => {
-                                            return (
-                                                <div key={"gameOption" + index}
-                                                className={"dropdown-option clickable " + (this.state.gameDataOptions[option].shown ? "bg-dark text-light" : "bg-light text-dark")} name={option}>{option}</div>
-                                            )
-                                            })
-                                        }
-                                        </div>
-                                    </Dropdown>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="risen-stats-body" style={{overflow: 'scroll', maxHeight: '500px'}}>
-                                <table className="table risen-table .table-responsive .table-striped">
-                                <thead>
-                                    <tr>
-                                    {
-                                        Object.keys(this.state.gameDataOptions).map((key, index) => {
-                                        if (this.state.gameDataOptions[key].shown) {
-                                            return (
-                                            <th key={index}>{key}</th>
-                                            )
-                                        }
-                                        else {
-                                            return;
-                                        }
-                                        })
-                                    }
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                    this.state.filteredData.map((datum, index) => {
-                                        return (
-                                        <tr key={"gameStatRow" + index}>
-                                            {
-                                            Object.keys(this.state.gameDataOptions).map((key, index2) => {
-                                                if (this.state.gameDataOptions[key].shown) {
-                                                return (
-                                                    <td key={"gameStatData" + index2}>{this.state.gameDataOptions[key].fnc(datum)}</td>
-                                                )
-                                                }
-                                                else {
-                                                return;
-                                                }
-                                            })
-                                            }
-
-                                        </tr>
-                                        );
-                                    })
-                                    }
-                                </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-4">
-                        <div className="risen-stats-block">
-                            <div className="risen-stats-header"><h3>Best Champs</h3></div>
-                            <div className="risen-stats-body">Coming Soon</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Detailed overall stats */}
-                <div className="row">
-                    <div className="col">
-                        <div className="risen-stats-block">
-                            <div className="risen-stats-header">
-                                <h3>Compare Stats</h3>
-                            </div>
+                <Container>
+                    <div className="row">
+                        <div className="col">
+                            <div className="risen-stats-block">
+                            <div className="risen-stats-header"><h3>General Stats</h3></div>
                             <div className="risen-stats-body">
                                 <div className="row">
-                                    Add Player :<input id="playerName"></input>
-                                    <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                <div className="col-sm">
+                                    <div className="center">{this.state.accumulatedStats["wr"]}%</div>
+                                    <div className="center risen-sub-label">Winrate</div>
                                 </div>
-                                <div className="row">
-                                    <table className="table-light table table-responsive-md table-sm table-striped">
-                                        <tbody>
+                                <div className="col-sm">
+                                    <div className="center">{this.state.accumulatedStats["kda"]}</div>
+                                    <div className="center risen-sub-label">KDA</div>
+                                </div>
+                                <div className="col-sm">
+                                    <div className="center">{this.state.accumulatedStats["cs"]}</div>
+                                    <div className="center risen-sub-label">CS/Min</div>
+                                </div>
+                                <div className="col-sm">
+                                    <div className="center">{this.state.accumulatedStats["games"]}</div>
+                                    <div className="center risen-sub-label">Games</div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        {/* Advanced game by game */}
+                    <div className="row">
+                        <div className="col-md-8">
+                            <div className="risen-stats-block">
+                                <div className="risen-stats-header">
+                                    <div className="row">
+                                        <div className="col">
+                                        <h3>Game Stats</h3>
+                                        </div>
+                                        <div className="col-3">
+                                        <Dropdown>
+                                            <Button className="dropdown-toggle risen-button" data-toggle="dropdown">STATS</Button>
+                                            <div className="dropdown-menu" style={gameDataDropDown}>
                                             {
-                                                // Check to ensure comp data has length. It will once data for the player loads in
-                                                //   as the #0 spot will be the players.
-                                                this.state.compData.length ? 
-                                                Object.keys(this.state.compData[0]).map((key, index) => {
+                                                Object.keys(this.state.gameDataOptions).map((option, index) => {
                                                 return (
-                                                    <tr key={"CompDataRow" + index}>
-                                                    <th>{key}</th>
-                                                    {
-                                                        this.state.compData.map((player, index2) => {
-                                                        // I really should just make this a new component
-                                                        return (
-                                                            <td key={index2 + "compData"}>{player[key]}</td>
-                                                        )
-                                                        })
-                                                    }
-                                                    </tr>
+                                                    <div key={"gameOption" + index}
+                                                    className={"dropdown-option clickable " + (this.state.gameDataOptions[option].shown ? "bg-dark text-light" : "bg-light text-dark")} name={option}>{option}</div>
                                                 )
-                                                }) : (<tr></tr>)
+                                                })
                                             }
-                                        </tbody>
+                                            </div>
+                                        </Dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="risen-stats-body" style={{overflow: 'scroll', maxHeight: '500px'}}>
+                                    <table className="table risen-table .table-responsive .table-striped">
+                                    <thead>
+                                        <tr>
+                                        {
+                                            Object.keys(this.state.gameDataOptions).map((key, index) => {
+                                            if (this.state.gameDataOptions[key].shown) {
+                                                return (
+                                                <th key={index}>{key}</th>
+                                                )
+                                            }
+                                            else {
+                                                return;
+                                            }
+                                            })
+                                        }
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                        this.state.filteredData.map((datum, index) => {
+                                            return (
+                                            <tr key={"gameStatRow" + index}>
+                                                {
+                                                Object.keys(this.state.gameDataOptions).map((key, index2) => {
+                                                    if (this.state.gameDataOptions[key].shown) {
+                                                    return (
+                                                        <td key={"gameStatData" + index2}>{this.state.gameDataOptions[key].fnc(datum)}</td>
+                                                    )
+                                                    }
+                                                    else {
+                                                    return;
+                                                    }
+                                                })
+                                                }
+
+                                            </tr>
+                                            );
+                                        })
+                                        }
+                                    </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                        <div className="col-md-4">
+                            <div className="risen-stats-block">
+                                <div className="risen-stats-header"><h3>Best Champs</h3></div>
+                                <div className="risen-stats-body">Coming Soon</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    {/* Detailed overall stats */}
+                    <div className="row">
+                        <div className="col">
+                            <div className="risen-stats-block">
+                                <div className="risen-stats-header">
+                                    <h3>Compare Stats</h3>
+                                </div>
+                                <div className="risen-stats-body">
+                                    <div className="row">
+                                        Add Player :<input id="playerName"></input>
+                                        <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                    </div>
+                                    <div className="row">
+                                        <table className="table-light table table-responsive-md table-sm table-striped">
+                                            <tbody>
+                                                {
+                                                    // Check to ensure comp data has length. It will once data for the player loads in
+                                                    //   as the #0 spot will be the players.
+                                                    this.state.compData.length ? 
+                                                    Object.keys(this.state.compData[0]).map((key, index) => {
+                                                    return (
+                                                        <tr key={"CompDataRow" + index}>
+                                                        <th>{key}</th>
+                                                        {
+                                                            this.state.compData.map((player, index2) => {
+                                                            // I really should just make this a new component
+                                                            return (
+                                                                <td key={index2 + "compData"}>{player[key]}</td>
+                                                            )
+                                                            })
+                                                        }
+                                                        </tr>
+                                                    )
+                                                    }) : (<tr></tr>)
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Container>
             </section>
         );
     }

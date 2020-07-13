@@ -96,18 +96,6 @@ export default class VisionStats extends Component {
       <section>
         <Container>
           <div className="row">
-            <div className="col">
-              <div className="risen-stats-block">
-                <div className="risen-stats-header">
-                  <h3>Filters</h3>
-                </div>
-                <div className="risen-stats-body">
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
             <div className="col-md">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">

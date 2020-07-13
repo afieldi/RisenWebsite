@@ -173,22 +173,6 @@ export default class CombatStats extends Component {
             <section>
                 <Container>
                     <div className="row">
-                        <div className="col">
-                            <div className="risen-stats-block">
-                                <div className="risen-stats-header">
-                                    <h3>Filters</h3>
-                                </div>
-                                <div className="risen-stats-body">
-                                    <div className="row">
-                                        <div className="col">
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
                         <div className="col-md-6">
                             <div className="risen-stats-block">
                                 <div className="risen-stats-header">
