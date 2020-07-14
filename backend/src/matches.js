@@ -1,7 +1,7 @@
 // require('dotenv').config();
 const { leagueApi } = require('./api');
 const { verifyPlayer } = require('./player')
-
+const {spawn} = require('child_process');
 const mongoose = require('mongoose');
 
 // const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
@@ -23,6 +23,7 @@ const TeamModel = require('../models/team.model');
 async function saveGames(matchIds) {
     for ( const matchId of matchIds ) {
         try {
+            console.log("adding game: " + matchId);
             await saveGame(matchId);
             console.log("Saved game: " + matchId);
         } catch (error) {
@@ -30,6 +31,26 @@ async function saveGames(matchIds) {
             console.log("Failed saving game: " + matchId);
         }
     }
+}
+
+async function getRoles(gameData, timeline) {
+    return new Promise( (resolve, reject) => {
+        const python = spawn('python', ['./src/roles.py']);
+        
+        python.stdin.write(JSON.stringify(gameData));
+        python.stdin.write("\r\n");
+        python.stdin.write(JSON.stringify(timeline));
+        python.stdin.end();
+        
+        python.stdout.on('data', function (data) {
+            resolve(JSON.parse(data.toString()));
+        });
+
+        python.stdout.on('error', (data) => {
+            reject();
+        })
+    })
+
 }
 
 async function saveGame(matchId) {
@@ -43,8 +64,10 @@ async function saveGame(matchId) {
         async gameData => {
             const teams = await getTeams(gameData.participantIdentities);
             const timeline = await leagueApi.Match.gettingTimelineById(matchId);
-            const laneAssignments = roles.getRoles(gameData, timeline);
+            // const laneAssignments = roles.getRoles(gameData, timeline);
+            const laneAssignments = await getRoles(gameData, timeline);
             const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
+
             for (const [i, player] of Object.entries(gameData.participants)) {
                 const playerTeam = await verifyExistence(
                     gameData.participantIdentities[i].player.accountId,
@@ -236,13 +259,8 @@ saveGames([
     3478174506,
     3478147318,
     3475852754,
-    3491481463,
-    3491327570,
-    3491381927,
     3491311607,
-    3491236217,
     3491178375,
-    3491153010,
     3490794102,
     3490769912,
     3490406651,
@@ -257,11 +275,6 @@ saveGames([
 ]).then(() => {
     console.log("donezo")
 });
-
-// setTimeout(() => {
-//     console.log("waitin");
-// }, 10000);
-
 
 module.exports = {
     'saveGames': saveGames

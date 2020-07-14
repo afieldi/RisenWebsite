@@ -116,3 +116,24 @@ function loadXYPositons(timeline) {
 module.exports = {
     getRoles: getRoles
 };
+
+// const {spawn} = require('child_process');
+
+// // const ls = spawn('ls', ['-lh', '/usr']);
+// const python = spawn('python', ['roles.py']);
+// python.stdout.on('data', function (data) {
+//     console.log('Pipe data from python script ...');
+//     // dataToSend = data.toString();
+//     console.log(data.toString());
+// });
+
+// python.stdin.write(JSON.stringify(gameData));
+// python.stdin.write("\r\n");
+// // console.log(timeline)
+// python.stdin.write(JSON.stringify(timeline));
+// // python.stdin.write("\r\n");
+
+// python.stdin.end();
+// setTimeout(() => {
+//     console.log("test");
+// }, 3000);
