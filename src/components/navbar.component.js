@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { NavDropdown } from 'react-bootstrap';
 
 export default class Navbar extends Component {
 
@@ -23,9 +22,9 @@ export default class Navbar extends Component {
               <li className="navbar-item ml-auto">
                 <Link to="/stats" className="nav-link">Player Stats</Link>
               </li>
-              <li className="navbar-item ml-auto">
+              {/* <li className="navbar-item ml-auto">
                 <Link to="/teams" className="nav-link">Team Stats</Link>
-              </li>
+              </li> */}
               <li className="navbar-item ml-auto">
                 <Link to="/contact" className="nav-link">Contact Us</Link>
               </li>

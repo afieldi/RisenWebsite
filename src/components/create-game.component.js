@@ -63,8 +63,6 @@ export default class CreateGame extends Component {
       date: this.state.date
     }
 
-    console.log(game);
-
     axios.post('http://localhost:5000/games/add', game)
       .then(res => console.log(res.data));
 

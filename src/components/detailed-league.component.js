@@ -11,8 +11,6 @@ export default class DetailedLeague extends Component {
         this.state = {
             leagueData: staticText.leagues[this.league]
         }
-
-        console.log(this.state.leagueData)
     }
 
     render() {

@@ -5,7 +5,7 @@ import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { Link } from 'react-router-dom'
-import { customRound } from '../Helpers';
+import { customRound, getBaseUrl } from '../Helpers';
 
 
 export default class Overview extends Component {
@@ -23,13 +23,11 @@ export default class Overview extends Component {
     }
 
     getData(lane = null) {
-        let url = "http://localhost:5000/stats/brief"
+        let url = getBaseUrl() + "/stats/brief";
         if(lane) {
-            url += '/lane/' + lane
+            url += '/lane/' + lane;
         }
-        console.log(lane);
         fetch(url).then((data) => {
-            // console.log(data.json());
             data.json().then(data => {
                 data = this.sortData(data, "lane", "DESC");
                 this.setState({
@@ -48,9 +46,6 @@ export default class Overview extends Component {
         else {
             this.state.filteredData = this.state.filteredData;
         }
-        // this.setState({
-        //     filteredData: laneData
-        // });
     }
 
     filterName() {
@@ -82,7 +77,6 @@ export default class Overview extends Component {
                 res = a._id.lane.localeCompare(b._id.lane);
             }
             else if (attr === "name" ) {
-                console.log("a" - "b");
                 res = a._id.player[0].localeCompare(b._id.player[0]);
             }
             else {
@@ -163,7 +157,7 @@ export default class Overview extends Component {
                         {
                             this.state.filteredData.map((item, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={"overviewStats-" + index}>
                                         <td scope="row" className="risen-datum center">{index + 1}</td>
                                         <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player[0]}`} >{item._id.player[0]}</Link></td>
                                         <td className="center" name="laneCol">{item._id.lane}</td>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { customRound } from '../../Helpers';
+import { customRound, getBaseUrl } from '../../Helpers';
 import { Button, Dropdown, Container } from "react-bootstrap";
 import $ from 'jquery';
 
@@ -10,7 +10,7 @@ export default class BasicStats extends Component {
     constructor(props) {
         super(props);
         this.filteredData = [];
-        this.accumulatedStats = [];
+        this.accumulatedStats = {};
         this.state = {
             playerName: this.props.player,
             statData: this.props.playerData,
@@ -66,15 +66,42 @@ export default class BasicStats extends Component {
     
     shouldComponentUpdate(newProps, newState) {
         this.filteredData = newProps.playerData;
-        this.accumulatedStats = newProps.accStats;
+        this.computeAccStats();
         return true;
     }
 
+    computeAccStats() {
+        let wins = 0;
+        let kills = 0, deaths = 0, assists = 0;
+        let cs = 0, min = 0;
+        this.accumulatedStats = {
+            "wr": 0,
+            "games": 0,
+            "kda": 0,
+            "cs": 0
+        };
+        for (let datum of this.filteredData) {
+          this.accumulatedStats["games"] += 1;
+          if (datum["win"]) {
+            wins += 1;
+          }
+          kills += datum["kills"];
+          deaths += datum["deaths"];
+          assists += datum["assists"];
+          cs += datum["totalMinionsKilled"];
+          min += datum["gameDuration"] / 60
+        }
+
+        this.accumulatedStats["wr"] = customRound((wins / this.accumulatedStats["games"]) * 100, 2);
+        this.accumulatedStats["kda"] = customRound((kills + assists) / deaths, 1);
+        this.accumulatedStats["cs"] = customRound(cs / min, 1);
+    }
+
     loadCompareData(playerName) {
-        let url = "http://localhost:5000/stats/player/name/" + playerName + "/agg"
+        let url = getBaseUrl() + "/stats/player/name/" + playerName + "/agg"
         fetch(url).then((data) => {
           if (data.status != 200) {
-            // alert("Could not find summoner!");
+            alert("Could not find summoner!");
             return;
           }
           data.json().then(jsonData => {
@@ -175,7 +202,7 @@ export default class BasicStats extends Component {
 
                         {/* Advanced game by game */}
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md">
                             <div className="risen-stats-block">
                                 <div className="risen-stats-header">
                                     <div className="row">
@@ -245,12 +272,12 @@ export default class BasicStats extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        {/* <div className="col-md-4">
                             <div className="risen-stats-block">
                                 <div className="risen-stats-header"><h3>Best Champs</h3></div>
                                 <div className="risen-stats-body">Coming Soon</div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Detailed overall stats */}

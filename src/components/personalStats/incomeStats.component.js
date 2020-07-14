@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Form } from 'react-bootstrap';
-import { customRound, matchDict } from '../../Helpers';
+import { customRound } from '../../Helpers';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 export default class IncomeStats extends Component {
   constructor(props) {
@@ -9,7 +10,9 @@ export default class IncomeStats extends Component {
     this.filteredData = [];
     this.state = {
       consumptionStats: {},
-      vsStats: {}
+      vsStats: {},
+      graphStat: "goldEarned",
+      graphSize: 10
     }
   }
 
@@ -83,6 +86,13 @@ export default class IncomeStats extends Component {
     this.setState({
       vsStats: totals
     });
+  }
+
+  updateGraph() {
+    this.setState({
+      graphStat: document.getElementById("goldDataSelect").value,
+      graphSize: document.getElementById("dataSizeSelect").value
+    })
   }
 
   filterData() {
@@ -177,7 +187,39 @@ export default class IncomeStats extends Component {
                   <h3>Gold Graph</h3>
                 </div>
                 <div className="risen-stats-body">
-                  
+                  <div className="row">
+                    <div className="col-8">
+                      <LineChart width={600} height={300} data={this.filteredData.slice(0, this.state.graphSize)}>
+                        <Line dataKey={this.state.graphStat}></Line>
+                        <CartesianGrid stroke="#ccc" />
+                        <XAxis tick={false} label="Game" />
+                        <YAxis />
+                      </LineChart>
+                    </div>
+                    <div className="col-4">
+                      <h4>Filters</h4>
+                        <Form>
+                            <Form.Group controlId="goldDataSelect">
+                                <Form.Label>Stat</Form.Label>
+                                <Form.Control as="select" defaultValue="goldEarned" onChange={this.updateGraph.bind(this)}>
+                                    <option value="goldEarned">Total Gold</option>
+                                    <option value="csDiff10">CSD@10</option>
+                                    <option value="csDiff20">CSD@20</option>
+                                    <option value="csDiff30">CSD@30</option>
+                                    <option value="firstItemTime">First Back</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group controlId="dataSizeSelect" defaultValue="10" onChange={this.updateGraph.bind(this)}>
+                                <Form.Label>Games Shown</Form.Label>
+                                <Form.Control as="select">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </Form.Control>
+                            </Form.Group>
+                        </Form>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

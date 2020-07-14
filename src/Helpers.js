@@ -10,3 +10,7 @@ export function matchDict(dict1, dict2) {
     }
     return true;
 }
+
+export function getBaseUrl() {
+    return "http://localhost:5000";
+}

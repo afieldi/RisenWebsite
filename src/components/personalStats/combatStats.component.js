@@ -106,10 +106,26 @@ export default class CombatStats extends Component {
 
     generateDots() {
         // This is kinda expensive
+        let side = document.getElementById("mapSideSelect");
+        let type = document.getElementById("mapType");
+        let time = document.getElementById("timeSelect");
+
+        if (type === null || side === null) {
+            return;
+        }
+        type = type.value;
+        side = side.value;
+        time = time.value;
 
         function addToDots(map, type="?", color="red") {
             let dots = [];
             for (const event of map) {
+                // Event is of form [x, y, timestamp]
+                if (time != 0) {
+                    if (Math.abs(event[2] - (time * 2 * 60000)) > 60000) {
+                        continue;
+                    }
+                }
 
                 dots.push([
                     customRound((event[0]/15000) * 100, 0).toString() + "%",
@@ -121,15 +137,6 @@ export default class CombatStats extends Component {
             }
             return dots;
         }
-
-        let side = document.getElementById("mapSideSelect");
-        let type = document.getElementById("mapType");
-
-        if (type === null || side === null) {
-            return;
-        }
-        type = type.value;
-        side = side.value;
 
         let allDots = [];
         for (const game of this.filteredData) {
@@ -290,9 +297,9 @@ export default class CombatStats extends Component {
                                                         <option value="BOTH">Both</option>
                                                     </Form.Control>
                                                 </Form.Group>
-                                                <Form.Group controlId="formBasicRangeCustom">
-                                                    <Form.Label>Time (0 shows all)</Form.Label>
-                                                    <Form.Control type="range" defaultValue="0" max="100" custom />
+                                                <Form.Group controlId="timeSelect" onChange={this.generateDots.bind(this)}>
+                                                    <Form.Label>Time (0 shows all): Don't use if you have a bad comp</Form.Label>
+                                                    <Form.Control type="range" defaultValue="0" max="21" custom />
                                                 </Form.Group>
                                             </Form>
                                         </div>

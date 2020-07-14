@@ -5,7 +5,7 @@ import jngLaneIcon from '../images/roles/Position_Gold-Jungle.png';
 import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
-import { customRound } from '../Helpers';
+import { customRound, getBaseUrl } from '../Helpers';
 import { Button, Dropdown, Container, Form } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
@@ -94,7 +94,7 @@ export default class DetailedStats extends Component {
   }
 
   loadPlayerData(playerName) {
-    let url = "http://localhost:5000/stats/player/name/" + playerName
+    let url = getBaseUrl() + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
         let accStats = {
@@ -108,10 +108,6 @@ export default class DetailedStats extends Component {
           statData: data,
           accumulatedStats: accStats,
           filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
-        }, () => {
-          // This is here beacuse in the sub-stats components all their stuff is kicked off in the shouldComponentUpdate function
-          // That function is not called upon first call. So we immediatly call the perform filter to set state and kick it off
-          // this.performFilter();
         });
       });
     })
@@ -143,11 +139,35 @@ export default class DetailedStats extends Component {
           return false;
         }
       }
+
+      let laneFilter = document.getElementById("roleFilter").value;
+      if (laneFilter !== "ANY") {
+        if (game.lane !== laneFilter) {
+          return false;
+        }
+      }
+
+      let timeFilter = document.getElementById("durationFilter").value;
+      if (timeFilter !== "ANY") {
+        let t1 = timeFilter.split("-")[0];
+        let t2 = timeFilter.split("-")[1];
+        if (game.gameDuration < t1 * 60 || game.gameDuration > t2 * 60) {
+          return false;
+        }
+      }
+
+      let winFilter = document.getElementById("resultFilter").value;
+      if (winFilter !== "ANY") {
+        if (winFilter === "WIN" && game.win !== true) {
+          return false;
+        }
+        else if (winFilter === "LOSS" && game.win === true) {
+          return false;
+        }
+      }
       return true;
     });
     
-    console.log(filteredData);
-
     this.setState({
       filteredData: filteredData
     });
@@ -192,13 +212,26 @@ export default class DetailedStats extends Component {
                                       </Form.Group>
                                     </div>
                                     <div className="col">
+                                      <Form.Group controlId="roleFilter">
+                                        <Form.Label>Role</Form.Label>
+                                        <Form.Control as="select" defaultValue="ANY">
+                                          <option value="ANY">Any</option>
+                                          <option value="TOP">Top</option>
+                                          <option value="JUNGLE">Jungle</option>
+                                          <option value="MIDDLE">Mid</option>
+                                          <option value="BOTTOM">Bot</option>
+                                          <option value="SUPPORT">Support</option>
+                                        </Form.Control>
+                                      </Form.Group>
+                                    </div>
+                                    <div className="col">
                                       <Form.Group controlId="durationFilter">
                                         <Form.Label>Duration</Form.Label>
                                         <Form.Control as="select">
-                                          <option>Any</option>
-                                          <option>20min</option>
-                                          <option>20-30min</option>
-                                          <option>30+min</option>
+                                          <option value="ANY">Any</option>
+                                          <option value="0-20">20min</option>
+                                          <option value="20-30">20-30min</option>
+                                          <option value="30-120">30+min</option>
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
@@ -206,9 +239,9 @@ export default class DetailedStats extends Component {
                                       <Form.Group controlId="resultFilter">
                                         <Form.Label>Result</Form.Label>
                                         <Form.Control as="select">
-                                          <option>Any</option>
-                                          <option>Win</option>
-                                          <option>Loss</option>
+                                          <option value="ANY">Any</option>
+                                          <option value="WIN">Win</option>
+                                          <option value="LOSS">Loss</option>
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
