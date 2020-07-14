@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 
 import { Container, Form } from "react-bootstrap";
-import { customRound } from '../../Helpers';
+import { customRound, matchDict } from '../../Helpers';
 
 import DotMap from '../dotmap.component';
 
@@ -13,9 +13,10 @@ export default class CombatStats extends Component {
         super(props);
 
         this.playerName = this.props.player;
+
+        this.statData = [];
+        this.filteredData = [];
         this.state = {
-            statData: [],
-            filteredData: [],
             dotLocations: [],
             offensiveStats: {},
             defensiveStats: {}
@@ -41,7 +42,7 @@ export default class CombatStats extends Component {
             "Solo Kills": 0,
             "Gank Kills": 0,
         }
-        this.state.filteredData.map(game => {
+        this.filteredData.map(game => {
             totals.Kills += game.kills;
             totals["Kills@15"] += game.kills15;
             totals["Assists"] += game.assists;
@@ -52,8 +53,15 @@ export default class CombatStats extends Component {
         });
         if (type === "AVG"){
             for (const key of Object.keys(totals)) {
-                totals[key] = customRound(totals[key] / this.state.filteredData.length);
+                totals[key] = customRound(totals[key] / this.filteredData.length);
             }
+        }
+        
+        // This is here so that the updates are found when getting data from the parent component
+        // The setState function is async and too slow that if this is called from shouldComponentUpdate
+        //  the changes will not occur in time and won't be shown
+        if (Object.keys(this.state.offensiveStats).length === 0) {
+            this.state.offensiveStats = totals;
         }
         this.setState({
             offensiveStats: totals
@@ -75,7 +83,7 @@ export default class CombatStats extends Component {
             "Solo Deaths": 0,
             "Gank Deaths": 0,
         }
-        this.state.filteredData.map(game => {
+        this.filteredData.map(game => {
             totals["Deaths"] += game.deaths;
             totals["Deaths@15"] += game.deaths15;
             totals["Damage Taken"] += game.totalDamageTaken;
@@ -84,8 +92,12 @@ export default class CombatStats extends Component {
         });
         if (type === "AVG"){
             for (const key of Object.keys(totals)) {
-                totals[key] = customRound(totals[key] / this.state.filteredData.length);
+                totals[key] = customRound(totals[key] / this.filteredData.length);
             }
+        }
+
+        if (Object.keys(this.state.defensiveStats).length === 0) {
+            this.state.defensiveStats = totals;
         }
         this.setState({
             defensiveStats: totals
@@ -120,7 +132,7 @@ export default class CombatStats extends Component {
         side = side.value;
 
         let allDots = [];
-        for (const game of this.state.filteredData) {
+        for (const game of this.filteredData) {
             if ((game.teamId !== 100 && side === "BLUE") ||
                 (game.teamId !== 200 && side === "RED")) {
                 continue;
@@ -155,17 +167,18 @@ export default class CombatStats extends Component {
         this.generateDots();
     }
 
-    componentDidUpdate() {
-        // Handle Async update to playerdata stuff
-        if (this.state.statData.length === 0 && this.props.playerData.length !== 0) {
-            this.setState({
-                statData: this.props.playerData,
-                filteredData: JSON.parse(JSON.stringify(this.props.playerData))
-            }, () => {
-                this.filterData();
-                this.analyzeData();
-            });
+    shouldComponentUpdate(newProps, newState) {
+        // TODO: maybe look for a better way to do this
+        if (this.filteredData === newProps.playerData &&
+            this.accumulatedStats === newProps.accStats &&
+            JSON.stringify(this.state) === JSON.stringify(newState)) {
+            return false;
         }
+        this.filteredData = newProps.playerData;
+        this.accumulatedStats = newProps.accStats;
+        this.filterData();
+        this.analyzeData();
+        return true;
     }
 
     render() {

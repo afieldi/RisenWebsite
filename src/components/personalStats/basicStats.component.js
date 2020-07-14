@@ -9,6 +9,8 @@ export default class BasicStats extends Component {
 
     constructor(props) {
         super(props);
+        this.filteredData = [];
+        this.accumulatedStats = [];
         this.state = {
             playerName: this.props.player,
             statData: this.props.playerData,
@@ -62,20 +64,10 @@ export default class BasicStats extends Component {
         this.loadCompareData(this.props.player);
     }
     
-    
-    componentDidUpdate() {
-
-        if (this.state.statData.length === 0 && this.props.playerData.length !== 0) {
-            this.setState({
-                statData: this.props.playerData,
-                filteredData: JSON.parse(JSON.stringify(this.props.playerData))
-            });
-        }
-        if (Object.keys(this.state.accumulatedStats).length === 0 && Object.keys(this.props.accStats).length !== 0) {
-            this.setState({
-                accumulatedStats: this.props.accStats,
-            });
-        }
+    shouldComponentUpdate(newProps, newState) {
+        this.filteredData = newProps.playerData;
+        this.accumulatedStats = newProps.accStats;
+        return true;
     }
 
     loadCompareData(playerName) {
@@ -160,19 +152,19 @@ export default class BasicStats extends Component {
                             <div className="risen-stats-body">
                                 <div className="row">
                                 <div className="col-sm">
-                                    <div className="center">{this.state.accumulatedStats["wr"]}%</div>
+                                    <div className="center">{this.accumulatedStats["wr"]}%</div>
                                     <div className="center risen-sub-label">Winrate</div>
                                 </div>
                                 <div className="col-sm">
-                                    <div className="center">{this.state.accumulatedStats["kda"]}</div>
+                                    <div className="center">{this.accumulatedStats["kda"]}</div>
                                     <div className="center risen-sub-label">KDA</div>
                                 </div>
                                 <div className="col-sm">
-                                    <div className="center">{this.state.accumulatedStats["cs"]}</div>
+                                    <div className="center">{this.accumulatedStats["cs"]}</div>
                                     <div className="center risen-sub-label">CS/Min</div>
                                 </div>
                                 <div className="col-sm">
-                                    <div className="center">{this.state.accumulatedStats["games"]}</div>
+                                    <div className="center">{this.accumulatedStats["games"]}</div>
                                     <div className="center risen-sub-label">Games</div>
                                 </div>
                                 </div>
@@ -228,7 +220,7 @@ export default class BasicStats extends Component {
                                     </thead>
                                     <tbody>
                                         {
-                                        this.state.filteredData.map((datum, index) => {
+                                        this.filteredData.map((datum, index) => {
                                             return (
                                             <tr key={"gameStatRow" + index}>
                                                 {

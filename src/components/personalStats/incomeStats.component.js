@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { Container, Form } from 'react-bootstrap';
-import { customRound } from '../../Helpers';
+import { customRound, matchDict } from '../../Helpers';
 
 export default class IncomeStats extends Component {
   constructor(props) {
     super(props);
+    this.statData = [];
+    this.filteredData = [];
     this.state = {
-      statData: [],
-      filteredData: [],
-      earlyStats: {},
-      generalStats: {}
+      consumptionStats: {},
+      vsStats: {}
     }
   }
 
-  aggregateEarlyStats() {
-    let type = document.getElementById("earlyType");
+  aggregateConsumptionStats() {
+    let type = document.getElementById("consumptionType");
     if (type == null) {
         return;
     }
@@ -25,7 +25,7 @@ export default class IncomeStats extends Component {
       "Jungle Creeps": 0,
       "Counter Jungled": 0
     }
-    this.state.filteredData.map(game => {
+    this.filteredData.map(game => {
         totals["Gold Earned"] += game.goldEarned;
         totals["Minions Killed"] += game.totalMinionsKilled;
         totals["Jungle Creeps"] += game.neutralMinionsKilled;
@@ -33,11 +33,16 @@ export default class IncomeStats extends Component {
     });
     if (type === "AVG"){
         for (const key of Object.keys(totals)) {
-            totals[key] = customRound(totals[key] / this.state.filteredData.length);
+            totals[key] = customRound(totals[key] / this.filteredData.length);
         }
     }
+
+    // For explanation, look at same code in combatStats.component.js
+    if (Object.keys(this.state.consumptionStats) === 0) {
+      this.state.consumptionStats = totals;
+    }
     this.setState({
-        earlyStats: totals
+        consumptionStats: totals
     });
   }
 
@@ -47,8 +52,8 @@ export default class IncomeStats extends Component {
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
   }
 
-  aggregateCompStats() {
-    let type = document.getElementById("generalType");
+  aggregateVsStats() {
+    let type = document.getElementById("vsType");
     if (type == null) {
       return;
     }
@@ -59,7 +64,7 @@ export default class IncomeStats extends Component {
       "CSD@30": 0,
       "First Back(min)": 0,
     }
-    this.state.filteredData.map(game => {
+    this.filteredData.map(game => {
       totals["CSD@10"] += customRound(game.csDiff10);
       totals["CSD@20"] += customRound(game.csDiff20);
       totals["CSD@30"] += customRound(game.csDiff30);
@@ -67,11 +72,16 @@ export default class IncomeStats extends Component {
     });
     if (type === "AVG") {
       for (const key of Object.keys(totals)) {
-        totals[key] = customRound(totals[key] / this.state.filteredData.length);
+        totals[key] = customRound(totals[key] / this.filteredData.length);
       }
     }
+
+    // For explanation, look at same code in combatStats.component.js
+    if (Object.keys(this.state.vsStats) === 0) {
+      this.state.vsStats = totals;
+    }
     this.setState({
-      generalStats: totals
+      vsStats: totals
     });
   }
 
@@ -80,21 +90,20 @@ export default class IncomeStats extends Component {
   }
 
   analyzeData() {
-    this.aggregateEarlyStats();
-    this.aggregateCompStats();
+    this.aggregateConsumptionStats();
+    this.aggregateVsStats();
   }
 
-  componentDidUpdate() {
-    // Handle Async update to playerdata stuff
-    if (this.state.statData.length === 0 && this.props.playerData.length !== 0) {
-        this.setState({
-            statData: this.props.playerData,
-            filteredData: JSON.parse(JSON.stringify(this.props.playerData))
-        }, () => {
-            this.filterData();
-            this.analyzeData();
-        });
+  shouldComponentUpdate(newProps, newState) {
+    // TODO: maybe look for a better way to do this
+    if (this.filteredData === newProps.playerData &&
+        JSON.stringify(this.state) === JSON.stringify(newState)) {
+        return false;
     }
+    this.filteredData = newProps.playerData;
+    this.filterData();
+    this.analyzeData();
+    return true;
   }
 
   render() {
@@ -106,8 +115,8 @@ export default class IncomeStats extends Component {
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
                   <h3>Consumption Stats</h3>
-                  <Form.Group controlId="earlyType">
-                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateEarlyStats.bind(this)}>
+                  <Form.Group controlId="consumptionType">
+                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateConsumptionStats.bind(this)}>
                       <option value="TOTAL">Total</option>
                       <option value="AVG">Average</option>
                     </Form.Control>
@@ -117,9 +126,9 @@ export default class IncomeStats extends Component {
                   <table className="table-striped table risen-table">
                       <tbody>
                         {
-                          Object.entries(this.state.earlyStats).map((entry, index) => {
+                          Object.entries(this.state.consumptionStats).map((entry, index) => {
                             return (
-                              <tr key={"earlyStatsRow-" + index}>
+                              <tr key={"consumptionStatsRow-" + index}>
                                 <td><b>{entry[0]}</b></td>
                                 <td>{entry[1]}</td>
                               </tr>
@@ -135,8 +144,8 @@ export default class IncomeStats extends Component {
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
                   <h3>VS Stats</h3>
-                  <Form.Group controlId="generalType">
-                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateCompStats.bind(this)}>
+                  <Form.Group controlId="vsType">
+                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateVsStats.bind(this)}>
                       <option value="TOTAL">Total</option>
                       <option value="AVG">Average</option>
                     </Form.Control>
@@ -146,7 +155,7 @@ export default class IncomeStats extends Component {
                   <table className="table-striped table risen-table">
                     <tbody>
                       {
-                        Object.entries(this.state.generalStats).map((entry, index) => {
+                        Object.entries(this.state.vsStats).map((entry, index) => {
                           return (
                             <tr key={"genStatsRow-" + index}>
                               <td><b>{entry[0]}</b></td>

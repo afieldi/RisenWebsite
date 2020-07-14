@@ -68,9 +68,9 @@ async function saveGame(matchId) {
                     spell2Id: player.spell2Id,
                 
                     // Base Stats
-                    kills: stats.kills,
-                    deaths: stats.deaths,
-                    assists: stats.assists,
+                    kills: stats.kills ? stats.kills : 0,
+                    deaths: stats.deaths ? stats.deaths : 0,
+                    assists: stats.assists ? stats.assists : 0,
                     champLevel: stats.champLevel,
                     win: stats.win,
 
@@ -88,10 +88,10 @@ async function saveGame(matchId) {
                 
                     // Income
                     goldEarned: stats.goldEarned,
-                    totalMinionsKilled: stats.totalMinionsKilled,
-                    neutralMinionsKilled: stats.neutralMinionsKilled,
-                    neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle,
-                    neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle,
+                    totalMinionsKilled: stats.totalMinionsKilled ? stats.totalMinionsKilled : 0,
+                    neutralMinionsKilled: stats.neutralMinionsKilled ? stats.neutralMinionsKilled : 0,
+                    neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle ? stats.neutralMinionsKilledTeamJungle : 0,
+                    neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle ? stats.neutralMinionsKilledEnemyJungle : 0,
                     firstItemTime: timelineStats[+i+1].firstItemTime,
                 
                     // Damage

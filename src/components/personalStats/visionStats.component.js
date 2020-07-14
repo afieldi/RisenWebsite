@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Form } from 'react-bootstrap';
-import { customRound } from '../../Helpers';
+import { customRound, matchDict } from '../../Helpers';
 
 export default class VisionStats extends Component {
   constructor(props) {
     super(props);
+    this.statData = [];
+    this.filteredData = [];
     this.state = {
-      statData: [],
-      filteredData: [],
       earlyStats: {},
       generalStats: {}
     }
@@ -16,7 +16,7 @@ export default class VisionStats extends Component {
   aggregateEarlyStats() {
     let type = document.getElementById("earlyType");
     if (type == null) {
-        return;
+      return;
     }
     type = type.value;
     const totals = {
@@ -25,7 +25,7 @@ export default class VisionStats extends Component {
       "Gank Kills": 0,
       "Gank Deaths": 0
     }
-    this.state.filteredData.map(game => {
+    this.filteredData.map(game => {
         totals["Wards Placed@15"] += game.wardsPlaced15;
         totals["Wards Killed@15"] += game.wardsKilled15;
         totals["Gank Kills"] += game.gankKills;
@@ -33,8 +33,13 @@ export default class VisionStats extends Component {
     });
     if (type === "AVG"){
         for (const key of Object.keys(totals)) {
-            totals[key] = customRound(totals[key] / this.state.filteredData.length);
+            totals[key] = customRound(totals[key] / this.filteredData.length);
         }
+    }
+
+    // For explanation, look at same code in combatStats.component.js
+    if (Object.keys(this.state.earlyStats).length === 0) {
+      this.state.earlyStats = totals;
     }
     this.setState({
         earlyStats: totals
@@ -53,7 +58,7 @@ export default class VisionStats extends Component {
       "VS/Min": 0,
       "Pinks Bought": 0,
     }
-    this.state.filteredData.map(game => {
+    this.filteredData.map(game => {
       totals["Vision Score"] += game.visionScore;
       totals["Wards Killed"] += game.wardsKilled ? game.wardsKilled : 0;
       totals["VS/Min"] += customRound(game.visionScore / (game.gameDuration / 60), 1);
@@ -61,8 +66,13 @@ export default class VisionStats extends Component {
     });
     if (type === "AVG") {
       for (const key of Object.keys(totals)) {
-        totals[key] = customRound(totals[key] / this.state.filteredData.length);
+        totals[key] = customRound(totals[key] / this.filteredData.length);
       }
+    }
+
+    // For explanation, look at same code in combatStats.component.js
+    if (Object.keys(this.state.generalStats).length === 0) {
+      this.state.generalStats = totals;
     }
     this.setState({
       generalStats: totals
@@ -78,17 +88,16 @@ export default class VisionStats extends Component {
     this.aggregateGeneralStats();
   }
 
-  componentDidUpdate() {
-    // Handle Async update to playerdata stuff
-    if (this.state.statData.length === 0 && this.props.playerData.length !== 0) {
-        this.setState({
-            statData: this.props.playerData,
-            filteredData: JSON.parse(JSON.stringify(this.props.playerData))
-        }, () => {
-            this.filterData();
-            this.analyzeData();
-        });
+  shouldComponentUpdate(newProps, newState) {
+    if (this.filteredData === newProps.playerData &&
+        JSON.stringify(this.state) === JSON.stringify(newState)) {
+        return false;
     }
+    this.filteredData = newProps.playerData;
+    this.accumulatedStats = newProps.accStats;
+    this.filterData();
+    this.analyzeData();
+    return true;
   }
 
   render() {

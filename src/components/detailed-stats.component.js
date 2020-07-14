@@ -108,6 +108,10 @@ export default class DetailedStats extends Component {
           statData: data,
           accumulatedStats: accStats,
           filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
+        }, () => {
+          // This is here beacuse in the sub-stats components all their stuff is kicked off in the shouldComponentUpdate function
+          // That function is not called upon first call. So we immediatly call the perform filter to set state and kick it off
+          // this.performFilter();
         });
       });
     })
@@ -141,7 +145,8 @@ export default class DetailedStats extends Component {
       }
       return true;
     });
-
+    
+    console.log(filteredData);
 
     this.setState({
       filteredData: filteredData
@@ -193,7 +198,7 @@ export default class DetailedStats extends Component {
                                           <option>Any</option>
                                           <option>20min</option>
                                           <option>20-30min</option>
-                                          <option>>30min</option>
+                                          <option>30+min</option>
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
@@ -217,16 +222,16 @@ export default class DetailedStats extends Component {
                 </div>
               </Container>
               <div className="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
-                <BasicStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></BasicStats>
+                <BasicStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></BasicStats>
               </div>
               <div className="tab-pane fade" id="nav-combat" role="tabpanel" aria-labelledby="nav-combat-tab">
-                <CombatStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></CombatStats>
+                <CombatStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></CombatStats>
               </div>
               <div className="tab-pane fade" id="nav-income" role="tabpanel" aria-labelledby="nav-income-tab">
-                <IncomeStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></IncomeStats>
+                <IncomeStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></IncomeStats>
               </div>
               <div className="tab-pane fade" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
-                <VisionStats player={this.state.playerName} playerData={this.state.statData} accStats={this.state.accumulatedStats}></VisionStats>
+                <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></VisionStats>
               </div>
             </div>
             
