@@ -1,8 +1,8 @@
+// require('dotenv').config();
 const { leagueApi } = require('./api');
 const { verifyPlayer } = require('./player')
-
+const {spawn} = require('child_process');
 const mongoose = require('mongoose');
-// require('dotenv').config();
 
 // const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
 // mongoose
@@ -12,18 +12,45 @@ const mongoose = require('mongoose');
 //   console.log("MongoDB database connection established successfully");
 // });
 
+const roles = require('./roles');
+const timelineAnalyizer = require('./timeline')
 
 const GameModel = require('../models/game.model');
 const PlayerModel = require('../models/player.model');
 const TeamModel = require('../models/team.model');
 
-
 // This will be used later
 async function saveGames(matchIds) {
     for ( const matchId of matchIds ) {
-        console.log(matchId);
-        await saveGame(matchId);
+        try {
+            console.log("adding game: " + matchId);
+            await saveGame(matchId);
+            console.log("Saved game: " + matchId);
+        } catch (error) {
+            console.log(error);
+            console.log("Failed saving game: " + matchId);
+        }
     }
+}
+
+async function getRoles(gameData, timeline) {
+    return new Promise( (resolve, reject) => {
+        const python = spawn('python', ['./src/roles.py']);
+        
+        python.stdin.write(JSON.stringify(gameData));
+        python.stdin.write("\r\n");
+        python.stdin.write(JSON.stringify(timeline));
+        python.stdin.end();
+        
+        python.stdout.on('data', function (data) {
+            resolve(JSON.parse(data.toString()));
+        });
+
+        python.stdout.on('error', (data) => {
+            reject();
+        })
+    })
+
 }
 
 async function saveGame(matchId) {
@@ -36,8 +63,12 @@ async function saveGame(matchId) {
     await leagueApi.Match.gettingById(matchId).then(
         async gameData => {
             const teams = await getTeams(gameData.participantIdentities);
+            const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            // const laneAssignments = roles.getRoles(gameData, timeline);
+            const laneAssignments = await getRoles(gameData, timeline);
+            const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
 
-            await gameData.participants.forEach(async (player, i) => {
+            for (const [i, player] of Object.entries(gameData.participants)) {
                 const playerTeam = await verifyExistence(
                     gameData.participantIdentities[i].player.accountId,
                     i < 5 ? teams[0] : teams[1]
@@ -49,7 +80,7 @@ async function saveGame(matchId) {
                 }
 
                 // Burn this code
-                const gameEntry = await GameModel.create({
+                await GameModel.create({
                     player: playerTeam[0]._id,
                     team: playerTeam[1]._id,
                     gameId: matchId,
@@ -60,18 +91,31 @@ async function saveGame(matchId) {
                     spell2Id: player.spell2Id,
                 
                     // Base Stats
-                    kills: stats.kills,
-                    deaths: stats.deaths,
-                    assists: stats.assists,
+                    kills: stats.kills ? stats.kills : 0,
+                    deaths: stats.deaths ? stats.deaths : 0,
+                    assists: stats.assists ? stats.assists : 0,
                     champLevel: stats.champLevel,
                     win: stats.win,
+
+                    // Combat
+                    kills15: timelineStats[+i+1].kills15,
+                    killMap: timelineStats[+i+1].killMap,
+                    soloKills: timelineStats[+i+1].soloKills,
+                    gankKills: timelineStats[+i+1].gankKills,
+                    deaths15: timelineStats[+i+1].deaths15,
+                    deathMap: timelineStats[+i+1].deathMap,
+                    soloDeaths: timelineStats[+i+1].soloDeaths,
+                    gankDeaths: timelineStats[+i+1].gankDeaths,
+                    assists15: timelineStats[+i+1].assists15,
+                    assistMap: timelineStats[+i+1].assistMap,
                 
                     // Income
                     goldEarned: stats.goldEarned,
-                    totalMinionsKilled: stats.totalMinionsKilled,
-                    neutralMinionsKilled: stats.neutralMinionsKilled,
-                    neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle,
-                    neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle,
+                    totalMinionsKilled: stats.totalMinionsKilled ? stats.totalMinionsKilled : 0,
+                    neutralMinionsKilled: stats.neutralMinionsKilled ? stats.neutralMinionsKilled : 0,
+                    neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle ? stats.neutralMinionsKilledTeamJungle : 0,
+                    neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle ? stats.neutralMinionsKilledEnemyJungle : 0,
+                    firstItemTime: timelineStats[+i+1].firstItemTime,
                 
                     // Damage
                     physicalDamageDealtToChampions: stats.physicalDamageDealtToChampions,
@@ -89,7 +133,9 @@ async function saveGame(matchId) {
                 
                     // Vision
                     visionScore: stats.visionScore,
-                    wardsKilled: stats.wardsKilled,
+                    wardsPlaced15: timelineStats[+i+1].wardsPlaced15,
+                    wardsKilled15: timelineStats[+i+1].wardsKilled15,
+                    wardsKilled: stats.wardsKilled ? stats.wardsKilled : 0,
                     visionWardsBoughtInGame: stats.visionWardsBoughtInGame,
                 
                     // Fun
@@ -104,19 +150,16 @@ async function saveGame(matchId) {
                     pentaKills: stats.pentaKills,
                 
                     // Timeline
-                    csDiff10: player.timeline.csDiffPerMinDeltas["0-10"] ? player.timeline.csDiffPerMinDeltas["0-10"] * 10 : 0,
-                    csDiff20: player.timeline.csDiffPerMinDeltas["10-20"] ? player.timeline.csDiffPerMinDeltas["10-20"] * 10 : 0,
-                    csDiff30: player.timeline.csDiffPerMinDeltas["20-30"] ? player.timeline.csDiffPerMinDeltas["20-30"] * 10 : 0,
-                    lane: player.timeline.lane,
+                    csDiff10: timelineStats[+i+1].CSD10,
+                    csDiff20: timelineStats[+i+1].CSD20,
+                    csDiff30: timelineStats[+i+1].CSD30,
+                    lane: laneAssignments[+i+1],
                 
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-                
-                // console.log(gameEntry);
-                // await gameEntry.save();
-            });
-            console.log("done");
+                console.log("Added game entry");
+            }
         },
         (error) => {
             console.log(error.message);
@@ -124,28 +167,12 @@ async function saveGame(matchId) {
     )
 }
 
-async function generatePlayers(participants) {
-    // await verifyExistence(participants[0].player.accountId, 1);
-    // await verifyExistence(participants[1].player.accountId, 1);
-    await verifyExistence(participants[2].player.accountId, 2);
-    await verifyExistence(participants[3].player.accountId, 2);
-    await verifyExistence(participants[4].player.accountId, 2);
-
-    // await verifyExistence(participants[5].player.accountId, 1);
-    // await verifyExistence(participants[6].player.accountId, 1);
-    await verifyExistence(participants[7].player.accountId, 3);
-    await verifyExistence(participants[8].player.accountId, 3);
-    await verifyExistence(participants[9].player.accountId, 3);
-}
 
 // Get the backend teams for participants
 // Participants is 10 length. first 5 are blue team, second 5 are red team
 // Returns [blueTeam, redTeam]
 async function getTeams(participants) {
     let participantsCopy = JSON.parse(JSON.stringify(participants));
-
-    // Remove later. Just gen's dummy data
-    // await generatePlayers(participants);
 
     function getTeam(members) {
         let teamCounter = {}
@@ -165,7 +192,6 @@ async function getTeams(participants) {
         return Object.keys(teamCounter).reduce((a, b) => teamCounter[a] > teamCounter[b] ? a : b);
     }
 
-    const players = await PlayerModel.find();
     let ids = participantsCopy.splice(0, 5).map((p) => {
         return p.player.accountId;
     });
@@ -173,14 +199,9 @@ async function getTeams(participants) {
     const teams1 = await PlayerModel.find(
         { 'accountId': { "$in": ids } }
     );
-    
-    console.log(ids);
-    console.log(teams1);
 
     const team1 = getTeam(teams1);
-        
-    console.log(team1)
-   
+           
     // participants has already been spliced
     ids = participantsCopy.map((p) => {
         return p.player.accountId;
@@ -234,18 +255,26 @@ async function verifyExistence(accountId, teamId) {
 }
 
 
-// saveGames([
-//     3478174506,
-//     3478147318,
-//     3475852754
-// ]).then(() => {
-//     console.log("donezo")
-// })
-
-// setTimeout(() => {
-//     console.log("waitin");
-// }, 10000);
-
+saveGames([
+    3478174506,
+    3478147318,
+    3475852754,
+    3491311607,
+    3491178375,
+    3490794102,
+    3490769912,
+    3490406651,
+    3490308718,
+    3490311851,
+    3490245081,
+    3490169087,
+    3490184363,
+    3490068881,
+    3490123843,
+    3489994608
+]).then(() => {
+    console.log("donezo")
+});
 
 module.exports = {
     'saveGames': saveGames

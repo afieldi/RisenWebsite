@@ -5,33 +5,64 @@ import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { Link } from 'react-router-dom'
-import { customRound } from '../Helpers';
+import { customRound, getBaseUrl } from '../Helpers';
 
 
 export default class Overview extends Component {
     constructor(props) {
         super(props);
+        this.filters = {
+            "lane": "",
+            "name": ""
+        }
         this.state = {
-            statData: []
+            statData: [],
+            filteredData: []
         }
         this.getData();
     }
 
     getData(lane = null) {
-        let url = "http://localhost:5000/stats/brief"
+        let url = getBaseUrl() + "/stats/brief";
         if(lane) {
-            url += '/lane/' + lane
+            url += '/lane/' + lane;
         }
-        console.log(lane);
         fetch(url).then((data) => {
-            // console.log(data.json());
             data.json().then(data => {
                 data = this.sortData(data, "lane", "DESC");
                 this.setState({
-                    statData: data
+                    statData: data,
+                    filteredData: data
                 });
             });
         })
+    }
+
+    filterLane() {
+        // let laneData;
+        if(this.filters.lane) {
+            this.state.filteredData = this.state.filteredData.filter(item => item._id.lane === this.filters.lane)
+        }
+        else {
+            this.state.filteredData = this.state.filteredData;
+        }
+    }
+
+    filterName() {
+        let name = document.getElementById("nameFilter").value;
+        this.state.filteredData = this.state.filteredData.filter(item => item._id.player[0].startsWith(name));
+    }
+
+    filterData() {
+        // We can set it here without using the setState function because we want this:
+        //  1. To be sync
+        //  2. Not to reload the page. That will be done later
+        this.state.filteredData = JSON.parse(JSON.stringify(this.state.statData));
+        this.filterLane();
+        this.filterName();
+
+        // Reload state as the above functions change it
+        this.setState({});
     }
 
     sortData(data, attr, direction) {
@@ -46,7 +77,6 @@ export default class Overview extends Component {
                 res = a._id.lane.localeCompare(b._id.lane);
             }
             else if (attr === "name" ) {
-                console.log("a" - "b");
                 res = a._id.player[0].localeCompare(b._id.player[0]);
             }
             else {
@@ -79,27 +109,35 @@ export default class Overview extends Component {
     render() {
         return (
             <div className="container">
-                <div className="btn-group risen-radio" data-toggle="buttons">
-                    <label className="btn btn-dark">
-                        <input type="radio" name="options" id="option1" onClick={this.getData.bind(this, "TOP")} />{this.getPositonalIcon("TOP")}
-                    </label>
-                    <label className="btn btn-dark">
-                        <input type="radio" name="options" id="option2" onClick={this.getData.bind(this, "JUNGLE")} />{this.getPositonalIcon("JUNGLE")}
-                    </label>
-                    <label className="btn btn-dark">
-                        <input type="radio" name="options" id="option3" onClick={this.getData.bind(this, "MIDDLE")} />{this.getPositonalIcon("MIDDLE")}
-                    </label>
-                    <label className="btn btn-dark">
-                        <input type="radio" name="options" id="option4" onClick={this.getData.bind(this, "BOTTOM")} />{this.getPositonalIcon("BOTTOM")}
-                    </label>
-                    <label className="btn btn-dark">
-                        <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, "SUPPORT")} />{this.getPositonalIcon("SUPPORT")}
-                    </label>
-                    <label className="btn btn-dark">
-                        <input type="radio" name="options" id="option5" onClick={this.getData.bind(this, null)} />All
-                    </label>
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="btn-group risen-radio" data-toggle="buttons">
+                            {/* TODO: Change these onClick functions */}
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
+                            </label>
+                            <label className="btn btn-light">
+                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col-md">
+                        <input type="text" id="nameFilter" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Player Name" onChange={this.filterData.bind(this)}></input>
+                    </div>
                 </div>
-                <table className="table risen-table">
+                <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
                     <thead>
                         <tr>
                         <th scope="col" className="center">Rank</th>
@@ -117,9 +155,9 @@ export default class Overview extends Component {
                     </thead>
                     <tbody>
                         {
-                            this.state.statData.map((item, index) => {
+                            this.state.filteredData.map((item, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={"overviewStats-" + index}>
                                         <td scope="row" className="risen-datum center">{index + 1}</td>
                                         <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player[0]}`} >{item._id.player[0]}</Link></td>
                                         <td className="center" name="laneCol">{item._id.lane}</td>

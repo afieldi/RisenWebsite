@@ -11,8 +11,10 @@ import CreateTeam from "./components/create-team.component";
 import Test from "./components/test.component";
 import Overview from "./components/overview-stats.component";
 import DetailedStats from "./components/detailed-stats.component";
+import DetailedLeague from './components/detailed-league.component';
 import AboutLeagues from "./components/about-leagues.component";
 import backgroundImage from "./images/backgroundimage2dark.png";
+import Contact from './components/contact.component';
 
 function App() {
   return (
@@ -30,8 +32,9 @@ function App() {
             <Route path="/test" component={Test} />
             <Route path="/stats" component={Overview} />
             <Route path="/detailed/:player" component={DetailedStats}></Route>
-            <Route path="/leagues/" component={AboutLeagues}></Route>
-            <Route path="/leagues/:league" component={AboutLeagues}></Route>
+            <Route path="/leagues" component={AboutLeagues}></Route>
+            <Route path="/league/:league" component={DetailedLeague}></Route>
+            <Route path="/contact" component={Contact}></Route>
           </div>
         </Router>
       </div>
