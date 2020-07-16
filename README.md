@@ -10,7 +10,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 5. Run the application
 >npm start
 6. Verify that website opened up in your browser (Should see Risen homepage)
-7. Add your Riot API Key to ../risen-website/backend/.env
+7. Add your Riot API Key & database credentials to ../risen-website/backend/.env
 8. Open a NEW terminal at ../risen-website/backend
 9. Install nodemon
 >npm nodemon
