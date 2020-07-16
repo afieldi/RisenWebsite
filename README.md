@@ -9,9 +9,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 >npm install
 5. Run the application
 >npm start
-6. Verify that website opened up in your browser (Should see "logged games")
-7. Open a NEW terminal at ../risen-website/backend
-8. Run the server
+6. Verify that website opened up in your browser (Should see Risen homepage)
+7. Add your Riot API Key to ../risen-website/backend/.env
+8. Open a NEW terminal at ../risen-website/backend
+9. Install nodemon
 >npm nodemon
-9. Verify that server is running locally (Refresh browser to see 3 games under "logged games")
-10. Report back
+10. Run the server
+>nodemon server
+11. Verify that server is running locally ("Player Stats" should be populated)
