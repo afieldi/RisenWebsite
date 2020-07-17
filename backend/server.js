@@ -28,11 +28,13 @@ connection.once('open', () => {
 //declare require and use of every route
 const teamsRouter = require('./routes/teams');
 const statsRouter = require('./routes/stats');
-const gamesRouter = require('./routes/games');	
+const gamesRouter = require('./routes/games');
+const codesRouter = require('./routes/codes');
 
 app.use('/games', gamesRouter);	
 app.use('/teams', teamsRouter);
 app.use('/stats', statsRouter);
+app.use('/codes', codesRouter);
 
 //starts server
 app.listen(port, () => {
