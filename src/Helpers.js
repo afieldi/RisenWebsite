@@ -12,5 +12,6 @@ export function matchDict(dict1, dict2) {
 }
 
 export function getBaseUrl() {
-    return "http://localhost:5000";
+    // return "99.79.193.118:5000";
+    return "http://localhost:5000"
 }

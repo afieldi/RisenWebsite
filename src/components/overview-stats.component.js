@@ -22,18 +22,27 @@ export default class Overview extends Component {
         this.getData();
     }
 
-    getData(lane = null) {
-        let url = getBaseUrl() + "/stats/brief";
+    getData(lane = null, page = 1, load=true, append=false) {
+        let url = getBaseUrl() + `/stats/brief`;
+        url += `?page=${page}&size=${20}`;
         if(lane) {
-            url += '/lane/' + lane;
+            url += '&lane=' + lane;
         }
         fetch(url).then((data) => {
             data.json().then(data => {
+                console.log(data);
                 data = this.sortData(data, "lane", "DESC");
-                this.setState({
-                    statData: data,
-                    filteredData: data
-                });
+                
+                if (append) {
+                    this.state.statData = this.state.statData.concat(data)
+                }
+                else {
+                    this.state.statData = data;
+                }
+                this.state.filteredData = JSON.parse(JSON.stringify(this.state.statData));
+                if(load) {
+                    this.setState({});
+                }
             });
         })
     }
@@ -57,8 +66,9 @@ export default class Overview extends Component {
         // We can set it here without using the setState function because we want this:
         //  1. To be sync
         //  2. Not to reload the page. That will be done later
-        this.state.filteredData = JSON.parse(JSON.stringify(this.state.statData));
-        this.filterLane();
+        // this.state.filteredData = JSON.parse(JSON.stringify(this.state.statData));
+        // this.filterLane();
+        this.getData(this.filters.lane, 1, false, false);
         this.filterName();
 
         // Reload state as the above functions change it
