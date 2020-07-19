@@ -179,7 +179,7 @@ export default class Overview extends Component {
                                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
                                 </div>
                         </div>
-                            </form>x`
+                            </form>
                     </div>
                 </div>
                 <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
