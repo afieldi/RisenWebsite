@@ -16,6 +16,8 @@ import AboutLeagues from "./components/about-leagues.component";
 import backgroundImage from "./images/backgroundimage2dark.png";
 import Contact from './components/contact.component';
 import GenerateCodes from './components/admin/generateCodes.component';
+import Setup from './components/drafting/setup.component';
+import Drafting from './components/drafting/drafting.component';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
             <Route path="/league/:league" component={DetailedLeague}></Route>
             <Route path="/contact" component={Contact}></Route>
             <Route path="/admin/codes" component={GenerateCodes}></Route>
+            <Route path="/drafting" component={Setup}></Route>
+            <Route path="/draft" component={Drafting}></Route>
           </div>
         </Router>
       </div>

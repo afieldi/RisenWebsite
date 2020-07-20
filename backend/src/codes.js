@@ -1,5 +1,3 @@
-const { leagueApi } = require('./api');
-const mongoose = require('mongoose');
 const fetch = require("node-fetch");
 const Code = require('../models/code.model');
 

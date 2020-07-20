@@ -9,8 +9,6 @@ export default class Contact extends Component {
         return (
             <section>
                 <br></br>
-                <br></br>
-                <br></br>
                 <div className="light-section">
                     <Container>
                         <h1 className="center text-dark">Need to Contact Us?</h1>

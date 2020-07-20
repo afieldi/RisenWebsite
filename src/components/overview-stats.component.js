@@ -149,37 +149,36 @@ export default class Overview extends Component {
                         <div className="btn-group risen-radio" data-toggle="buttons">
                             {/* TODO: Change these onClick functions */}
                             <label className="btn btn-light">
-                                <input type="radio" name="options" id="option1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
+                                <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
                             </label>
                             <label className="btn btn-light">
-                                <input type="radio" name="options" id="option2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
+                                <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
                             </label>
                             <label className="btn btn-light">
-                                <input type="radio" name="options" id="option3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
+                                <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
                             </label>
                             <label className="btn btn-light">
-                                <input type="radio" name="options" id="option4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
+                                <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
                             </label>
                             <label className="btn btn-light">
-                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
+                                <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
                             </label>
                             <label className="btn btn-light">
-                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
+                                <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
                             </label>
                         </div>
                     </div>
                     <div className="col-lg">
-                        {/* <input type="text" id="nameFilter" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Player Name" onChange={this.filterData.bind(this)}></input> */}
-                            <form onSubmit={this.submitSearch.bind(this)}>
-                        <div class="input-group mb-3 bg-light">
+                        <form onSubmit={this.submitSearch.bind(this)}>
+                            <div class="input-group mb-3 bg-light">
                                 <input type="text" class="form-control"
                                         placeholder="Recipient's username" aria-label="Recipient's username"
                                         aria-describedby="button-addon2" id="nameFilter" ></input>
                                 <div class="input-group-append text-dark">
                                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
                                 </div>
-                        </div>
-                            </form>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
