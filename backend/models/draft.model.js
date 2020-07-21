@@ -14,7 +14,8 @@ const draftSchema = new Schema({
     redPicks: [ { type: String } ],
     redBans: [ { type: String } ],
     bluePicks: [ { type: String } ],
-    blueBans: [ { type: String } ]
+    blueBans: [ { type: String } ],
+    stage: { type: Number } // The stage of draft we are in. 1-20 for picks/bans. 21 means we are done
 }, {
   timestamps: true
 });
