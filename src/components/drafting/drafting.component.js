@@ -90,9 +90,13 @@ export default class Drafting extends Component {
     }
 
     submitPick(event) {
+        if(this.state.selectedChamp.length < 3) {
+            return;
+        }
         this.socket.emit('picked', this.state.selectedChamp);
         this.setState({
-            picking: false
+            picking: false,
+            selectedChamp: ""
         });
     }
 
