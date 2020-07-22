@@ -6,7 +6,6 @@ const socketIo = require('socket.io');
 let gameGroups = {}
 
 function generateNewDraft(config, callback = (draft) => {}) {
-    console.log(config);
     Draft.create({
         gameLink: uuid.v4(),
         blueName: config.blueName,
@@ -20,7 +19,7 @@ function generateNewDraft(config, callback = (draft) => {}) {
         redBans: [],
         bluePicks: [],
         blueBans: [],
-        stage: 0
+        stage: 0 // Hasn't started yet
     }).then(draft => {
         callback(draft);
     });
@@ -45,11 +44,22 @@ function handleSocketConnection(socket) {
                         spec: [],
                         redReady: false,
                         blueReady: false,
-                        draft: draft
+                        redPickTime: 0,
+                        bluePickTime: 0,
+                        draft: draft,
+                        curTime: 0
                     };
-                    
+                    setTimeout(() => {
+                        // Kill draft after 1 hour to prevent memory hogging.
+                        try {
+                            endDraft(draft.gameLink);
+                        } catch (error) { }
+                    }, 1000 * 3600);
                 }
-                if(auth === draft.redAuth) {
+                if (draft.stage >= 20) {
+                    socket.emit("draftUpdate", draft);
+                }
+                else if(auth === draft.redAuth) {
                     gameGroups[game].redCap.push(socket);
                     handleGame(socket, gameGroups[game].draft, 1);
                 }
@@ -57,7 +67,7 @@ function handleSocketConnection(socket) {
                     gameGroups[game].blueCap.push(socket);
                     handleGame(socket, gameGroups[game].draft, 0);
                 }
-                else if (auth === undefined) {
+                else if (auth === undefined || auth === null) {
                     gameGroups[game].spec.push(socket);
                     socket.emit("draftUpdate", draft);
                 }
@@ -89,32 +99,32 @@ function handleGame(socket, draft, side) {
         if (gameGroups[draft.gameLink].redReady === true &&
             gameGroups[draft.gameLink].blueReady === true) {
             draft.save();
+
+            // Should only be hit once per draft
+            gameGroups[draft.gameLink].curTime = +draft.time;
             sendPick(draft);
         }
         socket.emit('drafting', true);
     });
 
-    socket.on('picked', (champ) => {
-        console.log("got pick: " + champ);
-        draft.stage += 1;
-        addPick(champ, draft);
-        draft.save();
-        sendUpdate(draft);
-        if(draft.stage < 20) {
-            sendPick(draft);
-        }
-        else {
-            endDraft(draft);
+    socket.on('picked', (champ, round) => {
+        if(round === +draft.stage + 1) {
+            handleChampPicked(champ, draft);
         }
     });
     
-    socket.on('hovered', (champ) => {
-        console.log("Pick: " + champ + " was hovered")
-        // Create copy so you can add the hovered champ, send the new draft and discard
-        let draftCopy = JSON.parse(JSON.stringify(draft));
-        draftCopy.stage += 1;
-        addPick(champ, draftCopy);
-        sendUpdate(draftCopy);
+    socket.on('hovered', (champ, round) => {
+        if(round === +draft.stage + 1) {
+            // Create copy so you can add the hovered champ, send the new draft and discard
+            let draftCopy = JSON.parse(JSON.stringify(draft));
+
+            // This is a hover so we don't actually want to progress a stage
+            // So we just add one and subtract so we can reuse the addPick function
+            draftCopy.stage += 1;
+            addPick(champ, draftCopy);
+            draftCopy.stage -= 1;
+            sendUpdate(draftCopy);
+        }
     });
 
     if (gameGroups[draft.gameLink].blueReady === true &&
@@ -122,32 +132,59 @@ function handleGame(socket, draft, side) {
         // Draft in progress
         sendPick(draft)
     }
+}
+
+function handleDisconnect() {
 
 }
 
-function endDraft(draft) {
-    for (let s of gameGroups[draft.gameLink].blueCap) {
+function handleChampPicked(champ, draft) {
+    console.log("got pick: " + champ);
+    draft.stage += 1;
+    addPick(champ, draft);
+    draft.save();
+    gameGroups[draft.gameLink].curTime = +draft.time;
+
+    let draftCopy = JSON.parse(JSON.stringify(draft));
+    // draftCopy.stage += 1;
+    sendUpdate(draftCopy);
+    
+    if(draft.stage < 20) {
+        sendPick(draft);
+    }
+    else {
+        endDraft(draft.gameLink);
+    }
+}
+
+function endDraft(gameLink) {
+    // Handle cleanup here
+    try {
+        clearTimeout(gameGroups[draft.gameLink].bluePickTime);
+        clearTimeout(gameGroups[draft.gameLink].redPickTime);
+    } catch (error) { }
+
+    for (let s of gameGroups[gameLink].blueCap) {
         s.disconnect(true);
     }
-    for (let s of gameGroups[draft.gameLink].redCap) {
+    for (let s of gameGroups[gameLink].redCap) {
         s.disconnect(true);
     }
-    for (let s of gameGroups[draft.gameLink].spec) {
+    for (let s of gameGroups[gameLink].spec) {
         s.disconnect(true);
     }
-    delete gameGroups[draft.gameLink];
+    delete gameGroups[gameLink];
 }
 
 function sendUpdate(draft) {
     for (let s of gameGroups[draft.gameLink].blueCap) {
-        s.emit('draftUpdate', draft);
+        s.emit('draftUpdate', draft, gameGroups[draft.gameLink].curTime);
     }
     for (let s of gameGroups[draft.gameLink].redCap) {
-        console.log("sending update");
-        s.emit('draftUpdate', draft);
+        s.emit('draftUpdate', draft, gameGroups[draft.gameLink].curTime);
     }
     for (let s of gameGroups[draft.gameLink].spec) {
-        s.emit('draftUpdate', draft);
+        s.emit('draftUpdate', draft, gameGroups[draft.gameLink].curTime);
     }
 }
 
@@ -156,13 +193,54 @@ function sendPick(draft) {
     let capSockets = side === 0 ? gameGroups[draft.gameLink].blueCap : gameGroups[draft.gameLink].redCap;
     for (let s of capSockets) {
         try {
-            // s.emit('keyError');
-            console.log("Sending pick")
-            // console.log(s);
-            s.emit('pickStart', +draft.stage + 1, draft.time);
+            s.emit('pickStart', +draft.stage + 1, gameGroups[draft.gameLink].curTime);
         } catch (error) { console.log(error) }
     }
-    // socket.emit("draftUpdate", draft);
+
+    handleCountDown(draft); // Just emulating rito's client hehe
+}
+
+function handleCountDown(draft) {
+    
+    const timeout = setTimeout(() => {
+        // Due to syncronization issues, this still tries to run even after endDraft() is called
+        // So either I can debug that, or I canthrow this in a try catch,
+        //  and I'm not getting paid enough to debug my own garbage
+        try {
+            if (gameGroups[draft.gameLink].curTime === 0) {
+                stopPick(draft);
+                handleChampPicked("Risen", draft);
+            }
+            else {
+                gameGroups[draft.gameLink].curTime -= 1;
+                handleCountDown(draft);
+            }
+        } catch (error) {}
+    }, 1000);
+
+    try {
+        clearTimeout(gameGroups[draft.gameLink].bluePickTime);
+        clearTimeout(gameGroups[draft.gameLink].redPickTime);
+    } catch (error) { }
+
+    const side = getSide(+draft.stage + 1);
+    
+    if (side === 0) {
+        gameGroups[draft.gameLink].bluePickTime = timeout
+    }
+    else {
+        gameGroups[draft.gameLink].redPickTime = timeout
+    }
+}
+
+function stopPick(draft) {
+    const side = getSide(+draft.stage + 1);
+    let capSockets = side === 1 ? gameGroups[draft.gameLink].blueCap : gameGroups[draft.gameLink].redCap;
+    for (let s of capSockets) {
+        try {
+            s.emit('pickEnd');
+        } catch (error) { console.log(error) }
+    }
 }
 
 function addPick(pick, draft) {

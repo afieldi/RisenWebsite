@@ -9,6 +9,4 @@ router.route("/create").post((req, res) => {
     });
 });
 
-router.route("/")
-
 module.exports = router;

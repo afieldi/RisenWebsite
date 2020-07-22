@@ -48,7 +48,7 @@ export default class SetupCreate extends Component {
                         <div className="col">
                             <div className="input-group mb-3">
                                 <div className="input-group-prepend">
-                                    <span className="input-group-text" style={textWidth} id="timeLabel">Time (0 unlimited)</span>
+                                    <span className="input-group-text" style={textWidth} id="timeLabel">Time (-1 unlimited)</span>
                                 </div>
                                 <input type="number" className="form-control" id="timeInput" aria-describedby="timeLabel" defaultValue="30"></input>
                             </div>
