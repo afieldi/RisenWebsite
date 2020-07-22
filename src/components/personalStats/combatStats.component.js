@@ -203,7 +203,7 @@ export default class CombatStats extends Component {
                                         <div className="col-md-4">
                                             <Form.Group controlId="offensiveType">
                                                 <Form.Label>Type</Form.Label>
-                                                <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateOffensiveStats.bind(this)} >
+                                                <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateOffensiveStats.bind(this)} >
                                                     <option value="TOTAL">Total</option>
                                                     <option value="AVG">Average</option>
                                                 </Form.Control>
@@ -239,7 +239,7 @@ export default class CombatStats extends Component {
                                         <div className="col-md-4">
                                             <Form.Group controlId="defensiveType">
                                                 <Form.Label>Type</Form.Label>
-                                                <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateDefensiveStats.bind(this)}>
+                                                <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateDefensiveStats.bind(this)}>
                                                     <option value="TOTAL">Total</option>
                                                     <option value="AVG">Average</option>
                                                 </Form.Control>
