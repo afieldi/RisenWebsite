@@ -26,6 +26,9 @@ export default class Navbar extends Component {
                 <Link to="/teams" className="nav-link">Team Stats</Link>
               </li> */}
               <li className="navbar-item ml-auto">
+                <Link to="/drafting" className="nav-link">Drafting</Link>
+              </li>
+              <li className="navbar-item ml-auto">
                 <Link to="/contact" className="nav-link">Contact Us</Link>
               </li>
             </ul>        

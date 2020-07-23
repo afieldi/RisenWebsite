@@ -245,7 +245,7 @@ export default class DetailedStats extends Component {
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
-                                    <div className="col">
+                                    <div className="col-md">
                                       <Button className="btn risen-button" onClick={this.performFilter.bind(this)}>FILTER</Button>
                                     </div>
                                 </div>

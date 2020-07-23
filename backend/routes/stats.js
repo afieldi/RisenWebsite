@@ -120,7 +120,7 @@ router.route('/brief').get((req, res) => {
         }
     });
 
-    if(playerName) {
+    if(playerName != null) {
         pipe.push({
             $match: {
                 "playername.name": { "$regex": playerName, "$options": "i" }
@@ -151,7 +151,8 @@ router.route('/brief').get((req, res) => {
 
     // TODO: SORT IS FUCKING BROKE. I have no idea why it doesn't work.
     // Stuff changes as I make changes, but for some reason items aren't in proper order
-    GameModel.aggregate(pipe).sort({"_id.player": 1}).limit(size).skip(page*size).then(games => {
+    // console.log(page*size)
+    GameModel.aggregate(pipe).sort({"_id.player": 1}).skip(page*size).limit(size).then(games => {
         res.json(games);
     }, (err) => {
         res.status(404).json("Error: " + err);
@@ -188,7 +189,7 @@ router.route('/brief/lane/:lane').get((req, res) => {
                 total_games: { $sum: 1 }
             }
         }
-    ]).limit(size).skip(page*size).then(games => {
+    ]).skip(page*size).limit(size).then(games => {
 
         res.json(games);
     }, (err) => {
