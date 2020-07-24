@@ -55,13 +55,13 @@ export default class SetupCreate extends Component {
                         </div>
                         <div className="col-md-3">
                             <div className="custom-control custom-switch">
-                                <input type="checkbox" className="custom-control-input" id="backtrackSwitch"></input>
+                                <input type="checkbox" className="custom-control-input" id="backtrackSwitch" disabled></input>
                                 <label className="custom-control-label" htmlFor="backtrackSwitch">Allow Backtrack</label>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="custom-control custom-switch">
-                                <input type="checkbox" className="custom-control-input" id="risenChampSwitch" defaultChecked={true}></input>
+                                <input type="checkbox" className="custom-control-input" id="risenChampSwitch" defaultChecked={false} disabled></input>
                                 <label className="custom-control-label" htmlFor="risenChampSwitch">Use Risen Champs</label>
                             </div>
                         </div>
