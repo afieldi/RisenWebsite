@@ -19,26 +19,6 @@ export default class AboutLeagues extends Component {
                     <Container>
                         <h1 className="center text-dark">Our Leagues</h1>
                         <hr className="risen-dark"></hr>
-                        {/* <div className="row">
-                            {
-                                Object.keys(staticText.leagues).map((leagueString, index) => {
-                                    return (
-                                        <div className="col-md center" key={index}>
-                                            
-                                            <img src={require('../images/' + staticText.leagues[leagueString].img)} style={iconStyle}></img>
-                                            <br></br>
-                                            <div>
-                                                <h2>{staticText.leagues[leagueString].prettyName}</h2>
-                                                <p>{staticText.leagues[leagueString].blurb}</p>
-                                                <p><b>Ranks:</b> {staticText.leagues[leagueString].ranks}</p>
-                                                <p><b>Max Rank:</b> {staticText.leagues[leagueString].peak}</p>
-                                            </div>
-                                            <Link to={"/league/" + leagueString}><Button className="risen-button">Learn More</Button></Link>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div> */}
                         <div className="row">
                             <div className="col" style={blockStyle}>
                                 <h2>{staticText.leagues.rampage.prettyName}</h2>
