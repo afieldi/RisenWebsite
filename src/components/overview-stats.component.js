@@ -146,24 +146,24 @@ export default class Overview extends Component {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-6">
-                        <div className="btn-group risen-radio" data-toggle="buttons">
+                        <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
                             {/* TODO: Change these onClick functions */}
-                            <label className="btn btn-light">
+                            <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
                             </label>
-                            <label className="btn btn-light">
+                            <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
                             </label>
-                            <label className="btn btn-light">
+                            <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
                             </label>
-                            <label className="btn btn-light">
+                            <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
                             </label>
-                            <label className="btn btn-light">
+                            <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
                             </label>
-                            <label className="btn btn-light">
+                            <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
                             </label>
                         </div>
@@ -184,7 +184,7 @@ export default class Overview extends Component {
                 <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
                     <thead>
                         <tr>
-                        <th scope="col" className="center">Rank</th>
+                        {/* <th scope="col" className="center">Rank</th> */}
                         <th scope="col">Summoner</th>
                         <th scope="col" className="center">Lane</th>
                         <th scope="col" className="center">Win Rate</th>
@@ -202,7 +202,7 @@ export default class Overview extends Component {
                             this.state.filteredData.map((item, index) => {
                                 return (
                                     <tr key={"overviewStats-" + index}>
-                                        <td scope="row" className="risen-datum center">{index + 1}</td>
+                                        {/* <td scope="row" className="risen-datum center">{index + 1}</td> */}
                                         <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player[0]}`} >{item._id.player[0]}</Link></td>
                                         <td className="center" name="laneCol">{item._id.lane}</td>
                                         <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
@@ -223,4 +223,8 @@ export default class Overview extends Component {
             </div>
         )
     }
+}
+
+const spaceButtons = {
+    width: '20%'
 }

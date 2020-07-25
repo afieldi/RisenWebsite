@@ -23,7 +23,9 @@ export default class DetailedLeague extends Component {
                     <Container>
                         <h1 className="center text-dark">{this.state.leagueData.prettyName}</h1>
                         <hr className="risen-dark"></hr>
+                        <img src={require('../images/' + this.state.leagueData.img)} style={iconStyle}></img>
                         <p className="center">{this.state.leagueData.longBlurb}</p>
+                        <hr></hr>
                         {
                             this.state.leagueData.subLeagues.map((league, index) => {
                                 return (
@@ -35,9 +37,9 @@ export default class DetailedLeague extends Component {
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-md-4">
+                                            {/* <div className="col-md-4">
                                                 <img src={require('../images/' + this.state.leagueData.img)} style={iconStyle}></img>
-                                            </div>
+                                            </div> */}
                                             <div className="col">
                                                 <p>{league.blurb}</p>
                                                 <p>{league.longBlurb}</p>
@@ -58,8 +60,8 @@ export default class DetailedLeague extends Component {
 
 const iconStyle = {
     // top: '10%',
-    width: '60%',
-    height: '100%',
+    // width: '60%',
+    // height: '100%',
     display: 'block',
     margin: 'auto',
     position: 'relative'

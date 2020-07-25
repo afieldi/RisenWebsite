@@ -20,7 +20,7 @@ export default class AboutLeagues extends Component {
                         <h1 className="center text-dark">Our Leagues</h1>
                         <hr className="risen-dark"></hr>
                         <div className="row">
-                            <div className="col" style={blockStyle}>
+                            <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.rampage.prettyName}</h2>
                                 <img src={require('../images/' + staticText.leagues.rampage.img)} style={iconStyle}></img>
                                 <p>{staticText.leagues.rampage.blurb}</p>
@@ -34,7 +34,7 @@ export default class AboutLeagues extends Component {
                                 </div>
                                 <Link to={"/league/rampage"}><Button className="risen-button">Learn More</Button></Link>
                             </div>
-                            <div className="col" style={blockStyle}>
+                            <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.unstoppable.prettyName}</h2>
                                 <img src={require('../images/' + staticText.leagues.unstoppable.img)} style={iconStyle}></img>
                                 <p>{staticText.leagues.unstoppable.blurb}</p>
@@ -50,7 +50,7 @@ export default class AboutLeagues extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col" style={blockStyle}>
+                            <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.dominate.prettyName}</h2>
                                 <img src={require('../images/' + staticText.leagues.dominate.img)} style={iconStyle}></img>
                                 <p>{staticText.leagues.dominate.blurb}</p>
@@ -64,7 +64,7 @@ export default class AboutLeagues extends Component {
                                 </div>
                                 <Link to={"/league/dominate"}><Button className="risen-button">Learn More</Button></Link>
                             </div>
-                            <div className="col" style={blockStyle}>
+                            <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.divine.prettyName}</h2>
                                 <img src={require('../images/' + staticText.leagues.divine.img)} style={iconStyle}></img>
                                 <p>{staticText.leagues.divine.blurb}</p>

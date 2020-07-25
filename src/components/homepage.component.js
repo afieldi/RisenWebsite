@@ -104,7 +104,7 @@ export default class HomePage extends Component {
                         <hr className="risen-light"></hr>
                         <h3 className="center text-light">Find a League for You</h3>
                         <hr className="risen-light"></hr>
-                        <table className="table table-striped center" style={{backgroundColor: 'aliceBlue'}}>
+                        <table className="table table-striped center table-responsive" style={{backgroundColor: 'aliceBlue'}}>
                             <thead>
                                 <tr style={leaguesTablePrimary}>
                                     <th>League Name</th>
