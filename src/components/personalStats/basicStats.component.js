@@ -160,6 +160,13 @@ export default class BasicStats extends Component {
         // $('[data-toggle="tooltip"]').tooltip()
     }
 
+    removePlayerCompare(i) {
+        this.state.compData.splice(i, 1);
+        this.setState({
+            compData: this.state.compData
+        });
+    }
+
     handleGameCheck(option) {
         // let tempOptions = this.state.gameDataOptions;
         this.state.gameDataOptions[option].shown = !this.state.gameDataOptions[option].shown;
@@ -206,10 +213,10 @@ export default class BasicStats extends Component {
                             <div className="risen-stats-block">
                                 <div className="risen-stats-header">
                                     <div className="row">
-                                        <div className="col">
-                                        <h3>Game Stats</h3>
+                                        <div className="col" style={verticalCenter}>
+                                            <h3>Game Stats</h3>
                                         </div>
-                                        <div className="col-3">
+                                        <div className="col-4">
                                         <Dropdown>
                                             <Button className="dropdown-toggle risen-button" data-toggle="dropdown">STATS</Button>
                                             <div className="dropdown-menu" style={gameDataDropDown}>
@@ -289,8 +296,12 @@ export default class BasicStats extends Component {
                                 </div>
                                 <div className="risen-stats-body">
                                     <div className="row">
-                                        Add Player :<input id="playerName"></input>
-                                        <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                        <div className="col-lg-4" style={verticalCenter}>
+                                            Add Player :<input id="playerName"></input>
+                                        </div>
+                                        <div className="col-lg-3">
+                                            <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <table className="table-light table table-responsive-md table-sm table-striped">
@@ -300,19 +311,26 @@ export default class BasicStats extends Component {
                                                     //   as the #0 spot will be the players.
                                                     this.state.compData.length ? 
                                                     Object.keys(this.state.compData[0]).map((key, index) => {
-                                                    return (
-                                                        <tr key={"CompDataRow" + index}>
-                                                        <th>{key}</th>
-                                                        {
-                                                            this.state.compData.map((player, index2) => {
-                                                            // I really should just make this a new component
-                                                            return (
-                                                                <td key={index2 + "compData"}>{player[key]}</td>
-                                                            )
-                                                            })
-                                                        }
-                                                        </tr>
-                                                    )
+                                                        return (
+                                                            <tr key={"CompDataRow" + index}>
+                                                            <th>{key}</th>
+                                                            {
+                                                                this.state.compData.map((player, index2) => {
+                                                                    // I really should just make this a new component
+                                                                    if (index2 > 0 && key === "Name") {
+                                                                        return (
+                                                                            <td key={index2 + "compData"}>{player[key]} <Button onClick={(()=> {this.removePlayerCompare(index2)}).bind(this)}>X</Button></td>
+                                                                        )
+                                                                    }
+                                                                    else {
+                                                                        return (
+                                                                            <td key={index2 + "compData"}>{player[key]}</td>
+                                                                        )
+                                                                    }
+                                                                })
+                                                            }
+                                                            </tr>
+                                                        )
                                                     }) : (<tr></tr>)
                                                 }
                                             </tbody>
@@ -331,5 +349,11 @@ export default class BasicStats extends Component {
 const gameDataDropDown = {
     maxHeight: '500px',
     overflow: 'auto'
-  }
+}
+
+const verticalCenter = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+}
   

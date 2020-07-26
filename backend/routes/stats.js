@@ -89,7 +89,6 @@ router.route('/lane/:lane').get((req, res) => {
     GameModel.find(
         { lane: req.params.lane }
     ).then(games => {
-
         res.json(games);
     }, (err) => {
         res.status(404).json("Error: " + err);
@@ -97,29 +96,63 @@ router.route('/lane/:lane').get((req, res) => {
 });
 
 router.route('/brief').get((req, res) => {
-    GameModel.aggregate([
-        {
-            $lookup: {
-                from: 'players',
-                localField: 'player',
-                foreignField: '_id',
-                as: 'playername'
-            }
-        },
-        {
-            $group: {
-                _id: { player: "$playername.name", lane: "$lane", playerId: "$player" },
-                avg_kills: { $avg: "$kills" },
-                avg_deaths: { $avg: "$deaths" },
-                avg_assists: { $avg: "$assists" },
-                avg_gold: { $avg: "$goldEarned" },
-                avg_cs: { $avg: "$totalMinionsKilled" },
-                avg_damage: { $avg: "$totalDamageDealtToChampions" },
-                wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
-                total_games: { $sum: 1 }
-            }
+    const page = req.query.page ? req.query.page - 1 : 0;
+    const size = req.query.size ? +req.query.size : 10;
+    const playerName = req.query.player ? req.query.player : null;
+    const lane = req.query.lane ? req.query.lane : null;
+    const sort = req.query.sort ? req.query.sort : "_id.player+";
+    const sortObject = sort.split(",").map((sortStr) => {
+        let dir = sortStr.substr(sortStr.length - 1);
+        return [
+            sortStr.substr(0, sortStr.length - 1),
+            dir === "-" ? -1 : 1
+        ];
+    });
+    console.log(sortObject)
+
+    let pipe = []
+    pipe.push({
+        $lookup: {
+            from: 'players',
+            localField: 'player',
+            foreignField: '_id',
+            as: 'playername'
         }
-    ]).then(games => {
+    });
+
+    if(playerName != null) {
+        pipe.push({
+            $match: {
+                "playername.name": { "$regex": playerName, "$options": "i" }
+            }
+        })
+    }
+    if (lane != null) {
+        pipe.push({
+            $match: {
+                lane: lane
+            }
+        });
+    }
+
+    pipe.push({
+        $group: {
+            _id: { player: "$playername.name", lane: "$lane", playerId: "$player" },
+            avg_kills: { $avg: "$kills" },
+            avg_deaths: { $avg: "$deaths" },
+            avg_assists: { $avg: "$assists" },
+            avg_gold: { $avg: "$goldEarned" },
+            avg_cs: { $avg: "$totalMinionsKilled" },
+            avg_damage: { $avg: "$totalDamageDealtToChampions" },
+            wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
+            total_games: { $sum: 1 }
+        }
+    });
+
+    // TODO: SORT IS FUCKING BROKE. I have no idea why it doesn't work.
+    // Stuff changes as I make changes, but for some reason items aren't in proper order
+    // console.log(page*size)
+    GameModel.aggregate(pipe).sort({"_id.player": 1}).skip(page*size).limit(size).then(games => {
         res.json(games);
     }, (err) => {
         res.status(404).json("Error: " + err);
@@ -127,6 +160,8 @@ router.route('/brief').get((req, res) => {
 });
 
 router.route('/brief/lane/:lane').get((req, res) => {
+    const page = req.query.page ? req.query.page - 1 : 0;
+    const size = req.query.size ? +req.query.size : 10;
     GameModel.aggregate([
         {
             $match: {
@@ -154,7 +189,7 @@ router.route('/brief/lane/:lane').get((req, res) => {
                 total_games: { $sum: 1 }
             }
         }
-    ]).then(games => {
+    ]).skip(page*size).limit(size).then(games => {
 
         res.json(games);
     }, (err) => {

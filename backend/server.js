@@ -2,6 +2,9 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const http = require('http');
+
+const draft = require('./src/draft');
 
 //env variables from dotenv file
 require('dotenv').config();
@@ -28,13 +31,19 @@ connection.once('open', () => {
 //declare require and use of every route
 const teamsRouter = require('./routes/teams');
 const statsRouter = require('./routes/stats');
-const gamesRouter = require('./routes/games');	
+const gamesRouter = require('./routes/games');
+const codesRouter = require('./routes/codes');
+const draftRouter = require('./routes/draft');
 
 app.use('/games', gamesRouter);	
 app.use('/teams', teamsRouter);
 app.use('/stats', statsRouter);
+app.use('/codes', codesRouter);
+app.use('/draft', draftRouter);
 
 //starts server
-app.listen(port, () => {
+let server = http.createServer(app);
+draft.setupSocket(server)
+server.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

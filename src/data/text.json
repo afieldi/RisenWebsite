@@ -69,24 +69,24 @@
                     "prettyName": "Rampage Premade",
                     "ranks":"Silver - Gold",
                     "peak":"Gold 1",
-                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league.",
+                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
                     "blurb": "Get 4 friends together and compete against other premade teams. Up to 10 players can sign-up on a single team."
                 }
             ]
         },
         "unstoppable": {
-            "prettyName": "Unstoppable League",
+            "prettyName": "Unstoppable Leagues",
             "ranks": "Gold - Platinum",
             "peak": "Platinum 1",
             "img": "rampage.png",
             "blurb": "Competitive 5v5 action for players in the Platinum skill range",
-            "longBlurb": "Unstoppable is our league for players in the Platiunum skill range.\n\n Unstoppable is a relativly new league in Risen Esports. Whether you’re an open or premade player, you’ll get to interact with an awesome and very active community, and improve alongside your teammates. Many of our past Unstoppable players have had success climbing in solo queue and say that Risen played a part in them getting better at League of Legends.",
+            "longBlurb": "Unstoppable is our league for players in the Platiunum skill range.\n\n Unstoppable is a relativly new league in Risen Esports. It was created to provide a competitive 5v5 for Platinum players who aren't quite ready to step into the Diamond 2 cap Dominate Premade league yet. Already this league is very popular, having grown to be larger than Dominate in just 2 seasons.",
             "subLeagues": [
                 {
                     "prettyName": "Unstoppable Premade",
                     "ranks":"Silver - Gold",
                     "peak":"Gold 1",
-                    "longBlurb": "",
+                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
                     "blurb": "Sign up on your own or with a friend and compete with a new team!"
                 }
             ]
@@ -97,7 +97,7 @@
             "peak": "Diamond",
             "img": "dominate.png",
             "blurb": "Competitive 5v5 action for players in the Platinum/Diamond skill range",
-            "longBlurb": "Dominate is our league for players in the Platiunum/Diamond skill range.\n\nDominate is our most popular league in Risen Esports. Whether you’re an open or premade player, you’ll get to interact with an awesome and very active community, and improve alongside your teammates. Many of our past Dominate players have had success climbing in solo queue and say that Risen played a part in them getting better at League of Legends.",
+            "longBlurb": "Dominate is our league for players in the Platiunum/Diamond skill range.\n\n Whether you’re an open or premade player, you’ll get to interact with an awesome and very active community, and improve alongside your teammates. Many of our past Dominate players have had success climbing in solo queue and say that Risen played a part in them getting better at League of Legends.",
             "subLeagues": [
                 {
                     "prettyName": "Dominate Open",
@@ -110,7 +110,7 @@
                     "prettyName": "Dominate Premade",
                     "ranks":"Platinum - Diamond",
                     "peak":"Diamond 2",
-                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league.",
+                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
                     "blurb": "Get 4 friends together and compete against other premade teams. Up to 10 players can sign-up on a single team."
                 }
             ]
@@ -119,15 +119,15 @@
             "prettyName": "Divine Leagues",
             "ranks": "Diamond",
             "peak": "Diamond 1",
-            "img": "champions.png",
-            "blurb": "Competitive 5v5 action for players in the Gold/Silver skill range",
-            "longBlurb": "",
+            "img": "dominate.png",
+            "blurb": "Competitive, high-stakes 5v5 action for players in the Diamond skill range",
+            "longBlurb": "This is a new league aimed at players who have previously participated in Dominate Premade or an equivalent skill level league but are looking for higher stake matches. Capped at Dimaond 1 Divine League has a pay-in fee as well as an increased prize pool suitable for high-elo teams looking to prove their mettle.",
             "subLeagues": [
                 {
                     "prettyName": "Divine Premade",
-                    "ranks":"Silver - Gold",
-                    "peak":"Gold 1",
-                    "longBlurb": "",
+                    "ranks":"Platinum - Diamond 1",
+                    "peak":"Diamond 1",
+                    "longBlurb": "Premade teams sign-up and are required to pay an entry fee to play. This fee goes towards the prize pool that is distrubuted to the winning teams at the end of the season.",
                     "blurb": "Sign up on your own or with a friend and compete with a new team!"
                 }
             ]
@@ -137,7 +137,7 @@
             "ranks": "Diamond - Challenger",
             "peak": "Challenger",
             "img": "champions.png",
-            "blurb": "Competitive 5v5 action for players in the Gold/Silver skill range",
+            "blurb": "Competitive, high-stakes action for players in the Diamond/Challenger skill range",
             "longBlurb": "Champions League is our premier eSports league, featuring some of the best teams outside of Riot sponsored events. It has a unique and interesting history, and is largely the product of an increase in demand for high-level events run by professional, knowledgeable, and motivated organizers. Over time, the average skill level of Champions League has gone up. Initially mid-plat average, it has since evolved from a mid-Plat skill level to high Diamond average teams.",
             "subLeagues": [
                 {

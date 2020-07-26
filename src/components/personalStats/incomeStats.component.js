@@ -126,7 +126,7 @@ export default class IncomeStats extends Component {
                 <div className="risen-stats-header">
                   <h3>Consumption Stats</h3>
                   <Form.Group controlId="consumptionType">
-                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateConsumptionStats.bind(this)}>
+                    <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateConsumptionStats.bind(this)}>
                       <option value="TOTAL">Total</option>
                       <option value="AVG">Average</option>
                     </Form.Control>
@@ -155,7 +155,7 @@ export default class IncomeStats extends Component {
                 <div className="risen-stats-header">
                   <h3>VS Stats</h3>
                   <Form.Group controlId="vsType">
-                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateVsStats.bind(this)}>
+                    <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateVsStats.bind(this)}>
                       <option value="TOTAL">Total</option>
                       <option value="AVG">Average</option>
                     </Form.Control>
