@@ -264,7 +264,7 @@ export default class Drafting extends Component {
                                     this.fiveSize.map(i => {
                                         if(this.state.draft.bluePicks && this.state.draft.bluePicks[+i]) {
                                             return (
-                                                <img key={"bluePick-" + i} id={"bluePick-" + i}
+                                                <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox}
                                                     src={require('../../images/champions/profile/' + this.state.draft.bluePicks[+i] + "_0.jpg")}>
     
                                                 </img>

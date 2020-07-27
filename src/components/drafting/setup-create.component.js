@@ -28,7 +28,7 @@ export default class SetupCreate extends Component {
                         <div className="col">
                             <div className="input-group mb-3">
                                 <div className="input-group-prepend">
-                                    <span className="input-group-text bg-primary text-light" style={textWidth} id="blueName">Blue Team Name</span>
+                                    <span className="input-group-text bg-primary text-light" style={spanStyle} id="blueName">Blue Team Name</span>
                                 </div>
                                 <input type="text" className="form-control" id="blueInput" aria-describedby="blueName"></input>
                             </div>
@@ -38,7 +38,7 @@ export default class SetupCreate extends Component {
                         <div className="col">
                             <div className="input-group mb-3">
                                 <div className="input-group-prepend">
-                                    <span className="input-group-text bg-danger text-light" style={textWidth} id="redName">Red Team Name</span>
+                                    <span className="input-group-text bg-danger text-light" style={spanStyle} id="redName">Red Team Name</span>
                                 </div>
                                 <input type="text" className="form-control" id="redInput" aria-describedby="redName"></input>
                             </div>
@@ -48,7 +48,7 @@ export default class SetupCreate extends Component {
                         <div className="col">
                             <div className="input-group mb-3">
                                 <div className="input-group-prepend">
-                                    <span className="input-group-text" style={textWidth} id="timeLabel">Time (-1 unlimited)</span>
+                                    <span className="input-group-text" style={spanStyle} id="timeLabel">Time (-1 unlimited)</span>
                                 </div>
                                 <input type="number" className="form-control" id="timeInput" aria-describedby="timeLabel" defaultValue="30"></input>
                             </div>
@@ -82,8 +82,9 @@ const vFlex = {
     height: '100%'
 }
 
-const textWidth = {
-    minWidth: '160px'
+const spanStyle = {
+    minWidth: '160px',
+    border: '0'
 }
 
 const fillRow = {
