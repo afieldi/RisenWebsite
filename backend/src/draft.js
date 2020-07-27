@@ -103,8 +103,18 @@ function handleGame(socket, draft, side) {
             // Should only be hit once per draft
             gameGroups[draft.gameLink].curTime = +draft.time;
             sendPick(draft);
+            sendUpdate(draft);
+
+            for (let socket of gameGroups[draft.gameLink].blueCap) {
+                socket.emit('drafting', 2);
+            }
+            for (let socket of gameGroups[draft.gameLink].redCap) {
+                socket.emit('drafting', 2);
+            }
         }
-        socket.emit('drafting', true);
+        else {
+            socket.emit('drafting', 1);
+        }
     });
 
     socket.on('picked', (champ, round) => {
@@ -130,7 +140,9 @@ function handleGame(socket, draft, side) {
     if (gameGroups[draft.gameLink].blueReady === true &&
         gameGroups[draft.gameLink].redReady === true) {
         // Draft in progress
-        sendPick(draft)
+        socket.emit('drafting', 2);
+        sendPick(draft);
+        sendUpdate(draft);
     }
 }
 

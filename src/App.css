@@ -220,3 +220,15 @@ hr.risen-dark {
   border-color: #fff transparent #fff transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
+@keyframes humming {
+  0% { filter: brightness(.8);}
+  50% {filter: brightness(1.2);}
+  100% { filter: brightness(.8);}
+}
+
+.selected {
+  animation-name: humming;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}

@@ -6,7 +6,6 @@ import risenLogo from '../../images/RE_TypeLogo_Shading.png'
 
 const qs = require('qs');
 const champions = require('../../data/champions.json')
-
 const map = [
     "",
     "blueBan-0",
@@ -59,7 +58,7 @@ export default class Drafting extends Component {
             round: 0,
             selectedChamp: "",
             picking: false,
-            ready: false,
+            ready: 0, // 0 no on ready, 1 I am ready, 2 Both are ready
             blueCount: -1,
             redCount: -1
         }
@@ -141,7 +140,7 @@ export default class Drafting extends Component {
                 draft: draft,
                 round: +draft.stage + 1
             }
-            if(this.getSide(draft.stage) === 0) {
+            if(this.getSide(+draft.stage + 1) === 0) {
                 nState["blueCount"] = time;
                 nState["redCount"] = 0;
             }
@@ -174,10 +173,12 @@ export default class Drafting extends Component {
             const ele = document.getElementById(map[i]);
             if(ele) {
                 if(this.state.round == i) {
-                    ele.style["borderTop"] = "10px solid red";
+                    // ele.style["borderTop"] = "10px solid red";
+                    ele.classList.add("selected");
                 }
                 else {
-                    ele.style["borderTop"] = "1px solid black";
+                    // ele.style["borderTop"] = "1px solid black";
+                    ele.classList.remove("selected");
                 }
             }
         }
@@ -263,7 +264,7 @@ export default class Drafting extends Component {
                                     this.fiveSize.map(i => {
                                         if(this.state.draft.bluePicks && this.state.draft.bluePicks[+i]) {
                                             return (
-                                                <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox}
+                                                <img key={"bluePick-" + i} id={"bluePick-" + i}
                                                     src={require('../../images/champions/profile/' + this.state.draft.bluePicks[+i] + "_0.jpg")}>
     
                                                 </img>
@@ -271,7 +272,7 @@ export default class Drafting extends Component {
                                         }
                                         else {
                                             return (
-                                                <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox}>
+                                                <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox} style={{...champBox, ...blueBox}}>
     
                                                 </img>
                                             )
@@ -292,7 +293,7 @@ export default class Drafting extends Component {
                                         }
                                         else {
                                             return (
-                                                <img key={"redPick-" + i} id={"redPick-" + i} style={champBox}>
+                                                <img key={"redPick-" + i} id={"redPick-" + i} style={champBox} style={{...champBox, ...redBox}}>
     
                                                 </img>
                                             )
@@ -317,7 +318,7 @@ export default class Drafting extends Component {
                                         }
                                         else {
                                             return (
-                                                <img key={"blueBan-" + i} id={"blueBan-" + i} style={champBox}>
+                                                <img key={"blueBan-" + i} id={"blueBan-" + i} style={champBox} style={{...champBox, ...blueBox}}>
     
                                                 </img>
                                             )
@@ -338,7 +339,7 @@ export default class Drafting extends Component {
                                         }
                                         else {
                                             return (
-                                                <img key={"redBan-" + i} id={"redBan-" + i} style={champBox}>
+                                                <img key={"redBan-" + i} id={"redBan-" + i} style={champBox} style={{...champBox, ...redBox}}>
     
                                                 </img>
                                             )
@@ -352,7 +353,7 @@ export default class Drafting extends Component {
                             this.drafting ? 
                             <div>
                                 {
-                                    this.state.round > 0 && this.state.ready ?
+                                    this.state.round > 0 && this.state.ready === 2 ?
                                     <div>
                                         <br></br>
                                         <div className="row">
@@ -400,7 +401,7 @@ export default class Drafting extends Component {
                                         <div className="row">
                                             <div className="col" style={colFlexStyle}>
                                                 {
-                                                    this.state.ready ? 
+                                                    this.state.ready === 1 ? 
                                                     <div>Waiting for opponent</div>
                                                     :
                                                     <Button onClick={this.readyUp.bind(this)}>Ready!</Button>
@@ -422,6 +423,14 @@ const champBox = {
     width: '20%',
     height: "200px",
     border: '1px solid black'
+}
+
+const redBox = {
+    backgroundColor: 'rgb(79, 15, 23)'
+}
+
+const blueBox = {
+    backgroundColor: 'rgb(18, 80, 113)'
 }
 
 const mainDivStyle = {

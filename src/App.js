@@ -18,6 +18,7 @@ import Contact from './components/contact.component';
 import GenerateCodes from './components/admin/generateCodes.component';
 import Setup from './components/drafting/setup.component';
 import Drafting from './components/drafting/drafting.component';
+import Admin from './components/admin/admin.component';
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
             <Route path="/leagues" component={AboutLeagues}></Route>
             <Route path="/league/:league" component={DetailedLeague}></Route>
             <Route path="/contact" component={Contact}></Route>
-            <Route path="/admin/codes" component={GenerateCodes}></Route>
+            <Route path="/admin" component={Admin}></Route>
             <Route path="/drafting" component={Setup}></Route>
             <Route path="/draft" component={Drafting}></Route>
           </div>
