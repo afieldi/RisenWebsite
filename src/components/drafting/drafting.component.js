@@ -72,6 +72,21 @@ export default class Drafting extends Component {
         this.setupSocket();
     }
 
+    handleRisenRules() {
+        fetch(getBaseUrl() + "/draft/champban").then(data => {
+            data.json().then(bans => {
+                for (let ban of bans) {
+                    if (this.allChamps.includes(ban.champion)) {
+                        console.log(this.allChamps.indexOf(ban.champion));
+                        this.allChamps.splice(0, 1);
+                        console.log(this.allChamps);
+                    }
+                }
+                this.filterChampions();
+            })
+        });
+    }
+
     startTimer() {
         let that = this;
         function tickTimer() {
@@ -101,6 +116,13 @@ export default class Drafting extends Component {
         this.socket.on('connect', () => {
             this.socket.emit("game", this.game, this.auth);
         });
+
+        this.socket.on("initalDraft", (draft) => {
+            if (draft.ruleset === "RISEN") {
+                this.handleRisenRules();   
+            }
+        });
+
         this.socket.on("drafting", (ready) => {
             this.drafting = true;
             this.setState({
@@ -138,7 +160,7 @@ export default class Drafting extends Component {
         this.socket.on("draftUpdate", (draft, time) => {
             let nState = {
                 draft: draft,
-                round: +draft.stage + 1
+                round: this.state.ready === 2 ? +draft.stage + 1 : +draft.stage
             }
             if(this.getSide(+draft.stage + 1) === 0) {
                 nState["blueCount"] = time;

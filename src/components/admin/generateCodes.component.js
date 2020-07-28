@@ -47,7 +47,7 @@ export default class GenerateCodes extends Component {
             </div>
           </div>
           <div className="col">
-            <button className="risen-button" onClick={this.getCodes.bind(this)}>Gesnerate Codes</button>
+            <button className="risen-button" onClick={this.getCodes.bind(this)}>Generate Codes</button>
           </div>
         </div>
         <div className="row">

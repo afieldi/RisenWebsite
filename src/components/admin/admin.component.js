@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import GenerateCodes from './generateCodes.component';
 import { Container } from 'react-bootstrap';
+import ManageDraft from './manageDraft.component';
 
 export default class Admin extends Component {
     render() {
@@ -13,7 +14,7 @@ export default class Admin extends Component {
                                 <GenerateCodes></GenerateCodes>
                             </div>
                             <div className="col">
-                                
+                                <ManageDraft></ManageDraft>
                             </div>
                         </div>
                     </Container>

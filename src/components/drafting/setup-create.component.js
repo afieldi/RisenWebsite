@@ -61,7 +61,7 @@ export default class SetupCreate extends Component {
                         </div>
                         <div className="col-md-3">
                             <div className="custom-control custom-switch">
-                                <input type="checkbox" className="custom-control-input" id="risenChampSwitch" defaultChecked={false} disabled></input>
+                                <input type="checkbox" className="custom-control-input" id="risenChampSwitch" defaultChecked={false}></input>
                                 <label className="custom-control-label" htmlFor="risenChampSwitch">Use Risen Champs</label>
                             </div>
                         </div>
