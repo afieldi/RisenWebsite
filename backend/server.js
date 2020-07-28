@@ -35,7 +35,7 @@ const gamesRouter = require('./routes/games');
 const codesRouter = require('./routes/codes');
 const draftRouter = require('./routes/draft');
 
-app.use('/games', gamesRouter);	
+app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
 app.use('/stats', statsRouter);
 app.use('/codes', codesRouter);
@@ -43,7 +43,7 @@ app.use('/draft', draftRouter);
 
 //starts server
 let server = http.createServer(app);
-draft.setupSocket(server)
+draft.setupSocket(server);
 server.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

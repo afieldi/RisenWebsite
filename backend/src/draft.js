@@ -31,6 +31,9 @@ function setupSocket(server) {
         handleSocketConnection(socket);
         console.log("connected");
     });
+    io.on('error', function(e) {
+        console.log(e)
+    });
 }
 
 function handleSocketConnection(socket) {
@@ -112,7 +115,7 @@ function handleGame(socket, draft, side) {
             handleChampPicked(champ, draft);
         }
     });
-    
+
     socket.on('hovered', (champ, round) => {
         if(round === +draft.stage + 1) {
             // Create copy so you can add the hovered champ, send the new draft and discard
@@ -148,7 +151,7 @@ function handleChampPicked(champ, draft) {
     let draftCopy = JSON.parse(JSON.stringify(draft));
     // draftCopy.stage += 1;
     sendUpdate(draftCopy);
-    
+
     if(draft.stage < 20) {
         sendPick(draft);
     }
@@ -201,7 +204,7 @@ function sendPick(draft) {
 }
 
 function handleCountDown(draft) {
-    
+
     const timeout = setTimeout(() => {
         // Due to syncronization issues, this still tries to run even after endDraft() is called
         // So either I can debug that, or I canthrow this in a try catch,
@@ -224,7 +227,7 @@ function handleCountDown(draft) {
     } catch (error) { }
 
     const side = getSide(+draft.stage + 1);
-    
+
     if (side === 0) {
         gameGroups[draft.gameLink].bluePickTime = timeout
     }
