@@ -296,8 +296,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col">
-                                                        <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox} style={{...blueBox}}>
+                                                    <div className="col-sm" style={{...blueBox, ...champBox}}>
+                                                        <img key={"bluePick-" + i} id={"bluePick-" + i} >
                                                         </img>
                                                     </div>
                                                 )
@@ -322,8 +322,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col">
-                                                        <img key={"redPick-" + i} id={"redPick-" + i} style={champBox} style={{...redBox}}>
+                                                    <div className="col-sm" style={{...redBox, ...champBox}}>
+                                                        <img key={"redPick-" + i} id={"redPick-" + i}>
                                                         </img>
                                                     </div>
                                                 )
@@ -351,8 +351,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col">
-                                                        <img key={"blueBan-" + i} id={"blueBan-" + i} style={champBox} style={{...blueBox}}>
+                                                    <div className="col-sm" style={{...blueBox, ...champBox}}>
+                                                        <img key={"blueBan-" + i} id={"blueBan-" + i} >
                                                         </img>
                                                     </div>
                                                 )
@@ -376,8 +376,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col">
-                                                        <img key={"redBan-" + i} id={"redBan-" + i} style={champBox} style={{...redBox}}>
+                                                    <div className="col-sm" style={{...redBox, ...champBox}}>
+                                                        <img key={"redBan-" + i} id={"redBan-" + i}>
                                                         </img>
                                                     </div>
                                                 )
@@ -478,7 +478,7 @@ const blueBox = {
 }
 
 const mainDivStyle = {
-    minHeight: '100vh'
+    // minHeight: '100vh'
 }
 
 const rowFlexStyle = {
@@ -502,9 +502,12 @@ const iconStyle = {
 }
 
 const minorRowStyle = {
-    paddingRight: '15px',
-    paddingLeft: '15px',
+    // paddingRight: '15px',
+    // paddingLeft: '15px',
+    width: '100%',
     // height: '100%'
+    height: '200px',
+    margin: '0'
 }
 
 const iconGridStyle = {
