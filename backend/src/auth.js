@@ -34,13 +34,15 @@ function getGuildUser(userId, callback) {
   });
 }
 
-function exchangeCode(code, callback) {
+function exchangeCode(req, code, callback) {
+  const redirect = "http://" + req.headers.host + "/auth/callback";
+
   const data = {
     'client_id': process.env.DISCORD_CLIENT_ID,
     'client_secret': process.env.DISCORD_CLIENT_SECRET,
     'grant_type': 'authorization_code',
     'code': code,
-    'redirect_uri': 'http://99.246.224.136:5000/auth/callback',   // TODO: Use Host instead once this migrates to an actual server
+    'redirect_uri': redirect,   // TODO: Use Host instead once this migrates to an actual server
     'scope': 'identify'
   };
   
@@ -78,14 +80,14 @@ function getSelf(token, callback) {
   });
 }
 
-function getAdmin(code, onSuccess, onReject) {
+function getAdmin(request, code, onSuccess, onReject) {
   console.log("got code: " + code);
   // AHHHHHHHHH
   // AHHHHHHHHH
   // AHHHHHHHHH
   // AHHHH CALLBACKS
   try {
-    exchangeCode(code, (token) => {
+    exchangeCode(request, code, (token) => {
       getSelf(token, (user) => {
         getGuildUser(user.id, (guildUser) => {
           getAdminGuildRoles((adminRoles) => {

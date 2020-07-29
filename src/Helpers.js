@@ -12,8 +12,8 @@ export function matchDict(dict1, dict2) {
 }
 
 export function getBaseUrl() {
-    // return "99.79.193.118:5000";
-    return "http://localhost:5000"
+    // return "http://99.79.193.118:5000";
+    return "http://99.246.224.136:5000"
 }
 
 export function getCookie(name) {

@@ -62,7 +62,7 @@ export default class App extends Component {
     fetch(getBaseUrl() + "/auth/verify?code=" + getCookie("auth"), {
       method: "DELETE"
     }).then(data => {
-      this.checkLoggedIn(() => {});
+      this.checkLoggedIn(() => { this.props.history.push("/"); });
     });
   }
 

@@ -7,7 +7,7 @@ const uuid = require('uuid');
 // This is so that the calling url can be passed from the /redirect endpoint into this function
 //  via the callback url
 router.route("/callback").get((req, res) => {
-  auth.getAdmin(req.query.code,
+  auth.getAdmin(req, req.query.code,
     (user) => {
       // Is an admin, success
       let weekFromNow = new Date();
@@ -29,9 +29,9 @@ router.route("/callback").get((req, res) => {
 router.route("/redirect").get((req, res) => {
   const client_id = process.env.DISCORD_CLIENT_ID;
 
-  // const redirect = "http%3A%2F%2F" + req.headers.host + "/auth/callback";
+  const redirect = "http%3A%2F%2F" + req.headers.host + "/auth/callback";
   // TODO: Use Host instead once this migrates to an actual server
-  const redirect = "http%3A%2F%2F" + "99.246.224.136:5000" + "/auth/callback";
+  // const redirect = "http%3A%2F%2F" + "99.246.224.136:5000" + "/auth/callback";
 
   //  console.log(req.get("url"));
   // TODO add in the state query param
