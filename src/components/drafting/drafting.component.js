@@ -282,92 +282,109 @@ export default class Drafting extends Component {
                         </div>
                         <div className="row">
                             <div className="col-6" style={rowFlexStyle}>
-                                {
-                                    this.fiveSize.map(i => {
-                                        if(this.state.draft.bluePicks && this.state.draft.bluePicks[+i]) {
-                                            return (
-                                                <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox}
-                                                    src={require('../../images/champions/profile/' + this.state.draft.bluePicks[+i] + "_0.jpg")}>
-    
-                                                </img>
-                                            )
-                                        }
-                                        else {
-                                            return (
-                                                <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox} style={{...champBox, ...blueBox}}>
-    
-                                                </img>
-                                            )
-                                        }
-                                    })
-                                }
+                                <div className="row" style={minorRowStyle}>
+                                    {
+                                        this.fiveSize.map(i => {
+                                            if(this.state.draft.bluePicks && this.state.draft.bluePicks[+i]) {
+                                                return (
+                                                    <div className="col-sm" style={champBox}>
+                                                        <img key={"bluePick-" + i} id={"bluePick-" + i} style={champImg}
+                                                            src={require('../../images/champions/profile/' + this.state.draft.bluePicks[+i] + "_0.jpg")}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <div className="col">
+                                                        <img key={"bluePick-" + i} id={"bluePick-" + i} style={champBox} style={{...blueBox}}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+
+                                </div>
                             </div>
                             <div className="col-6" style={rowFlexStyle}>
-                                {
-                                    this.fiveSize.map(i => {
-                                        if(this.state.draft.redPicks && this.state.draft.redPicks[+i]) {
-                                            return (
-                                                <img key={"redPick-" + i} id={"redPick-" + i} style={champBox}
-                                                    src={require('../../images/champions/profile/' + this.state.draft.redPicks[+i] + "_0.jpg")}>
-    
-                                                </img>
-                                            )
-                                        }
-                                        else {
-                                            return (
-                                                <img key={"redPick-" + i} id={"redPick-" + i} style={champBox} style={{...champBox, ...redBox}}>
-    
-                                                </img>
-                                            )
-                                        }
-                                    })
-                                }
+                                <div className="row" style={minorRowStyle}>
+                                    {
+                                        this.fiveSize.map(i => {
+                                            if(this.state.draft.redPicks && this.state.draft.redPicks[+i]) {
+                                                return (
+                                                    <div className="col-sm" style={champBox}>
+                                                        <img key={"redPick-" + i} id={"redPick-" + i} style={champImg}
+                                                            src={require('../../images/champions/profile/' + this.state.draft.redPicks[+i] + "_0.jpg")}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <div className="col">
+                                                        <img key={"redPick-" + i} id={"redPick-" + i} style={champBox} style={{...redBox}}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+                                </div>
                             </div>
                         </div>
                         <br></br>
                         <br></br>
                         <div className="row">
                             <div className="col-6" style={rowFlexStyle}>
-                                {
-                                    this.fiveSize.map(i => {
-                                        if(this.state.draft.blueBans && this.state.draft.blueBans[+i]) {
-                                            return (
-                                                <img key={"blueBan-" + i} id={"blueBan-" + i} style={champBox}
-                                                    src={require('../../images/champions/profile/' + this.state.draft.blueBans[+i] + "_0.jpg")}>
-    
-                                                </img>
-                                            )
-                                        }
-                                        else {
-                                            return (
-                                                <img key={"blueBan-" + i} id={"blueBan-" + i} style={champBox} style={{...champBox, ...blueBox}}>
-    
-                                                </img>
-                                            )
-                                        }
-                                    })
-                                }
+                                <div className="row" style={minorRowStyle}>
+                                    {
+                                        this.fiveSize.map(i => {
+                                            if(this.state.draft.blueBans && this.state.draft.blueBans[+i]) {
+                                                return (
+                                                    <div className="col-sm" style={champBox}>
+                                                        <img key={"blueBan-" + i} id={"blueBan-" + i} style={champImg}
+                                                            src={require('../../images/champions/profile/' + this.state.draft.blueBans[+i] + "_0.jpg")}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <div className="col">
+                                                        <img key={"blueBan-" + i} id={"blueBan-" + i} style={champBox} style={{...blueBox}}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+                                </div>
                             </div>
                             <div className="col-6" style={rowFlexStyle}>
-                                {
-                                    this.fiveSize.map(i => {
-                                        if(this.state.draft.redBans && this.state.draft.redBans[+i]) {
-                                            return (
-                                                <img key={"redBan-" + i} id={"redBan-" + i} style={champBox}
-                                                    src={require('../../images/champions/profile/' + this.state.draft.redBans[+i] + "_0.jpg")}>
-    
-                                                </img>
-                                            )
-                                        }
-                                        else {
-                                            return (
-                                                <img key={"redBan-" + i} id={"redBan-" + i} style={champBox} style={{...champBox, ...redBox}}>
-    
-                                                </img>
-                                            )
-                                        }
-                                    })
-                                }
+                                <div className="row" style={minorRowStyle}>
+                                    {
+                                        this.fiveSize.map(i => {
+                                            if(this.state.draft.redBans && this.state.draft.redBans[+i]) {
+                                                return (
+                                                    <div className="col-sm" style={champBox}>
+                                                        <img key={"redBan-" + i} id={"redBan-" + i} style={champImg}
+                                                            src={require('../../images/champions/profile/' + this.state.draft.redBans[+i] + "_0.jpg")}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <div className="col">
+                                                        <img key={"redBan-" + i} id={"redBan-" + i} style={champBox} style={{...redBox}}>
+                                                        </img>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+                                </div>
                             </div>
                         </div>
                     
@@ -442,9 +459,14 @@ export default class Drafting extends Component {
 }
 
 const champBox = {
-    width: '20%',
-    height: "200px",
-    border: '1px solid black'
+    height: "100%",
+    border: '1px solid black',
+    padding: '0'
+}
+
+const champImg = {
+    height: '100%',
+    width: '100%'
 }
 
 const redBox = {
@@ -477,6 +499,12 @@ const fullRow = {
 
 const iconStyle = {
     width: '75px'
+}
+
+const minorRowStyle = {
+    paddingRight: '15px',
+    paddingLeft: '15px',
+    // height: '100%'
 }
 
 const iconGridStyle = {
