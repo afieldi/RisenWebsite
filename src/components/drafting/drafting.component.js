@@ -218,7 +218,7 @@ export default class Drafting extends Component {
     }
 
     filterChampions() {
-        const name = document.getElementById("champInput").value;
+        const name = document.getElementById("champInput") ? document.getElementById("champInput").value : "";
         this.setState({
             availChamps: this.allChamps.filter(champ => champ.toUpperCase().includes(name.toUpperCase()))
         })
