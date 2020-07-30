@@ -36,7 +36,6 @@ export default class Drafting extends Component {
         this.query = qs.parse(props.location.search, { ignoreQueryPrefix: true });
         this.auth = this.query.auth;
         this.game = this.query.game;
-        this.timer = 0;
 
         // Used so that we can use .map in the render function for a size of 5
         this.fiveSize = [0, 1, 2, 3, 4];
@@ -62,7 +61,6 @@ export default class Drafting extends Component {
             blueCount: -1,
             redCount: -1
         }
-        this.startTimer();
     }
 
     componentDidMount() {
@@ -87,30 +85,6 @@ export default class Drafting extends Component {
         });
     }
 
-    startTimer() {
-        let that = this;
-        function tickTimer() {
-            const timeout = setTimeout(() => {
-                if(that.state.blueCount === 1) {
-                    that.submitPick();
-                }
-                else if(that.state.redCount === 1) {
-                    that.submitPick();
-                }
-                that.setState({
-                    blueCount: that.state.blueCount - 1,
-                    redCount: that.state.redCount - 1
-                });
-                tickTimer();
-            }, 1000);
-            that.timer = timeout;
-        }
-        tickTimer();
-    }
-
-    stopTimer() {
-        clearTimeout(this.timer);
-    }
     
     setupSocket() {
         this.socket.on('connect', () => {
@@ -155,6 +129,19 @@ export default class Drafting extends Component {
             this.setState({
                 picking: false
             });
+        });
+
+        this.socket.on("timeUpdate", (time) => {
+            let nState = {};
+            if(this.getSide(+this.state.draft.stage + 1) === 0) {
+                nState["blueCount"] = time;
+                nState["redCount"] = 0;
+            }
+            else {
+                nState["redCount"] = time;
+                nState["blueCount"] = 0;
+            }
+            this.setState(nState);
         });
 
         this.socket.on("draftUpdate", (draft, time) => {

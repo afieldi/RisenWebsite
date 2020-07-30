@@ -202,6 +202,18 @@ function sendUpdate(draft) {
     }
 }
 
+function sendTimeUpdate(draft) {
+    for (let s of gameGroups[draft.gameLink].blueCap) {
+        s.emit('timeUpdate', gameGroups[draft.gameLink].curTime);
+    }
+    for (let s of gameGroups[draft.gameLink].redCap) {
+        s.emit('timeUpdate', gameGroups[draft.gameLink].curTime);
+    }
+    for (let s of gameGroups[draft.gameLink].spec) {
+        s.emit('timeUpdate', gameGroups[draft.gameLink].curTime);
+    }
+}
+
 function sendPick(draft) {
     const side = getSide(+draft.stage + 1);
     let capSockets = side === 0 ? gameGroups[draft.gameLink].blueCap : gameGroups[draft.gameLink].redCap;
@@ -221,6 +233,9 @@ function handleCountDown(draft) {
         // So either I can debug that, or I canthrow this in a try catch,
         //  and I'm not getting paid enough to debug my own garbage
         try {
+            if(gameGroups[draft.gameLink].hasReset === false) {
+                sendTimeUpdate(draft);
+            }
             if (gameGroups[draft.gameLink].curTime === 0) {
                 if(gameGroups[draft.gameLink].hasReset) {
                     stopPick(draft);
