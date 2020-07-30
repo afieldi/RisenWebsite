@@ -287,8 +287,8 @@ export default class Drafting extends Component {
                                         this.fiveSize.map(i => {
                                             if(this.state.draft.bluePicks && this.state.draft.bluePicks[+i]) {
                                                 return (
-                                                    <div className="col-sm" style={champBox}>
-                                                        <img key={"bluePick-" + i} id={"bluePick-" + i} style={champImg}
+                                                    <div className="col-sm" style={champBox} id={"bluePick-" + i}>
+                                                        <img key={"bluePick-" + i} style={champImg}
                                                             src={require('../../images/champions/profile/' + this.state.draft.bluePicks[+i] + "_0.jpg")}>
                                                         </img>
                                                     </div>
@@ -296,8 +296,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...blueBox, ...champBox}}>
-                                                        <img key={"bluePick-" + i} id={"bluePick-" + i} >
+                                                    <div className="col-sm" style={{...blueBox, ...champBox}} id={"bluePick-" + i}>
+                                                        <img key={"bluePick-" + i} >
                                                         </img>
                                                     </div>
                                                 )
@@ -313,8 +313,8 @@ export default class Drafting extends Component {
                                         this.fiveSize.map(i => {
                                             if(this.state.draft.redPicks && this.state.draft.redPicks[+i]) {
                                                 return (
-                                                    <div className="col-sm" style={champBox}>
-                                                        <img key={"redPick-" + i} id={"redPick-" + i} style={champImg}
+                                                    <div className="col-sm" style={champBox} id={"redPick-" + i}>
+                                                        <img key={"redPick-" + i} style={champImg}
                                                             src={require('../../images/champions/profile/' + this.state.draft.redPicks[+i] + "_0.jpg")}>
                                                         </img>
                                                     </div>
@@ -322,8 +322,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...redBox, ...champBox}}>
-                                                        <img key={"redPick-" + i} id={"redPick-" + i}>
+                                                    <div className="col-sm" style={{...redBox, ...champBox}} id={"redPick-" + i}>
+                                                        <img key={"redPick-" + i}>
                                                         </img>
                                                     </div>
                                                 )
@@ -342,8 +342,8 @@ export default class Drafting extends Component {
                                         this.fiveSize.map(i => {
                                             if(this.state.draft.blueBans && this.state.draft.blueBans[+i]) {
                                                 return (
-                                                    <div className="col-sm" style={champBox}>
-                                                        <img key={"blueBan-" + i} id={"blueBan-" + i} style={champImg}
+                                                    <div className="col-sm" style={champBox} id={"blueBan-" + i}>
+                                                        <img key={"blueBan-" + i} style={champImg}
                                                             src={require('../../images/champions/profile/' + this.state.draft.blueBans[+i] + "_0.jpg")}>
                                                         </img>
                                                     </div>
@@ -351,8 +351,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...blueBox, ...champBox}}>
-                                                        <img key={"blueBan-" + i} id={"blueBan-" + i} >
+                                                    <div className="col-sm" style={{...blueBox, ...champBox}} id={"blueBan-" + i} >
+                                                        <img key={"blueBan-" + i}>
                                                         </img>
                                                     </div>
                                                 )
@@ -367,8 +367,8 @@ export default class Drafting extends Component {
                                         this.fiveSize.map(i => {
                                             if(this.state.draft.redBans && this.state.draft.redBans[+i]) {
                                                 return (
-                                                    <div className="col-sm" style={champBox}>
-                                                        <img key={"redBan-" + i} id={"redBan-" + i} style={champImg}
+                                                    <div className="col-sm" style={champBox} id={"redBan-" + i}>
+                                                        <img key={"redBan-" + i} style={champImg}
                                                             src={require('../../images/champions/profile/' + this.state.draft.redBans[+i] + "_0.jpg")}>
                                                         </img>
                                                     </div>
@@ -376,8 +376,8 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...redBox, ...champBox}}>
-                                                        <img key={"redBan-" + i} id={"redBan-" + i}>
+                                                    <div className="col-sm" style={{...redBox, ...champBox}} id={"redBan-" + i}>
+                                                        <img key={"redBan-" + i}>
                                                         </img>
                                                     </div>
                                                 )
