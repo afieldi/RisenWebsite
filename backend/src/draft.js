@@ -50,7 +50,8 @@ function handleSocketConnection(socket) {
                         redPickTime: 0,
                         bluePickTime: 0,
                         draft: draft,
-                        curTime: 0
+                        curTime: 0,
+                        hasReset: false // used to give teams a bit extra leeway
                     };
                     setTimeout(() => {
                         // Kill draft after 1 hour to prevent memory hogging.
@@ -87,8 +88,9 @@ function handleSocketConnection(socket) {
 
 function handleGame(socket, draft, side) {
     // Side is 0 == blue, 1 == red
-    const readyState = side === 0 ? gameGroups[draft.gameLink].blueReady : gameGroups[draft.gameLink].redReady;
-    socket.emit('drafting', readyState);
+    // const readyState = side === 0 ? gameGroups[draft.gameLink].blueReady : gameGroups[draft.gameLink].redReady;
+    // socket.emit('drafting', readyState);
+    socket.emit('initalDraft', draft);
     socket.emit('draftUpdate', draft);
 
     socket.on('draftReady', () => {
@@ -105,9 +107,19 @@ function handleGame(socket, draft, side) {
 
             // Should only be hit once per draft
             gameGroups[draft.gameLink].curTime = +draft.time;
+            
+            for (let socket of gameGroups[draft.gameLink].blueCap) {
+                socket.emit('drafting', 2);
+            }
+            for (let socket of gameGroups[draft.gameLink].redCap) {
+                socket.emit('drafting', 2);
+            }
             sendPick(draft);
+            sendUpdate(draft);
         }
-        socket.emit('drafting', true);
+        else {
+            socket.emit('drafting', 1);
+        }
     });
 
     socket.on('picked', (champ, round) => {
@@ -133,7 +145,9 @@ function handleGame(socket, draft, side) {
     if (gameGroups[draft.gameLink].blueReady === true &&
         gameGroups[draft.gameLink].redReady === true) {
         // Draft in progress
-        sendPick(draft)
+        socket.emit('drafting', 2);
+        sendPick(draft);
+        sendUpdate(draft);
     }
 }
 
@@ -142,7 +156,7 @@ function handleDisconnect() {
 }
 
 function handleChampPicked(champ, draft) {
-    console.log("got pick: " + champ);
+    gameGroups[draft.gameLink].hasReset = false;
     draft.stage += 1;
     addPick(champ, draft);
     draft.save();
@@ -191,6 +205,18 @@ function sendUpdate(draft) {
     }
 }
 
+function sendTimeUpdate(draft) {
+    for (let s of gameGroups[draft.gameLink].blueCap) {
+        s.emit('timeUpdate', gameGroups[draft.gameLink].curTime);
+    }
+    for (let s of gameGroups[draft.gameLink].redCap) {
+        s.emit('timeUpdate', gameGroups[draft.gameLink].curTime);
+    }
+    for (let s of gameGroups[draft.gameLink].spec) {
+        s.emit('timeUpdate', gameGroups[draft.gameLink].curTime);
+    }
+}
+
 function sendPick(draft) {
     const side = getSide(+draft.stage + 1);
     let capSockets = side === 0 ? gameGroups[draft.gameLink].blueCap : gameGroups[draft.gameLink].redCap;
@@ -210,9 +236,19 @@ function handleCountDown(draft) {
         // So either I can debug that, or I canthrow this in a try catch,
         //  and I'm not getting paid enough to debug my own garbage
         try {
+            if(gameGroups[draft.gameLink].hasReset === false) {
+                sendTimeUpdate(draft);
+            }
             if (gameGroups[draft.gameLink].curTime === 0) {
-                stopPick(draft);
-                handleChampPicked("Risen", draft);
+                if(gameGroups[draft.gameLink].hasReset) {
+                    stopPick(draft);
+                    handleChampPicked("Risen", draft);
+                }
+                else {
+                    gameGroups[draft.gameLink].hasReset = true;
+                    gameGroups[draft.gameLink].curTime = 3;
+                    handleCountDown(draft);
+                }
             }
             else {
                 gameGroups[draft.gameLink].curTime -= 1;

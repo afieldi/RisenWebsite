@@ -34,12 +34,14 @@ const statsRouter = require('./routes/stats');
 const gamesRouter = require('./routes/games');
 const codesRouter = require('./routes/codes');
 const draftRouter = require('./routes/draft');
+const authRouter = require('./routes/auth');
 
 app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
 app.use('/stats', statsRouter);
 app.use('/codes', codesRouter);
 app.use('/draft', draftRouter);
+app.use('/auth', authRouter);
 
 //starts server
 let server = http.createServer(app);

@@ -53,7 +53,7 @@ export default class HomePage extends Component {
                     <br></br>
                     <br></br>
                 </Container>
-                <div className="dark-section">
+                <div className="deep-section">
                     <Container>
                         <h1 className="center text-light">Who Are We?</h1>
                         <hr className="risen-light"></hr>
@@ -98,74 +98,76 @@ export default class HomePage extends Component {
                 <br></br>
                 <br></br>
                 <br></br>
-                <div className="dark-section">
+                <div className="deep-section">
                     <Container>
                         <h1 className="center text-light">Our Leagues</h1>
                         <hr className="risen-light"></hr>
                         <h3 className="center text-light">Find a League for You</h3>
                         <hr className="risen-light"></hr>
-                        <table className="table table-striped center table-responsive" style={{backgroundColor: 'aliceBlue'}}>
-                            <thead>
-                                <tr style={leaguesTablePrimary}>
-                                    <th>League Name</th>
-                                    <th>Signup Size</th>
-                                    <th>Max Rank</th>
-                                    <th>Rank Range</th>
-                                    <th>Paid Entry</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Rampage Open</td>
-                                    <td>1-2 Players</td>
-                                    <td>Gold 1</td>
-                                    <td>Silver-Gold</td>
-                                    <td>Free</td>
-                                </tr>
-                                <tr>
-                                    <td>Rampage Premade</td>
-                                    <td>5-10 Players</td>
-                                    <td>Gold 1</td>
-                                    <td>Silver-Gold</td>
-                                    <td>Free</td>
-                                </tr>
-                                <tr>
-                                    <td>Unstoppable Premade</td>
-                                    <td>5-10 Players</td>
-                                    <td>Platinum 1</td>
-                                    <td>Gold-Platinum</td>
-                                    <td>Free</td>
-                                </tr>
-                                <tr>
-                                    <td>Dominate Open</td>
-                                    <td>1-2 Players</td>
-                                    <td>Diamond 4</td>
-                                    <td>Platinum-D4</td>
-                                    <td>Free</td>
-                                </tr>
-                                <tr>
-                                    <td>Dominate Premade</td>
-                                    <td>5-10 Players</td>
-                                    <td>Diamond 2</td>
-                                    <td>Platinum-Diamond</td>
-                                    <td>Free</td>
-                                </tr>
-                                <tr>
-                                    <td>Divine League</td>
-                                    <td>5-10 Players</td>
-                                    <td>Diamond 1</td>
-                                    <td>Diamond</td>
-                                    <td>Paid</td>
-                                </tr>
-                                <tr>
-                                    <td>Champions League</td>
-                                    <td>5-10 Players</td>
-                                    <td>Challenger</td>
-                                    <td>Any</td>
-                                    <td>Paid</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div className="table-responsive">
+                            <table className="table table-striped center" style={{backgroundColor: 'aliceBlue'}}>
+                                <thead>
+                                    <tr style={leaguesTablePrimary}>
+                                        <th>League Name</th>
+                                        <th>Signup Size</th>
+                                        <th>Max Rank</th>
+                                        <th>Rank Range</th>
+                                        <th>Paid Entry</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Rampage Open</td>
+                                        <td>1-2 Players</td>
+                                        <td>Gold 1</td>
+                                        <td>Silver-Gold</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rampage Premade</td>
+                                        <td>5-10 Players</td>
+                                        <td>Gold 1</td>
+                                        <td>Silver-Gold</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Unstoppable Premade</td>
+                                        <td>5-10 Players</td>
+                                        <td>Platinum 1</td>
+                                        <td>Gold-Platinum</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dominate Open</td>
+                                        <td>1-2 Players</td>
+                                        <td>Diamond 4</td>
+                                        <td>Platinum-D4</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dominate Premade</td>
+                                        <td>5-10 Players</td>
+                                        <td>Diamond 2</td>
+                                        <td>Platinum-Diamond</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Divine League</td>
+                                        <td>5-10 Players</td>
+                                        <td>Diamond 1</td>
+                                        <td>Diamond</td>
+                                        <td>Paid</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Champions League</td>
+                                        <td>5-10 Players</td>
+                                        <td>Challenger</td>
+                                        <td>Any</td>
+                                        <td>Paid</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div>
                             <Link to="/leagues"><Button className="risen-button btn-lg">Learn More</Button></Link>
                         </div>

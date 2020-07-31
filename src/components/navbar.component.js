@@ -1,7 +1,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { getBaseUrl, getCookie } from '../Helpers';
 
 export default class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      url: ""
+    };
+    fetch(getBaseUrl() + "/auth/redirect").then(data => {
+      data.text().then(url => {
+        this.setState({
+          url: url
+        })
+      })
+    });
+  }
 
   render() {
     return (
@@ -31,6 +46,22 @@ export default class Navbar extends Component {
               <li className="navbar-item ml-auto">
                 <Link to="/contact" className="nav-link">Contact Us</Link>
               </li>
+              {
+                this.props.admin ? 
+                <li className="navbar-item ml-auto">
+                  <Link to="/admin" className="nav-link">Admin</Link>
+                </li> : 
+                <li className="navbar-item ml-auto">
+                  <a href={this.state.url} className="nav-link">Log In</a>
+                </li>
+              }
+              {
+                this.props.admin ? 
+                <li className="navbar-item ml-auto">
+                  <a onClick={this.props.logout} href="#" className="nav-link">Log Out</a>
+                </li> : 
+                null
+              }
             </ul>        
           </div>
         </div>
