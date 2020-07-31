@@ -11,7 +11,7 @@ require('dotenv').config();
 
 //creates express server and port
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 //middleware
 app.use(cors());
@@ -36,7 +36,7 @@ const codesRouter = require('./routes/codes');
 const draftRouter = require('./routes/draft');
 const authRouter = require('./routes/auth');
 
-app.use('/games', gamesRouter);	
+app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
 app.use('/stats', statsRouter);
 app.use('/codes', codesRouter);
@@ -45,7 +45,7 @@ app.use('/auth', authRouter);
 
 //starts server
 let server = http.createServer(app);
-draft.setupSocket(server)
+draft.setupSocket(server);
 server.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
