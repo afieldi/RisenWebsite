@@ -13,7 +13,7 @@ export function matchDict(dict1, dict2) {
 
 export function getBaseUrl() {
     // return "http://99.79.193.118:5000";
-    return "http://99.246.224.136:5000"
+    return "https://risenwebsite.ue.r.appspot.com:8080/"
 }
 
 export function getCookie(name) {
