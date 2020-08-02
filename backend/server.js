@@ -43,6 +43,10 @@ app.use('/codes', codesRouter);
 app.use('/draft', draftRouter);
 app.use('/auth', authRouter);
 
+app.route("/").get((req, res) => {
+    res.status(200).send("Hello World").end();
+})
+
 //starts server
 let server = http.createServer(app);
 draft.setupSocket(server);
