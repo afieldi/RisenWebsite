@@ -9,6 +9,7 @@ const uuid = require('uuid');
 router.route("/callback").get((req, res) => {
   auth.getAdmin(req, req.query.code,
     (user) => {
+      console.log("Verified Admin")
       // Is an admin, success
       let weekFromNow = new Date();
       weekFromNow.setDate(weekFromNow.getDate() + 7);
@@ -18,18 +19,20 @@ router.route("/callback").get((req, res) => {
         expiry: weekFromNow
       }).then(userDoc => {
         // res.send(userDoc);
-        res.redirect(`http://${process.env.WEBSITE_BASE}/auth?code=${userDoc.auth}`)
-      })
+        console.log("Redirecting with success");
+        res.redirect(`${process.env.WEBSITE_BASE}/auth?code=${userDoc.auth}`)
+      });
     }, () => {
       // No an admin, fail
-      res.redirect(`http://${process.env.WEBSITE_BASE}/auth`)
+      console.log("Redirecting with failure");
+      res.redirect(`${process.env.WEBSITE_BASE}/auth`)
     })
 });
 
 router.route("/redirect").get((req, res) => {
   const client_id = process.env.DISCORD_CLIENT_ID;
 
-  const redirect = "http%3A%2F%2F" + req.headers.host + "/auth/callback";
+  const redirect = "https%3A%2F%2F" + req.headers.host + "/auth/callback";
   // TODO: Use Host instead once this migrates to an actual server
   // const redirect = "http%3A%2F%2F" + "99.246.224.136:5000" + "/auth/callback";
 

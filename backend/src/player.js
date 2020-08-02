@@ -1,16 +1,16 @@
-const { leagueApi } = require('./api');
+const { leagueApi, constants } = require('./api');
 const PlayerModel = require('../models/player.model');
 
 
 async function playerExists() {
-    const summoner = await leagueApi.Summoner.gettingByAccount(accountId);
+    const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
 }
 
 // Ensure player exists and create if it doesn't
 async function verifyPlayer(accountId) {
     let player = await PlayerModel.findOne({ accountId: accountId });
     if (player === null) {
-        const summoner = await leagueApi.Summoner.gettingByAccount(accountId);
+        const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
         player = await PlayerModel.create({
             accountId: accountId,
             name: summoner.name
@@ -20,10 +20,10 @@ async function verifyPlayer(accountId) {
 }
 
 async function addPlayerByName(name) {
-    const summoner = await leagueApi.Summoner.gettingByName(name).catch((err) => {
+    const summoner = (await leagueApi.Summoner.getByName(name).catch((err) => {
         console.log(err);
         throw Error("Summoner not found!");
-    });
+    })).response;
 
     let player = await PlayerModel.findOne({ accountId: summoner.accountId });
     if (player === null) {
