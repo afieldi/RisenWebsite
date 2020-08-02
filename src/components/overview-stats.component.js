@@ -43,7 +43,7 @@ export default class Overview extends Component {
             data.json().then(data => {
                 console.log(data);
                 data = this.sortData(data, "lane", "DESC");
-                
+
                 if (append) {
                     this.state.statData = this.state.statData.concat(data)
                 }
@@ -91,7 +91,7 @@ export default class Overview extends Component {
     sortData(data, attr, direction) {
         return data.sort((a, b) => {
             let res = 0;
-            // Handle special cases where either the stats are a string or 
+            // Handle special cases where either the stats are a string or
             //   can't be accessed by a simple attr accessor
             if (attr === "wr") {
                 res = a.wins/a.total_games - b.wins/b.total_games;
@@ -109,9 +109,7 @@ export default class Overview extends Component {
         })
     }
 
-    
-
-    getPositonalIcon(position) {
+    getPositionalIcon(position) {
         switch (position) {
             case "TOP":
                 return (<img src={topLaneIcon} alt="Top Lane"></img>)
@@ -149,19 +147,19 @@ export default class Overview extends Component {
                         <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
                             {/* TODO: Change these onClick functions */}
                             <label className="btn btn-light" style={spaceButtons}>
-                                <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
+                                <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositionalIcon("TOP")}
                             </label>
                             <label className="btn btn-light" style={spaceButtons}>
-                                <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
+                                <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("JUNGLE")}
                             </label>
                             <label className="btn btn-light" style={spaceButtons}>
-                                <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
+                                <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("MIDDLE")}
                             </label>
                             <label className="btn btn-light" style={spaceButtons}>
-                                <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
+                                <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositionalIcon("BOTTOM")}
                             </label>
                             <label className="btn btn-light" style={spaceButtons}>
-                                <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
+                                <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositionalIcon("SUPPORT")}
                             </label>
                             <label className="btn btn-light" style={spaceButtons}>
                                 <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
@@ -172,7 +170,7 @@ export default class Overview extends Component {
                         <form onSubmit={this.submitSearch.bind(this)}>
                             <div class="input-group mb-3 bg-light">
                                 <input type="text" class="form-control"
-                                        placeholder="Recipient's username" aria-label="Recipient's username"
+                                        placeholder="Summoner Name" aria-label="Summoner Name"
                                         aria-describedby="button-addon2" id="nameFilter" ></input>
                                 <div class="input-group-append text-dark">
                                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
@@ -185,15 +183,15 @@ export default class Overview extends Component {
                     <thead>
                         <tr>
                         {/* <th scope="col" className="center">Rank</th> */}
-                        <th scope="col">Summoner</th>
+                        <th scope="col">Summoner Name</th>
                         <th scope="col" className="center">Lane</th>
                         <th scope="col" className="center">Win Rate</th>
                         <th scope="col" className="center">Kills</th>
                         <th scope="col" className="center">Deaths</th>
                         <th scope="col" className="center">Assists</th>
-                        <th scope="col" className="center">Gold</th>
-                        <th scope="col" className="center">CS</th>
-                        <th scope="col" className="center">Damage</th>
+                        {/*<th scope="col" className="center">Gold</th>*/}
+                        {/*<th scope="col" className="center">CS</th>*/}
+                        {/*<th scope="col" className="center">Damage</th>*/}
                         <th scope="col" className="center">Games</th>
                         </tr>
                     </thead>
@@ -209,15 +207,15 @@ export default class Overview extends Component {
                                         <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
                                         <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
                                         <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
-                                        <td className="center" name="goldCol">{customRound(item.avg_gold)}</td>
-                                        <td className="center" name="csCol">{customRound(item.avg_cs)}</td>
-                                        <td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>
+                                        {/*<td className="center" name="goldCol">{customRound(item.avg_gold)}</td>*/}
+                                        {/*<td className="center" name="csCol">{customRound(item.avg_cs)}</td>*/}
+                                        {/*<td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>*/}
                                         <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
                                     </tr>
                                 )
                             })
                         }
-                        
+
                     </tbody>
                 </table>
             </div>

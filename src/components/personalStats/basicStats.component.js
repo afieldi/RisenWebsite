@@ -63,7 +63,7 @@ export default class BasicStats extends Component {
         }
         this.loadCompareData(this.props.player);
     }
-    
+
     shouldComponentUpdate(newProps, newState) {
         this.filteredData = newProps.playerData;
         this.computeAccStats();
@@ -107,7 +107,7 @@ export default class BasicStats extends Component {
           data.json().then(jsonData => {
             const playerData = jsonData[0];
             const newData = {}
-    
+
             newData["Name"] = playerData._id.player[0];
             newData["Kills"] = customRound(playerData["avg_kills"]);
             newData["Deaths"] = customRound(playerData["avg_deaths"]);
@@ -122,8 +122,8 @@ export default class BasicStats extends Component {
             newData["Vision"] = customRound(playerData["avg_vision"]);
             newData["Wards killed"] = customRound(playerData["avg_wards_killed"]);
             newData["Win Rate"] = customRound((playerData["wins"] / playerData["total_games"]) * 100) + "%";
-    
-    
+
+
             this.setState({
               compData: this.state.compData.concat(newData)
             });
@@ -132,7 +132,7 @@ export default class BasicStats extends Component {
           alert("Could not find summoner!");
         })
       }
-    
+
       // This is an intermediate function so that loadCompareData can be kept general
       loadCompareDataFromSearch() {
         this.loadCompareData(document.getElementById("playerName").value);
@@ -144,15 +144,15 @@ export default class BasicStats extends Component {
           $('.dropdown-menu').slideToggle();
           event.stopPropagation();
         });
-      
+
         $('.dropdown-menu').on('click', function(event) {
           event.stopPropagation();
         });
-    
+
         $('.dropdown-option').on('click', function(event) {
           where.handleGameCheck(event.target.getAttribute("name"));
         })
-      
+
         $(window).on('click', function() {
           $('.dropdown-menu').slideUp();
         });
@@ -170,7 +170,7 @@ export default class BasicStats extends Component {
     handleGameCheck(option) {
         // let tempOptions = this.state.gameDataOptions;
         this.state.gameDataOptions[option].shown = !this.state.gameDataOptions[option].shown;
-    
+
         // Just reload the state
         this.setState({})
     }
@@ -218,7 +218,7 @@ export default class BasicStats extends Component {
                                         </div>
                                         <div className="col-4">
                                         <Dropdown>
-                                            <Button className="dropdown-toggle risen-button" data-toggle="dropdown">STATS</Button>
+                                            <Button className="dropdown-toggle select-cols-dropdown-btn" data-toggle="dropdown">Select Columns</Button>
                                             <div className="dropdown-menu" style={gameDataDropDown}>
                                             {
                                                 Object.keys(this.state.gameDataOptions).map((option, index) => {
@@ -297,10 +297,10 @@ export default class BasicStats extends Component {
                                 <div className="risen-stats-body">
                                     <div className="row">
                                         <div className="col-lg-4" style={verticalCenter}>
-                                            Add Player :<input id="playerName"></input>
+                                            <input id="playerName" placeholder="Summoner Name"></input>
                                         </div>
-                                        <div className="col-lg-3">
-                                            <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                        <div className="col-lg-8">
+                                            <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn search-for-player-button">Search For Player</Button>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -309,7 +309,7 @@ export default class BasicStats extends Component {
                                                 {
                                                     // Check to ensure comp data has length. It will once data for the player loads in
                                                     //   as the #0 spot will be the players.
-                                                    this.state.compData.length ? 
+                                                    this.state.compData.length ?
                                                     Object.keys(this.state.compData[0]).map((key, index) => {
                                                         return (
                                                             <tr key={"CompDataRow" + index}>
@@ -356,4 +356,3 @@ const verticalCenter = {
     flexDirection: 'row',
     alignItems: 'center'
 }
-  
