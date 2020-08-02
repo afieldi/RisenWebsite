@@ -1,9 +1,12 @@
-runtime: nodejs10
+runtime: nodejs12
+service: website
 
 handlers:
+  - url: /static
+    static_dir: build/static
   - url: /
     static_files: build/index.html
     upload: build/index.html
-
-  - url: /
-    static_dir: build
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html

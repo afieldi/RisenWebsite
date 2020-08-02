@@ -1,5 +1,5 @@
 // require('dotenv').config();
-const { leagueApi } = require('./api');
+const { leagueApi, constants } = require('./api')
 const { verifyPlayer } = require('./player')
 const {spawn} = require('child_process');
 const mongoose = require('mongoose');
@@ -36,14 +36,14 @@ async function saveGames(matchIds) {
 async function getRoles(gameData, timeline) {
     return new Promise( (resolve, reject) => {
         const python = spawn('python', ['./src/roles.py']);
-        
         python.stdin.write(JSON.stringify(gameData));
         python.stdin.write("\r\n");
         python.stdin.write(JSON.stringify(timeline));
         python.stdin.end();
         
         python.stdout.on('data', function (data) {
-            resolve(JSON.parse(data.toString()));
+            console.log(data);
+
         });
 
         python.stdout.on('error', (data) => {
@@ -60,12 +60,15 @@ async function saveGame(matchId) {
         return;
     }
     // TODO: change this to tourney
-    await leagueApi.Match.gettingById(matchId).then(
+    await leagueApi.Match.get(matchId, constants.Regions.AMERICA_NORTH).then(
         async gameData => {
+            gameData = gameData.response;
             const teams = await getTeams(gameData.participantIdentities);
-            const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            // const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            const timeline = (await leagueApi.Match.timeline(matchId, constants.Regions.AMERICA_NORTH)).response;
             // const laneAssignments = roles.getRoles(gameData, timeline);
             const laneAssignments = await getRoles(gameData, timeline);
+
             const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
 
             for (const [i, player] of Object.entries(gameData.participants)) {
@@ -199,9 +202,9 @@ async function getTeams(participants) {
     const teams1 = await PlayerModel.find(
         { 'accountId': { "$in": ids } }
     );
-
+    
     const team1 = getTeam(teams1);
-           
+    
     // participants has already been spliced
     ids = participantsCopy.map((p) => {
         return p.player.accountId;
@@ -271,7 +274,8 @@ saveGames([
     3490184363,
     3490068881,
     3490123843,
-    3489994608
+    3489994608,
+    // 3516542892
 ]).then(() => {
     console.log("donezo")
 });

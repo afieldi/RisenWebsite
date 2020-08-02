@@ -43,9 +43,9 @@ app.use('/codes', codesRouter);
 app.use('/draft', draftRouter);
 app.use('/auth', authRouter);
 
-app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "/build/index.html"))
-});
+app.route("/").get((req, res) => {
+    res.status(200).send("Hello World").end();
+})
 
 //starts server
 let server = http.createServer(app);

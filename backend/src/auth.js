@@ -35,7 +35,7 @@ function getGuildUser(userId, callback) {
 }
 
 function exchangeCode(req, code, callback) {
-  const redirect = "http://" + req.headers.host + "/auth/callback";
+  const redirect = "https://" + req.headers.host + "/auth/callback";
 
   const data = {
     'client_id': process.env.DISCORD_CLIENT_ID,
@@ -48,6 +48,9 @@ function exchangeCode(req, code, callback) {
   
 
   const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
+  console.log(data);
+  console.log(formBody);
+  console.log("making fetch request");
   fetch('https://discord.com/api/oauth2/token', {
     method: 'POST',
     headers: {
@@ -55,15 +58,20 @@ function exchangeCode(req, code, callback) {
     },
     body: formBody
   }).then(data => {
+    console.log("got data from fetch request");
     data.json().then(res => {
       if(res.error) {
-        throw new Error();
+        console.log("Error: " + res.error);
+        return;
       }
       callback(res.access_token);
+    }, res => {
+      console.error(res);
+      // throw new Error();
     });
   }).catch(err => {
     console.log(err);
-    throw new Error();
+    // throw new Error(err);
   });
 }
 
@@ -87,10 +95,15 @@ function getAdmin(request, code, onSuccess, onReject) {
   // AHHHHHHHHH
   // AHHHH CALLBACKS
   try {
+    console.log("got in function");
     exchangeCode(request, code, (token) => {
+      console.log("got exchange code");
       getSelf(token, (user) => {
+        console.log("got user data");
         getGuildUser(user.id, (guildUser) => {
+          console.log("got user role data");
           getAdminGuildRoles((adminRoles) => {
+            console.log("got admin role data");
             for (let role of guildUser.roles) {
               if (adminRoles.includes(role)) {
                 onSuccess(user);

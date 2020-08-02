@@ -34,9 +34,9 @@ export default class Setup extends Component {
                 console.log(data);
                 this.setState({
                     gameLinks: {
-                        blue: `http://${window.location.hostname}:3000/draft?game=${data.gameLink}&auth=${data.blueAuth}`,
-                        red: `http://${window.location.hostname}:3000/draft?game=${data.gameLink}&auth=${data.redAuth}`,
-                        spec: `http://${window.location.hostname}:3000/draft?game=${data.gameLink}`
+                        blue: `https://${window.location.hostname}/draft?game=${data.gameLink}&auth=${data.blueAuth}`,
+                        red: `https://${window.location.hostname}/draft?game=${data.gameLink}&auth=${data.redAuth}`,
+                        spec: `https://${window.location.hostname}/draft?game=${data.gameLink}`
                     },
                     showCreate: false
                 });
