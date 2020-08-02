@@ -70,12 +70,12 @@
 .risen-table thead th {
   border-bottom: 1px solid rgb(117, 117, 117);
   /* TODO: Find a nicer font. This one sucks */
-  font-family: 'Courier New', Courier, monospace; 
+  font-family: 'Open Sans', Arial, monospace;
 }
 
 .risen-table tbody td {
   border-bottom: 1px solid rgb(117, 117, 117);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Open Sans', Arial, monospace;
 }
 
 .center {
@@ -101,6 +101,67 @@
   display: block;
   margin: 10px auto;
   position: relative;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.search-for-player-button {
+  color: #fff;
+  background-color: #E4692B;
+  border: none;
+  border-radius: 300px;
+  font-weight: 700;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  padding: 5px 15px;
+  display: block;
+  margin: 10px 10px 10px 475px;
+  position: relative;
+  font-size: 14px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.select-cols-dropdown-btn {
+  color: #fff;
+  background-color: #E4692B;
+  border: none;
+  border-radius: 300px;
+  font-weight: 700;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  padding: 5px 15px;
+  display: block;
+  margin: 10px 10px 10px 135px;
+  position: relative;
+  font-size: 14px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.filter-button {
+  color: #fff;
+  background-color: #E4692B;
+  border: none;
+  border-radius: 300px;
+  font-weight: 700;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  padding: 5px 25px;
+  display: block;
+  margin: 30px 10px 10px 60px;
+  position: relative;
+  font-size: 14px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.risen-button-small {
+  color: #fff;
+  background-color: #E4692B;
+  border: none;
+  border-radius: 300px;
+  font-weight: 700;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  padding: 5px 15px;
+  display: block;
+  margin: 5px auto;
+  position: relative;
+  font-size: 14px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .risen-radio {
@@ -199,7 +260,7 @@ hr.risen-dark {
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
- 
+
   /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;

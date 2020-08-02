@@ -70,7 +70,7 @@ export default class DetailedStats extends Component {
         "Dmg/Gold": {shown: true, fnc: game => customRound(game["damagePerGold"])}
       }
     }
-    this.loadPlayerData(this.props.match.params.player);    
+    this.loadPlayerData(this.props.match.params.player);
   }
 
   computeAccStats(accStats, data) {
@@ -167,7 +167,7 @@ export default class DetailedStats extends Component {
       }
       return true;
     });
-    
+
     this.setState({
       filteredData: filteredData
     });
@@ -181,7 +181,7 @@ export default class DetailedStats extends Component {
         <br></br> */}
         <div className="light-section">
           <div className="container">
-            
+
             {/* Basic Stats */}
             <nav>
               <div>
@@ -246,7 +246,7 @@ export default class DetailedStats extends Component {
                                       </Form.Group>
                                     </div>
                                     <div className="col-md">
-                                      <Button className="btn risen-button" onClick={this.performFilter.bind(this)}>FILTER</Button>
+                                      <Button className="btn filter-button" onClick={this.performFilter.bind(this)}>Filter</Button>
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +267,7 @@ export default class DetailedStats extends Component {
                 <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></VisionStats>
               </div>
             </div>
-            
+
           </div>
         </div>
       </section>

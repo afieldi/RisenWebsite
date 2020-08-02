@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2cdcefa1-6a75-429a-b3f2-0123e1a7753e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/app.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/detailed-stats.component.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/detailed-stats.component.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/overview-stats.component.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/overview-stats.component.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/personalStats/basicStats.component.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/personalStats/basicStats.component.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/text.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/text.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +54,7 @@
       <option name="presentableId" value="Default" />
       <updated>1596164795844</updated>
       <workItem from="1596164798210" duration="1086000" />
+      <workItem from="1596399020770" duration="7680000" />
     </task>
     <servers />
   </component>
