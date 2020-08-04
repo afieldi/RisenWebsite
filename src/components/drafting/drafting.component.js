@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { getBaseUrl } from '../../Helpers';
 import socketIOClient from "socket.io-client";
-import risenLogo from '../../images/RE_TypeLogo_Shading.png'
+import risenLogo from '../../images/RE_TypeLogo_Shading.png';
+
 
 const qs = require('qs');
 const champions = require('../../data/champions.json')
@@ -141,6 +142,10 @@ export default class Drafting extends Component {
                 nState["redCount"] = time;
                 nState["blueCount"] = 0;
             }
+
+            if(time === 0 && this.state.picking) {
+                this.submitPick();
+            }
             this.setState(nState);
         });
 
@@ -208,7 +213,7 @@ export default class Drafting extends Component {
         const name = document.getElementById("champInput") ? document.getElementById("champInput").value : "";
         this.setState({
             availChamps: this.allChamps.filter(champ => champ.toUpperCase().includes(name.toUpperCase()))
-        })
+        });
     }
 
     getCurBlock() {
@@ -272,18 +277,23 @@ export default class Drafting extends Component {
                                 <div className="row" style={minorRowStyle}>
                                     {
                                         this.fiveSize.map(i => {
+                                            let boxStyle = window.screen.width > 1200 ? champBoxTall : champBoxShort;
                                             if(this.state.draft.bluePicks && this.state.draft.bluePicks[+i]) {
+                                                let champ = this.state.draft.bluePicks[+i];
+                                                let imgSrc = window.screen.width > 1200 ? 'profile' : 'splash';
                                                 return (
-                                                    <div className="col-sm" style={champBox} id={"bluePick-" + i}>
+                                                    <div className="col-lg" style={boxStyle} id={"bluePick-" + i}>
                                                         <img key={"bluePick-" + i} style={champImg}
-                                                            src={require('../../images/champions/profile/' + this.state.draft.bluePicks[+i] + "_0.jpg")}>
+                                                            src={require(`../../images/champions/${imgSrc}/${this.state.draft.bluePicks[+i]}_0.jpg`)}>
                                                         </img>
+                                                        <div style={champImgOverlay} className="d-lg-none"></div>
+                                                        <div style={champNameStyle} className="d-lg-none">{champions.data[champ].name}</div>
                                                     </div>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...blueBox, ...champBox}} id={"bluePick-" + i}>
+                                                    <div className="col-lg" style={{...blueBox, ...boxStyle}} id={"bluePick-" + i}>
                                                         <img key={"bluePick-" + i} >
                                                         </img>
                                                     </div>
@@ -298,18 +308,23 @@ export default class Drafting extends Component {
                                 <div className="row" style={minorRowStyle}>
                                     {
                                         this.fiveSize.map(i => {
+                                            let boxStyle = window.screen.width > 1200 ? champBoxTall : champBoxShort;
                                             if(this.state.draft.redPicks && this.state.draft.redPicks[+i]) {
+                                                let champ = this.state.draft.redPicks[+i];
+                                                let imgSrc = window.screen.width > 1200 ? 'profile' : 'splash';
                                                 return (
-                                                    <div className="col-sm" style={champBox} id={"redPick-" + i}>
+                                                    <div className="col-lg" style={boxStyle} id={"redPick-" + i}>
                                                         <img key={"redPick-" + i} style={champImg}
-                                                            src={require('../../images/champions/profile/' + this.state.draft.redPicks[+i] + "_0.jpg")}>
-                                                        </img>
+                                                            src={require(`../../images/champions/${imgSrc}/${this.state.draft.redPicks[+i]}_0.jpg`)}>
+                                                            </img>
+                                                        <div style={{...champImgOverlay, ...champOverlayRed}} className="d-lg-none"></div>
+                                                        <div style={{...champNameStyle, ...champNameRed}} className="d-lg-none">{champions.data[champ] ? champions.data[champ].name : "You idiot"}</div>
                                                     </div>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...redBox, ...champBox}} id={"redPick-" + i}>
+                                                    <div className="col-lg" style={{...redBox, ...boxStyle}} id={"redPick-" + i}>
                                                         <img key={"redPick-" + i}>
                                                         </img>
                                                     </div>
@@ -327,9 +342,10 @@ export default class Drafting extends Component {
                                 <div className="row" style={minorRowStyle}>
                                     {
                                         this.fiveSize.map(i => {
+                                            let boxStyle = window.screen.width > 1200 ? champBoxTall : champBoxShort;
                                             if(this.state.draft.blueBans && this.state.draft.blueBans[+i]) {
                                                 return (
-                                                    <div className="col-sm" style={champBox} id={"blueBan-" + i}>
+                                                    <div className="col" style={boxStyle} id={"blueBan-" + i}>
                                                         <img key={"blueBan-" + i} style={champImg}
                                                             src={require('../../images/champions/profile/' + this.state.draft.blueBans[+i] + "_0.jpg")}>
                                                         </img>
@@ -338,7 +354,7 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...blueBox, ...champBox}} id={"blueBan-" + i} >
+                                                    <div className="col" style={{...blueBox, ...boxStyle}} id={"blueBan-" + i} >
                                                         <img key={"blueBan-" + i}>
                                                         </img>
                                                     </div>
@@ -352,9 +368,11 @@ export default class Drafting extends Component {
                                 <div className="row" style={minorRowStyle}>
                                     {
                                         this.fiveSize.map(i => {
+                                            let boxStyle = window.screen.width > 1200 ? champBoxTall : champBoxShort;
+
                                             if(this.state.draft.redBans && this.state.draft.redBans[+i]) {
                                                 return (
-                                                    <div className="col-sm" style={champBox} id={"redBan-" + i}>
+                                                    <div className="col" style={boxStyle} id={"redBan-" + i}>
                                                         <img key={"redBan-" + i} style={champImg}
                                                             src={require('../../images/champions/profile/' + this.state.draft.redBans[+i] + "_0.jpg")}>
                                                         </img>
@@ -363,7 +381,7 @@ export default class Drafting extends Component {
                                             }
                                             else {
                                                 return (
-                                                    <div className="col-sm" style={{...redBox, ...champBox}} id={"redBan-" + i}>
+                                                    <div className="col" style={{...redBox, ...boxStyle}} id={"redBan-" + i}>
                                                         <img key={"redBan-" + i}>
                                                         </img>
                                                     </div>
@@ -412,9 +430,12 @@ export default class Drafting extends Component {
                                                                 onClickFnc = null;
                                                             }
                                                             return (
-                                                                <img key={"img" + champ} id={"img-" + champ}
+                                                                <div>
+                                                                    <img key={"img" + champ} id={"img-" + champ}
                                                                     src={require(`../../images/champions/icons/` + champ + `_0.jpg`)}
                                                                     style={style} onClick={onClickFnc}></img>
+                                                                    <h6>{champions.data[champ].name}</h6>
+                                                                </div>
                                                             )
                                                         })
                                                     }
@@ -445,23 +466,66 @@ export default class Drafting extends Component {
     }
 }
 
-const champBox = {
-    height: "100%",
+const champBoxTall = {
+    // height: "100%",
     border: '1px solid black',
-    padding: '0'
+    padding: '0',
+    height: '200px',
+}
+
+const champBoxShort = {
+    // height: "100%",
+    border: '1px solid black',
+    padding: '0',
+    height: '100px',
 }
 
 const champImg = {
     height: '100%',
-    width: '100%'
+    width: '100%',
+    objectFit: 'cover',
+    objectPosition: '0% 20%',
 }
 
+const champImgOverlay = {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    top: '0',
+    background: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 59%, rgba(0,0,0,0.75) 100%)'
+}
+
+const champOverlayRed = {
+    transform: 'rotate(180deg)'
+}
+
+const champNameStyle = {
+    position: 'absolute',
+    width: '95%',
+    left: '2.5%',
+    bottom: '5px',
+    fontFamily: 'fantasy',
+    color: 'white',
+    fontSize: '24px',
+    textAlign: 'right'
+}
+
+const champNameRed = {
+    textAlign: 'left'
+}
+
+// const champImg = {
+//     height: '100%',
+//     width: '100%',
+//     height: '200px',
+// }
+
 const redBox = {
-    backgroundColor: 'rgb(79, 15, 23)'
+    backgroundColor: 'rgb(79, 15, 23)',
 }
 
 const blueBox = {
-    backgroundColor: 'rgb(18, 80, 113)'
+    backgroundColor: 'rgb(18, 80, 113)',
 }
 
 const mainDivStyle = {
@@ -489,11 +553,7 @@ const iconStyle = {
 }
 
 const minorRowStyle = {
-    // paddingRight: '15px',
-    // paddingLeft: '15px',
     width: '100%',
-    // height: '100%'
-    height: '200px',
     margin: '0'
 }
 

@@ -8,7 +8,6 @@ import GamesList from "./components/games-list.component";
 import EditGame from "./components/edit-game.component";
 import CreateGame from "./components/create-game.component";
 import CreateTeam from "./components/create-team.component";
-import Test from "./components/test.component";
 import Overview from "./components/overview-stats.component";
 import DetailedStats from "./components/detailed-stats.component";
 import DetailedLeague from './components/detailed-league.component';
@@ -80,7 +79,7 @@ export default class App extends Component {
           <Router>
             <div className="risen-main-background">
               <RisenNavbar admin={this.state.isAdmin} logout={this.logOut.bind(this)} />
-              <br/>
+              {/* <br/> */}
               <Route path="/" exact component={HomePage} />
               <Route path="/gameslist" exact component={GamesList} />
               <Route path="/edit/:id" component={EditGame} />
