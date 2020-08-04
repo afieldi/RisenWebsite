@@ -27,6 +27,12 @@ fetch("https://ddragon.leagueoflegends.com/api/versions.json").then(response => 
                             res.body.pipe(dest);
                         });
                     }
+                    if(!fs.existsSync(`src/images/champions/splash/${key}_0.jpg`)) {
+                        fetch(`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${key}_0.jpg`).then(res => {
+                            const dest = fs.createWriteStream(`src/images/champions/splash/${key}_0.jpg`);
+                            res.body.pipe(dest);
+                        });
+                    }
                 }
                 fs.writeFileSync("src/data/champions_map.json", JSON.stringify(newData, undefined, 2));
             });
