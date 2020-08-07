@@ -47,20 +47,20 @@ export default class Navbar extends Component {
                 <Link to="/contact" className="nav-link">Contact Us</Link>
               </li>
               {
-                this.props.admin ? 
+                this.props.admin === 1 ? 
                 <li className="navbar-item ml-auto">
                   <Link to="/admin" className="nav-link">Admin</Link>
                 </li> : 
-                <li className="navbar-item ml-auto">
-                  <a href={this.state.url} className="nav-link">Log In</a>
-                </li>
+                null
               }
               {
-                this.props.admin ? 
+                this.props.admin === -1 ? 
+                <li className="navbar-item ml-auto">
+                  <a href={this.state.url} className="nav-link">Log In</a>
+                </li> :
                 <li className="navbar-item ml-auto">
                   <a onClick={this.props.logout} href="#" className="nav-link">Log Out</a>
-                </li> : 
-                null
+                </li>
               }
             </ul>        
           </div>

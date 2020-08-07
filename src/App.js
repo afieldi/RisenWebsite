@@ -25,7 +25,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAdmin: false
+      level: -1
     }
 
     // Add callback that does nothing. This callback is used in the auth component to let it know
@@ -38,19 +38,30 @@ export default class App extends Component {
     if(code) {
       fetch(getBaseUrl() + "/auth/verify?code=" + code).then((res) => {
         if(res.status === 200) {
-          this.setState({
-            isAdmin: true
+          res.json().then(user => {
+            console.log(user);
+            if(user.level === 2) {
+              this.setState({
+                level: user.level
+              });
+            }
+            else {
+              this.setState({
+                level: -1
+              });
+            }
           });
         }
         else {
+          console.log("aaaa");
           this.setState({
-            isAdmin: false
+            level: -1
           });
         }
         callback();
       }).catch(err => {
         this.setState({
-          isAdmin: false
+          level: -1
         });
       })
     }
@@ -67,7 +78,7 @@ export default class App extends Component {
 
   authRender(props) {
     return (
-      <Login authCheck={this.checkLoggedIn.bind(this)} admin={this.state.isAdmin} {...props}></Login>
+      <Login authCheck={this.checkLoggedIn.bind(this)} {...props}></Login>
     );
   }
   
@@ -78,7 +89,7 @@ export default class App extends Component {
           <div style={ backgroundImageStyle }></div>
           <Router>
             <div className="risen-main-background">
-              <RisenNavbar admin={this.state.isAdmin} logout={this.logOut.bind(this)} />
+              <RisenNavbar admin={this.state.level} logout={this.logOut.bind(this)} />
               {/* <br/> */}
               <Route path="/" exact component={HomePage} />
               <Route path="/gameslist" exact component={GamesList} />
@@ -95,9 +106,8 @@ export default class App extends Component {
               <Route path="/auth" render={this.authRender.bind(this)} ></Route>
               {
                 // Only create route if it is an admin
-                this.state.isAdmin ? <Route path="/admin" component={Admin}></Route> : null
+                this.state.level === 1 ? <Route path="/admin" component={Admin}></Route> : null
               }
-  
             </div>
           </Router>
         </div>

@@ -7,23 +7,23 @@ const uuid = require('uuid');
 // This is so that the calling url can be passed from the /redirect endpoint into this function
 //  via the callback url
 router.route("/callback").get((req, res) => {
-  auth.getAdmin(req, req.query.code,
-    (user) => {
-      console.log("Verified Admin")
+  auth.getUser(req, req.query.code,
+    (user, level) => {
       // Is an admin, success
       let weekFromNow = new Date();
       weekFromNow.setDate(weekFromNow.getDate() + 7);
       User.create({
         user: user.id,
         auth: uuid.v4(),
+        level: level,
+        name: user.username,
         expiry: weekFromNow
       }).then(userDoc => {
-        // res.send(userDoc);
         console.log("Redirecting with success");
         res.redirect(`${process.env.WEBSITE_BASE}/auth?code=${userDoc.auth}`)
       });
     }, () => {
-      // No an admin, fail
+      // Something went wrong
       console.log("Redirecting with failure");
       res.redirect(`${process.env.WEBSITE_BASE}/auth`)
     })
@@ -32,7 +32,13 @@ router.route("/callback").get((req, res) => {
 router.route("/redirect").get((req, res) => {
   const client_id = process.env.DISCORD_CLIENT_ID;
 
-  const redirect = "https%3A%2F%2F" + req.headers.host + "/auth/callback";
+  let redirect = req.headers.host + "/auth/callback";
+  if(req.connection.encrypted) {
+    redirect = "https%3A%2F%2F" + redirect;
+  }
+  else {
+    redirect = "http%3A%2F%2F" + redirect;
+  }
   // TODO: Use Host instead once this migrates to an actual server
   // const redirect = "http%3A%2F%2F" + "99.246.224.136:5000" + "/auth/callback";
 

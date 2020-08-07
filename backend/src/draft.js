@@ -170,6 +170,7 @@ function handleChampPicked(champ, draft) {
         sendPick(draft);
     }
     else {
+        draft.stage = 21; // Set it to 21 so we know it is over
         endDraft(draft.gameLink);
     }
 }

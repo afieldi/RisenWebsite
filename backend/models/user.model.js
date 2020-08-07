@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-// I don't do much database design in my job...
 const userSchema = new Schema({
     user: { type: String },
     auth: { type: String },
+    name: { type: String },
+    level: { type: Number }, // 0 user, 1 admin, can add more
     expiry: { type: Date }
 }, {
   timestamps: true

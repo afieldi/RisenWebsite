@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const process = require('process');
 
-function getAdminGuildRoles(callback) {
+function getGuildRoles(roleMap, callback) {
   fetch(`https://discord.com/api/guilds/${process.env.DISCORD_SERVER_ID}/roles`, {
     method: "GET",
     headers: {
@@ -9,11 +9,15 @@ function getAdminGuildRoles(callback) {
     }
   }).then(data => {
     data.json().then(roles => {
-      let approvedRoles = ["Admin"];
-      let approvedIds = [];
+      let approvedIds = {};
       for (let role of roles) {
-        if (approvedRoles.includes(role.name)) {
-          approvedIds.push(role.id);
+        for (let i in roleMap) {
+          if (roleMap[i].includes(role.name)) {
+            if (!approvedIds[i]) {
+              approvedIds[i] = []
+            }
+            approvedIds[i].push(role.id);
+          }
         }
       }
       callback(approvedIds);
@@ -35,7 +39,13 @@ function getGuildUser(userId, callback) {
 }
 
 function exchangeCode(req, code, callback) {
-  const redirect = "https://" + req.headers.host + "/auth/callback";
+  let redirect = req.headers.host + "/auth/callback";
+  if(req.connection.encrypted) {
+    redirect = "https://" + redirect;
+  }
+  else {
+    redirect = "http://" + redirect;
+  }
 
   const data = {
     'client_id': process.env.DISCORD_CLIENT_ID,
@@ -67,11 +77,11 @@ function exchangeCode(req, code, callback) {
       callback(res.access_token);
     }, res => {
       console.error(res);
-      // throw new Error();
+      throw new Error();
     });
   }).catch(err => {
     console.log(err);
-    // throw new Error(err);
+    throw new Error(err);
   });
 }
 
@@ -88,30 +98,30 @@ function getSelf(token, callback) {
   });
 }
 
-function getAdmin(request, code, onSuccess, onReject) {
+function getUser(request, code, onSuccess, onReject) {
   console.log("got code: " + code);
   // AHHHHHHHHH
   // AHHHHHHHHH
   // AHHHHHHHHH
   // AHHHH CALLBACKS
+  let roleMap = {
+    1: ["Admin", "admin"],
+    2: ["Verified"]
+  }
   try {
-    console.log("got in function");
     exchangeCode(request, code, (token) => {
-      console.log("got exchange code");
       getSelf(token, (user) => {
-        console.log("got user data");
         getGuildUser(user.id, (guildUser) => {
-          console.log("got user role data");
-          getAdminGuildRoles((adminRoles) => {
-            console.log("got admin role data");
-            for (let role of guildUser.roles) {
-              if (adminRoles.includes(role)) {
-                onSuccess(user);
-                return;
+          getGuildRoles(roleMap, (definedRoles) => {
+            for (let defRoleIndex in definedRoles) {
+              for (let role of guildUser.roles) {
+                if (definedRoles[defRoleIndex].includes(role)) {
+                  onSuccess(user, defRoleIndex);
+                  return;
+                }
               }
             }
-            console.log("not admin")
-            onReject();
+            onSuccess(user, 0); // Just a regular user
           });
         });
       });
@@ -123,5 +133,5 @@ function getAdmin(request, code, onSuccess, onReject) {
 }
 
 module.exports = {
-  getAdmin: getAdmin
+  getUser: getUser
 }
