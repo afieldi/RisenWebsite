@@ -11,11 +11,6 @@ export function matchDict(dict1, dict2) {
     return true;
 }
 
-export function getBaseUrl() {
-    // return "http://99.246.224.136:5000";
-    return "https://api-dot-risenwebsite.ue.r.appspot.com"
-}
-
 export function getCookie(name) {
   var nameEQ = name + "=";
   var ca = document.cookie.split(';');

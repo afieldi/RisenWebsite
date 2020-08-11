@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { getBaseUrl } from '../../Helpers';
 
 const champions = require('../../data/champions_map.json')
 
@@ -17,7 +16,7 @@ export default class ManageDraft extends Component {
     }
 
     sendBan() {
-        fetch(getBaseUrl() + "/draft/champban", {
+        fetch(process.env.REACT_APP_BASE_URL + "/draft/champban", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +31,7 @@ export default class ManageDraft extends Component {
     }
 
     removeBan(id) {
-        fetch(getBaseUrl() + "/draft/champban?id=" + id, {
+        fetch(process.env.REACT_APP_BASE_URL + "/draft/champban?id=" + id, {
             method: "DELETE"
         }).then(data => {
             this.getBannedChamps();
@@ -41,7 +40,7 @@ export default class ManageDraft extends Component {
     }
 
     getBannedChamps() {
-        fetch(getBaseUrl() + "/draft/champban").then(data => {
+        fetch(process.env.REACT_APP_BASE_URL + "/draft/champban").then(data => {
             data.json().then(bans => {
                 console.log(bans);
                 this.setState({

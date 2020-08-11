@@ -5,13 +5,12 @@ import jngLaneIcon from '../images/roles/Position_Gold-Jungle.png';
 import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
-import { customRound, getBaseUrl } from '../Helpers';
-import { Button, Dropdown, Container, Form } from "react-bootstrap";
+import { customRound } from '../Helpers';
+import { Button, Container, Form } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
 import IncomeStats from "./personalStats/incomeStats.component";
 import VisionStats from "./personalStats/visionStats.component";
-
 
 let champMap = require('../data/champions_map.json');
 // let champions = require('../data/champions.json'); // oof. This is loading a lot of unneeded data
@@ -86,7 +85,7 @@ export default class DetailedStats extends Component {
       deaths += datum["deaths"];
       assists += datum["assists"];
       cs += datum["totalMinionsKilled"];
-      min += datum["gameDuration"] / 60
+      min += datum["gameDuration"] / 60;
     }
     accStats["wr"] = customRound(wins / accStats["games"] * 100, 2);
     accStats["kda"] = customRound((kills + assists) / deaths, 1);
@@ -94,7 +93,7 @@ export default class DetailedStats extends Component {
   }
 
   loadPlayerData(playerName) {
-    let url = getBaseUrl() + "/stats/player/name/" + playerName;
+    let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
         let accStats = {

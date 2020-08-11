@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { customRound, getBaseUrl } from '../../Helpers';
+import { customRound } from '../../Helpers';
 import { Button, Dropdown, Container } from "react-bootstrap";
 import $ from 'jquery';
 
@@ -98,7 +98,7 @@ export default class BasicStats extends Component {
     }
 
     loadCompareData(playerName) {
-        let url = getBaseUrl() + "/stats/player/name/" + playerName + "/agg"
+        let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName + "/agg"
         fetch(url).then((data) => {
           if (data.status != 200) {
             alert("Could not find summoner!");

@@ -18,7 +18,7 @@ import Setup from './components/drafting/setup.component';
 import Drafting from './components/drafting/drafting.component';
 import Admin from './components/admin/admin.component';
 import Login from './components/login.component';
-import { getBaseUrl, getCookie } from './Helpers';
+import { getCookie } from './Helpers';
 import fetch from 'node-fetch';
 
 export default class App extends Component {
@@ -36,7 +36,7 @@ export default class App extends Component {
   checkLoggedIn(callback) {
     let code = getCookie("auth");
     if(code) {
-      fetch(getBaseUrl() + "/auth/verify?code=" + code).then((res) => {
+      fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + code).then((res) => {
         if(res.status === 200) {
           res.json().then(user => {
             console.log(user);
@@ -69,7 +69,7 @@ export default class App extends Component {
 
   
   logOut() {
-    fetch(getBaseUrl() + "/auth/verify?code=" + getCookie("auth"), {
+    fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + getCookie("auth"), {
       method: "DELETE"
     }).then(data => {
       this.checkLoggedIn(() => { this.props.history.push("/"); });

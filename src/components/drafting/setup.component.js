@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Container } from 'react-bootstrap';
 import SetupCreate from './setup-create.component';
 import SetupDisplay from './setup-display.component';
-import { getBaseUrl } from '../../Helpers';
 
 export default class Setup extends Component {
     constructor(props) {
@@ -20,7 +19,7 @@ export default class Setup extends Component {
     }
     
     createGame(configData) {
-        const url = getBaseUrl() + '/draft/create';
+        const url = process.env.REACT_APP_BASE_URL + '/draft/create';
         console.log(configData);
         fetch(url, {
             method: 'POST',

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Container, Button } from 'react-bootstrap';
-import { getBaseUrl } from '../../Helpers';
 import socketIOClient from "socket.io-client";
 import risenLogo from '../../images/RE_TypeLogo_Shading.png';
 
@@ -65,14 +64,14 @@ export default class Drafting extends Component {
     }
 
     componentDidMount() {
-        this.socket = socketIOClient(getBaseUrl(), {
+        this.socket = socketIOClient(process.env.REACT_APP_BASE_URL, {
             path: "/draft/connect"
         });
         this.setupSocket();
     }
 
     handleRisenRules() {
-        fetch(getBaseUrl() + "/draft/champban").then(data => {
+        fetch(process.env.REACT_APP_BASE_URL + "/draft/champban").then(data => {
             data.json().then(bans => {
                 for (let ban of bans) {
                     if (this.allChamps.includes(ban.champion)) {

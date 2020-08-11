@@ -3,11 +3,18 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const http = require('http');
+const {argv} = require('yargs');
 
 const draft = require('./src/draft');
 
+
 //env variables from dotenv file
-require('dotenv').config();
+
+let envFile = ".env.development";
+if (argv.prod) {
+    envFile = ".env.production";
+}
+require('dotenv').config({path: envFile});
 
 //creates express server and port
 const app = express();

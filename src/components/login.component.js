@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import fetch from 'node-fetch';
 
-import {getBaseUrl, setCookie} from '../Helpers';
+import {setCookie} from '../Helpers';
 import { Container } from 'react-bootstrap';
 
 const qs = require('qs');
@@ -23,7 +23,7 @@ export default class Login extends Component {
   }
 
   getLoginUrl () {
-    fetch(getBaseUrl() + "/auth/redirect").then(data => {
+    fetch(process.env.REACT_APP_BASE_URL + "/auth/redirect").then(data => {
       data.text().then(url => {
         console.log(url);
       })

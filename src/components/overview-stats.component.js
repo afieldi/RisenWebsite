@@ -5,7 +5,7 @@ import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { Link } from 'react-router-dom'
-import { customRound, getBaseUrl } from '../Helpers';
+import { customRound } from '../Helpers';
 
 
 export default class Overview extends Component {
@@ -30,7 +30,7 @@ export default class Overview extends Component {
         }
         this.loadingData = true;
         this.lastLoadedPage = page;
-        let url = getBaseUrl() + `/stats/brief`;
+        let url = process.env.REACT_APP_BASE_URL + `/stats/brief`;
         url += `?page=${page}&size=${20}`;
         if(lane) {
             url += '&lane=' + lane;

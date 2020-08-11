@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { getBaseUrl } from '../../Helpers';
 
 export default class GenerateCodes extends Component {
 
@@ -16,7 +15,7 @@ export default class GenerateCodes extends Component {
       alert("Please fill out the number of codes requested");
       return;
     }
-    const url = getBaseUrl() + "/codes/create/" + count
+    const url = process.env.REACT_APP_BASE_URL + "/codes/create/" + count
     fetch(url, {
       method: 'POST'
     }).then(res => {

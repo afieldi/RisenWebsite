@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getBaseUrl, getCookie } from '../Helpers';
 
 export default class Navbar extends Component {
 
@@ -9,7 +8,7 @@ export default class Navbar extends Component {
     this.state = {
       url: ""
     };
-    fetch(getBaseUrl() + "/auth/redirect").then(data => {
+    fetch(process.env.REACT_APP_BASE_URL + "/auth/redirect").then(data => {
       data.text().then(url => {
         this.setState({
           url: url
