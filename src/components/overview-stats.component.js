@@ -38,11 +38,12 @@ export default class Overview extends Component {
         if (player) {
             url += "&player=" + player;
         }
+        // url += "&sort=_id.sortablePlayer-"
         fetch(url).then((data) => {
             this.loadingData = false;
             data.json().then(data => {
                 console.log(data);
-                data = this.sortData(data, "lane", "DESC");
+                // data = this.sortData(data, "lane", "DESC");
 
                 if (append) {
                     this.state.statData = this.state.statData.concat(data)
@@ -74,7 +75,7 @@ export default class Overview extends Component {
 
     filterName() {
         let name = document.getElementById("nameFilter").value;
-        this.state.filteredData = this.state.filteredData.filter(item => item._id.player[0].startsWith(name));
+        this.state.filteredData = this.state.filteredData.filter(item => item._id.player.startsWith(name));
     }
 
     filterData() {
@@ -100,7 +101,7 @@ export default class Overview extends Component {
                 res = a._id.lane.localeCompare(b._id.lane);
             }
             else if (attr === "name" ) {
-                res = a._id.player[0].localeCompare(b._id.player[0]);
+                res = a._id.player.localeCompare(b._id.player);
             }
             else {
                 res = a[attr] - b[attr];
@@ -142,44 +143,45 @@ export default class Overview extends Component {
     render() {
         return (
             <div className="container">
+                <br></br>
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
                             {/* TODO: Change these onClick functions */}
-                            <label className="btn btn-light" style={spaceButtons}>
+                            <label className="btn btn-dark" style={spaceButtons}>
                                 <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositionalIcon("TOP")}
                             </label>
-                            <label className="btn btn-light" style={spaceButtons}>
+                            <label className="btn btn-dark" style={spaceButtons}>
                                 <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("JUNGLE")}
                             </label>
-                            <label className="btn btn-light" style={spaceButtons}>
+                            <label className="btn btn-dark" style={spaceButtons}>
                                 <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("MIDDLE")}
                             </label>
-                            <label className="btn btn-light" style={spaceButtons}>
+                            <label className="btn btn-dark" style={spaceButtons}>
                                 <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositionalIcon("BOTTOM")}
                             </label>
-                            <label className="btn btn-light" style={spaceButtons}>
+                            <label className="btn btn-dark" style={spaceButtons}>
                                 <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositionalIcon("SUPPORT")}
                             </label>
-                            <label className="btn btn-light" style={spaceButtons}>
+                            <label className="btn btn-dark" style={spaceButtons}>
                                 <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
                             </label>
                         </div>
                     </div>
                     <div className="col-lg">
                         <form onSubmit={this.submitSearch.bind(this)}>
-                            <div class="input-group mb-3 bg-light">
-                                <input type="text" class="form-control"
+                            <div class="input-group mb-3 bg-dark text-light">
+                                <input type="text" class="form-control bg-dark text-light"
                                         placeholder="Summoner Name" aria-label="Summoner Name"
                                         aria-describedby="button-addon2" id="nameFilter" ></input>
-                                <div class="input-group-append text-dark">
-                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                                <div class="input-group-append text-light bg-secondary">
+                                    <button class="btn btn-outline-dark text-light" type="submit" id="button-addon2">Search</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
+                <table className="table table-responsive-lg risen-table sticky-top table-dark table-striped">
                     <thead>
                         <tr>
                         {/* <th scope="col" className="center">Rank</th> */}
@@ -201,7 +203,7 @@ export default class Overview extends Component {
                                 return (
                                     <tr key={"overviewStats-" + index}>
                                         {/* <td scope="row" className="risen-datum center">{index + 1}</td> */}
-                                        <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player[0]}`} >{item._id.player[0]}</Link></td>
+                                        <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player}`} style={whiteText}>{item._id.player}</Link></td>
                                         <td className="center" name="laneCol">{item._id.lane}</td>
                                         <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
                                         <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
@@ -225,4 +227,8 @@ export default class Overview extends Component {
 
 const spaceButtons = {
     width: '20%'
+}
+
+const whiteText = {
+    color: '#fff'
 }

@@ -122,7 +122,7 @@ export default class IncomeStats extends Component {
         <Container>
           <div className="row">
             <div className="col-md">
-              <div className="risen-stats-block">
+              <div className="risen-stats-block bg-deep text-light">
                 <div className="risen-stats-header">
                   <h3>Consumption Stats</h3>
                   <Form.Group controlId="consumptionType">
@@ -151,7 +151,7 @@ export default class IncomeStats extends Component {
               </div>
             </div>
             <div className="col-md">
-              <div className="risen-stats-block">
+              <div className="risen-stats-block bg-deep text-light">
                 <div className="risen-stats-header">
                   <h3>VS Stats</h3>
                   <Form.Group controlId="vsType">

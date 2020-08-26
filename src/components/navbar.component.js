@@ -42,8 +42,8 @@ export default class Navbar extends Component {
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <Link to="/stats" className="dropdown-item">Player Stats</Link>
-                  <Link to="/stats" className="dropdown-item">Team Stats</Link>
-                  <Link to="/stats" className="dropdown-item">Champion Stats</Link>
+                  <Link to="#" className="dropdown-item" aria-disabled="true">Team Stats(TBD)</Link>
+                  <Link to="#" className="dropdown-item">Champion Stats(TBD)</Link>
                 </div>
               </li>
               {/* <li className="navbar-item ml-auto">

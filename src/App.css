@@ -65,6 +65,7 @@
   /* border: black;
   background-color: #201b17;
   color: #fffef9; */
+  color: white;
 }
 
 .risen-table thead th {
@@ -73,9 +74,17 @@
   font-family: 'Open Sans', Arial, monospace;
 }
 
-.risen-table tbody td {
+.risen-table tbody tr td {
   border-bottom: 1px solid rgb(117, 117, 117);
   font-family: 'Open Sans', Arial, monospace;
+}
+
+.table-black {
+  background-color: #22222200;
+}
+
+.risen-table tbody tr:nth-of-type(2n) {
+  background-color: rgba(255, 255, 255, 0.068);
 }
 
 .center {
@@ -113,7 +122,8 @@
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   padding: 5px 15px;
   display: block;
-  margin: 10px 10px 10px 475px;
+  margin: 10px 10px 10px 10px;
+  float: right;
   position: relative;
   font-size: 14px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -128,7 +138,7 @@
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   padding: 5px 15px;
   display: block;
-  margin: 10px 10px 10px 135px;
+  margin: 10px 10px 0px 10px;
   position: relative;
   font-size: 14px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
@@ -181,9 +191,10 @@
 
 .risen-stats-block {
   margin: 10px;
-  border: 1px solid #dfe3e7;
-  border-radius: .267rem;
-  box-shadow: -8px 12px 18px 0 rgba(25,42,70,.13);
+  /* border: 1px solid #dfe3e7;
+  border-radius: .267rem; */
+  /* box-shadow: -8px 12px 18px 0 rgba(25,42,70,.13); */
+  box-shadow: 11px 11px 18px 3px rgb(25 42 70 / 29%);
 }
 
 .risen-stats-header {
@@ -231,6 +242,10 @@ hr.risen-dark {
   background-color: #283652;
   padding-top: 3em;
   padding-bottom: 3em;
+}
+
+.bg-deep {
+  background-color: #283652;
 }
 
 .light-section {

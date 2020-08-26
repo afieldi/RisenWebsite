@@ -194,10 +194,10 @@ export default class CombatStats extends Component {
                 <Container>
                     <div className="row">
                         <div className="col-md-6">
-                            <div className="risen-stats-block">
+                            <div className="risen-stats-block bg-deep text-light">
                                 <div className="risen-stats-header">
                                     <div className="row">
-                                        <div className="col-8">
+                                        <div className="col-8" style={centerTitleStyle}>
                                             <h3>Offensive Stats</h3>
                                         </div>
                                         <div className="col-md-4">
@@ -230,10 +230,10 @@ export default class CombatStats extends Component {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <div className="risen-stats-block">
+                            <div className="risen-stats-block bg-deep text-light">
                                 <div className="risen-stats-header">
                                     <div className="row">
-                                        <div className="col-8">
+                                        <div className="col-8" style={centerTitleStyle}>
                                             <h3>Defensive Stats</h3>
                                         </div>
                                         <div className="col-md-4">
@@ -312,4 +312,9 @@ export default class CombatStats extends Component {
             </section>
         )
     }
+}
+
+const centerTitleStyle = {
+    display: 'flex',
+    alignItems: 'center'
 }

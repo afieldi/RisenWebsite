@@ -178,7 +178,7 @@ export default class DetailedStats extends Component {
         {/* <br></br>
         <br></br>
         <br></br> */}
-        <div className="light-section">
+        <div className="light-section text-dark">
           <div className="container">
 
             {/* Basic Stats */}

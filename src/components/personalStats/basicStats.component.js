@@ -108,7 +108,7 @@ export default class BasicStats extends Component {
             const playerData = jsonData[0];
             const newData = {}
 
-            newData["Name"] = playerData._id.player[0];
+            newData["Name"] = playerData._id.player;
             newData["Kills"] = customRound(playerData["avg_kills"]);
             newData["Deaths"] = customRound(playerData["avg_deaths"]);
             newData["Assists"] = customRound(playerData["avg_assists"]);
@@ -140,12 +140,12 @@ export default class BasicStats extends Component {
 
     componentDidMount() {
         const where = this;
-        $('.dropdown-toggle').on('click', function(event) {
-          $('.dropdown-menu').slideToggle();
+        $('#optionsDropDownLink').on('click', function(event) {
+          $('#optionsDropDownMenu').slideToggle();
           event.stopPropagation();
         });
 
-        $('.dropdown-menu').on('click', function(event) {
+        $('#optionsDropDownMenu').on('click', function(event) {
           event.stopPropagation();
         });
 
@@ -154,7 +154,7 @@ export default class BasicStats extends Component {
         })
 
         $(window).on('click', function() {
-          $('.dropdown-menu').slideUp();
+          $('#optionsDropDownMenu').slideUp();
         });
 
         // $('[data-toggle="tooltip"]').tooltip()
@@ -181,28 +181,29 @@ export default class BasicStats extends Component {
                 <Container>
                     <div className="row">
                         <div className="col">
-                            <div className="risen-stats-block">
-                            <div className="risen-stats-header"><h3>General Stats</h3></div>
-                            <div className="risen-stats-body">
-                                <div className="row">
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["wr"]}%</div>
-                                    <div className="center risen-sub-label">Winrate</div>
+                            <div className="risen-stats-block bg-dark text-light">
+                                <div className="risen-stats-header"><h3>General Stats</h3></div>
+                                {/* <hr></hr> */}
+                                <div className="risen-stats-body">
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["wr"]}%</div>
+                                            <div className="center risen-sub-label">Winrate</div>
+                                        </div>
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["kda"]}</div>
+                                            <div className="center risen-sub-label">KDA</div>
+                                        </div>
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["cs"]}</div>
+                                            <div className="center risen-sub-label">CS/Min</div>
+                                        </div>
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["games"]}</div>
+                                            <div className="center risen-sub-label">Games</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["kda"]}</div>
-                                    <div className="center risen-sub-label">KDA</div>
-                                </div>
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["cs"]}</div>
-                                    <div className="center risen-sub-label">CS/Min</div>
-                                </div>
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["games"]}</div>
-                                    <div className="center risen-sub-label">Games</div>
-                                </div>
-                                </div>
-                            </div>
                             </div>
                         </div>
                         </div>
@@ -217,24 +218,26 @@ export default class BasicStats extends Component {
                                             <h3>Game Stats</h3>
                                         </div>
                                         <div className="col-4">
-                                        <Dropdown>
-                                            <Button className="dropdown-toggle select-cols-dropdown-btn" data-toggle="dropdown">Select Columns</Button>
-                                            <div className="dropdown-menu" style={gameDataDropDown}>
-                                            {
-                                                Object.keys(this.state.gameDataOptions).map((option, index) => {
-                                                return (
-                                                    <div key={"gameOption" + index}
-                                                    className={"dropdown-option clickable " + (this.state.gameDataOptions[option].shown ? "bg-dark text-light" : "bg-light text-dark")} name={option}>{option}</div>
-                                                )
-                                                })
-                                            }
+                                            <div className="btn-group" style={{float: 'right'}}>
+                                                <Dropdown>
+                                                    <Button className="dropdown-toggle select-cols-dropdown-btn" id="optionsDropDownLink" data-toggle="dropdown">Select Columns</Button>
+                                                    <div className="dropdown-menu" id="optionsDropDownMenu" style={gameDataDropDown} aria-labelledby="optionsDropDownLink">
+                                                        {
+                                                            Object.keys(this.state.gameDataOptions).map((option, index) => {
+                                                            return (
+                                                                <div key={"gameOption" + index}
+                                                                className={"dropdown-option clickable " + (this.state.gameDataOptions[option].shown ? "bg-dark text-light" : "bg-light text-dark")} name={option}>{option}</div>
+                                                            )
+                                                            })
+                                                        }
+                                                    </div>
+                                                </Dropdown>
                                             </div>
-                                        </Dropdown>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="risen-stats-body" style={{overflow: 'scroll', maxHeight: '500px'}}>
-                                    <table className="table risen-table .table-responsive .table-striped">
+                                    <table className="table risen-table table-striped text-dark">
                                     <thead>
                                         <tr>
                                         {
@@ -290,11 +293,11 @@ export default class BasicStats extends Component {
                     {/* Detailed overall stats */}
                     <div className="row">
                         <div className="col">
-                            <div className="risen-stats-block">
-                                <div className="risen-stats-header">
+                            <div className="risen-stats-block bg-dark text-light">
+                                <div className="risen-stats-header" style={{paddingBottom: '0px'}}>
                                     <h3>Compare Stats</h3>
                                 </div>
-                                <div className="risen-stats-body">
+                                <div className="risen-stats-body" style={{paddingTop: '0'}}>
                                     <div className="row">
                                         <div className="col-lg-4" style={verticalCenter}>
                                             <input id="playerName" placeholder="Summoner Name"></input>
@@ -304,7 +307,7 @@ export default class BasicStats extends Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <table className="table-light table table-responsive-md table-sm table-striped">
+                                        <table className="table table-black table-responsive-md table-sm table-striped text-light">
                                             <tbody>
                                                 {
                                                     // Check to ensure comp data has length. It will once data for the player loads in

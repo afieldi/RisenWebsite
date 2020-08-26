@@ -125,7 +125,7 @@ export default class HomePage extends Component {
                     <Container>
                         <h1 className="center">Our Leagues</h1>
                         <hr className="risen-dark"></hr>
-                        <h3 className="center">Find a League for You</h3>
+                        <h3 className="center">League of Legends</h3>
                         <hr className="risen-dark"></hr>
                         <div className="table-responsive" style={{boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)', marginBottom: '1rem'}}>
                             <table className="table table-striped center" style={{backgroundColor: 'aliceBlue', marginBottom: '0'}}>
