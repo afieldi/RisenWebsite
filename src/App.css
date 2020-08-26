@@ -300,3 +300,30 @@ hr.risen-dark {
   animation-duration: 2s;
   animation-iteration-count: infinite;
 }
+
+.offline-selected {
+  background-color: #c4c4c48a;
+  box-shadow: 0 0 20px 5px rgb(196, 196, 196);
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: inherit;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(94, 94, 94);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(163, 163, 163);
+}

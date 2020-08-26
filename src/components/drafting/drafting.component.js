@@ -431,7 +431,7 @@ export default class Drafting extends Component {
                                                             return (
                                                                 <div>
                                                                     <img key={"img" + champ} id={"img-" + champ}
-                                                                    src={require(`../../images/champions/icons/` + champ + `_0.jpg`)}
+                                                                    src={require(`../../images/champions/icons/` + champ + `_0.png`)}
                                                                     style={style} onClick={onClickFnc}></img>
                                                                     <h6>{champions.data[champ].name}</h6>
                                                                 </div>

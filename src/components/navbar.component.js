@@ -33,8 +33,18 @@ export default class Navbar extends Component {
               <li className="navbar-item ml-auto">
                 <Link to="/leagues" className="nav-link">Leagues</Link>
               </li>
-              <li className="navbar-item ml-auto">
+              {/* <li className="navbar-item ml-auto">
                 <Link to="/stats" className="nav-link">Player Stats</Link>
+              </li> */}
+              <li class="navbar-item ml-auto dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Stats
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <Link to="/stats" className="dropdown-item">Player Stats</Link>
+                  <Link to="/stats" className="dropdown-item">Team Stats</Link>
+                  <Link to="/stats" className="dropdown-item">Champion Stats</Link>
+                </div>
               </li>
               {/* <li className="navbar-item ml-auto">
                 <Link to="/teams" className="nav-link">Team Stats</Link>

@@ -20,6 +20,7 @@ import Admin from './components/admin/admin.component';
 import Login from './components/login.component';
 import { getCookie } from './Helpers';
 import fetch from 'node-fetch';
+import OfflineDraft from './components/drafting/offline.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ export default class App extends Component {
         if(res.status === 200) {
           res.json().then(user => {
             console.log(user);
-            if(user.level === 2) {
+            if(user.level) {
               this.setState({
                 level: user.level
               });
@@ -103,6 +104,7 @@ export default class App extends Component {
               <Route path="/contact" component={Contact}></Route>
               <Route path="/drafting" component={Setup}></Route>
               <Route path="/draft" component={Drafting}></Route>
+              <Route path="/pbdraft" component={OfflineDraft}></Route>
               <Route path="/auth" render={this.authRender.bind(this)} ></Route>
               {
                 // Only create route if it is an admin

@@ -100,12 +100,35 @@ export default class HomePage extends Component {
                 <br></br>
                 <div className="deep-section">
                     <Container>
-                        <h1 className="center text-light">Our Leagues</h1>
+                        <h1 className="center text-light">Our Games</h1>
                         <hr className="risen-light"></hr>
-                        <h3 className="center text-light">Find a League for You</h3>
-                        <hr className="risen-light"></hr>
-                        <div className="table-responsive">
-                            <table className="table table-striped center" style={{backgroundColor: 'aliceBlue'}}>
+                        <div className="row">
+                            <div className="col-md">
+                                <div style={gameImageContainerStyle}>
+                                    <img src={require('../images/logos/TFT_Logo.png')} style={gameImageStyle}></img>
+                                </div>
+                            </div>
+                            <div className="col-md">
+                                <div style={gameImageContainerStyle}>
+                                    <img src={require('../images/logos/League_of_Legends_Logo.png')} style={gameImageStyle}></img>
+                                </div>
+                            </div>
+                            <div className="col-md">
+                                <div style={gameImageContainerStyle}>
+                                    <img src={require('../images/logos/Valorant_Logo.png')} style={gameImageStyle}></img>
+                                </div>
+                            </div>
+                        </div>
+                    </Container>
+                </div>
+                <div className="light-section">
+                    <Container>
+                        <h1 className="center">Our Leagues</h1>
+                        <hr className="risen-dark"></hr>
+                        <h3 className="center">Find a League for You</h3>
+                        <hr className="risen-dark"></hr>
+                        <div className="table-responsive" style={{boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)', marginBottom: '1rem'}}>
+                            <table className="table table-striped center" style={{backgroundColor: 'aliceBlue', marginBottom: '0'}}>
                                 <thead>
                                     <tr style={leaguesTablePrimary}>
                                         <th>League Name</th>
@@ -200,3 +223,12 @@ var iconStyle = {
     display: 'block',
     margin: 'auto'
 }
+
+const gameImageContainerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '15px 0'
+}
+
+const gameImageStyle = {height: '100px'};

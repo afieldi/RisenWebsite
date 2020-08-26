@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Container, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export default class SetupCreate extends Component {
     constructor(props) {
@@ -68,6 +69,10 @@ export default class SetupCreate extends Component {
                     </div>
                     <div className="row">
                         <Button onClick={this.createGame.bind(this)}>Create Game</Button>
+                    </div>
+                    <br></br>
+                    <div>
+                        <Link to="/pbdraft"><Button onClick={this.createGame.bind(this)}>Interactive Draft</Button></Link>
                     </div>
                 </div>
             </div>
