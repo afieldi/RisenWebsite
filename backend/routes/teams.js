@@ -5,7 +5,8 @@ const { addPlayerByName } = require('../src/player');
 const { loadXlFile } = require('../src/gsheets');
 
 const multer  = require('multer');
-const upload = multer({dest: 'uploads'})
+const storage = multer.memoryStorage();
+const upload = multer({storage: storage})
 
 router.route('/').get((req, res) => {
     const seasonName = req.query.season;
@@ -71,7 +72,7 @@ router.route('/load').post( upload.single('teamSheet'), (req, res) => {
     const seasonName = req.body.seasonName;
     
     if(seasonName.length > 3) {
-        loadXlFile(req.file.path, seasonName);
+        loadXlFile(req.file.buffer, seasonName);
         res.redirect(req.headers.referer);
     }
     else {
