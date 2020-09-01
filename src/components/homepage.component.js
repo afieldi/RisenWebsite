@@ -22,10 +22,10 @@ export default class HomePage extends Component {
         return (
             <section>
                 <Container className="p-3">
-                    <img src={ risenLogo } className="risenLogoClass"/>
-                    <Jumbotron style={ outerJumboStyle }>
+                    <img style={{marginTop: '10vh', marginBottom: '5vh'}} src={ risenLogo } className="risenLogoClass"/>
+                    {/* <Jumbotron style={ outerJumboStyle }>
                         <h1 style={{fontWeight: '700'}}>Welcome to Risen Esports</h1>
-                    </Jumbotron>
+                    </Jumbotron> */}
                     <div className="row">
                         <div className="col-lg">
                             <div className="row">
@@ -53,11 +53,11 @@ export default class HomePage extends Component {
                     <br></br>
                     <br></br>
                 </Container>
-                <div className="deep-section">
+                <div className="dark-section">
                     <Container>
                         <h1 className="center text-light">Who Are We?</h1>
                         <hr className="risen-light"></hr>
-                        <p className="risen-body-text light">
+                        <p className="risen-body-text light center">
                             {staticText.home.whoAreWe}
                         </p>
                     </Container>
@@ -98,7 +98,7 @@ export default class HomePage extends Component {
                 <br></br>
                 <br></br>
                 <br></br>
-                <div className="deep-section">
+                <div className="dark-section">
                     <Container>
                         <h1 className="center text-light">Our Games</h1>
                         <hr className="risen-light"></hr>
@@ -193,6 +193,15 @@ export default class HomePage extends Component {
                         </div>
                         <div>
                             <Link to="/leagues"><Button className="risen-button btn-lg">Learn More</Button></Link>
+                        </div>
+                        <br></br>
+                        <h3 className="center">Valorant and TFT</h3>
+                        <hr className="risen-dark"></hr>
+                        <p className="risen-body-text center">
+                            {staticText.home.leagueData}
+                        </p>
+                        <div>
+                            <a href="https://discord.com/invite/BwnnBsV"><Button className="risen-button">Join the Discord</Button></a>
                         </div>
                     </Container>
                 </div>
