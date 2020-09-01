@@ -181,7 +181,7 @@ export default class BasicStats extends Component {
                 <Container>
                     <div className="row">
                         <div className="col">
-                            <div className="risen-stats-block text-dark">
+                            <div className="risen-stats-block">
                                 <div className="risen-stats-header"><h3>General Stats</h3></div>
                                 {/* <hr></hr> */}
                                 <div className="risen-stats-body">
@@ -237,7 +237,7 @@ export default class BasicStats extends Component {
                                     </div>
                                 </div>
                                 <div className="risen-stats-body" style={{overflow: 'scroll', maxHeight: '500px'}}>
-                                    <table className="table risen-table table-striped text-dark">
+                                    <table className="table risen-table table-striped">
                                     <thead>
                                         <tr>
                                         {
@@ -293,7 +293,7 @@ export default class BasicStats extends Component {
                     {/* Detailed overall stats */}
                     <div className="row">
                         <div className="col">
-                            <div className="risen-stats-block text-dark">
+                            <div className="risen-stats-block">
                                 <div className="risen-stats-header">
                                     <h3>Compare Stats</h3>
                                 </div>
@@ -307,7 +307,7 @@ export default class BasicStats extends Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <table className="table table-black table-responsive-md table-sm table-striped">
+                                        <table className="table table-responsive-md table-sm risen-table table-striped ">
                                             <tbody>
                                                 {
                                                     // Check to ensure comp data has length. It will once data for the player loads in
@@ -316,7 +316,7 @@ export default class BasicStats extends Component {
                                                     Object.keys(this.state.compData[0]).map((key, index) => {
                                                         return (
                                                             <tr key={"CompDataRow" + index}>
-                                                            <th>{key}</th>
+                                                            <td><b>{key}</b></td>
                                                             {
                                                                 this.state.compData.map((player, index2) => {
                                                                     // I really should just make this a new component

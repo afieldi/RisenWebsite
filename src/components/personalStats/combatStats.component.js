@@ -194,7 +194,7 @@ export default class CombatStats extends Component {
                 <Container>
                     <div className="row">
                         <div className="col-md-6">
-                            <div className="risen-stats-block bg-deep text-light">
+                            <div className="risen-stats-block text-light">
                                 <div className="risen-stats-header">
                                     <div className="row">
                                         <div className="col-8" style={centerTitleStyle}>
@@ -230,7 +230,7 @@ export default class CombatStats extends Component {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <div className="risen-stats-block bg-deep text-light">
+                            <div className="risen-stats-block text-light">
                                 <div className="risen-stats-header">
                                     <div className="row">
                                         <div className="col-8" style={centerTitleStyle}>

@@ -176,10 +176,7 @@ export default class DetailedStats extends Component {
   render() {
     return (
       <section>
-        {/* <br></br>
-        <br></br>
-        <br></br> */}
-        <div className="light-section text-dark">
+        <div className="dark-section text-light">
           <div className="container">
 
             {/* Basic Stats */}

@@ -106,7 +106,7 @@ export default class VisionStats extends Component {
         <Container>
           <div className="row">
             <div className="col-md">
-              <div className="risen-stats-block bg-deep text-light">
+              <div className="risen-stats-block text-light">
                 <div className="risen-stats-header">
                   <h3>Early Stats</h3>
                   <Form.Group controlId="earlyType">
@@ -135,7 +135,7 @@ export default class VisionStats extends Component {
               </div>
             </div>
             <div className="col-md">
-              <div className="risen-stats-block bg-deep text-light">
+              <div className="risen-stats-block text-light">
                 <div className="risen-stats-header">
                   <h3>General Stats</h3>
                   <Form.Group controlId="generalType">

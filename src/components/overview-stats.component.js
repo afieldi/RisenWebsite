@@ -142,85 +142,88 @@ export default class Overview extends Component {
 
     render() {
         return (
-            <div className="container">
-                <br></br>
-                <div className="row">
-                    <div className="col-lg-6">
-                        <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
-                            {/* TODO: Change these onClick functions */}
-                            <label className="btn btn-dark" style={spaceButtons}>
-                                <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositionalIcon("TOP")}
-                            </label>
-                            <label className="btn btn-dark" style={spaceButtons}>
-                                <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("JUNGLE")}
-                            </label>
-                            <label className="btn btn-dark" style={spaceButtons}>
-                                <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("MIDDLE")}
-                            </label>
-                            <label className="btn btn-dark" style={spaceButtons}>
-                                <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositionalIcon("BOTTOM")}
-                            </label>
-                            <label className="btn btn-dark" style={spaceButtons}>
-                                <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositionalIcon("SUPPORT")}
-                            </label>
-                            <label className="btn btn-dark" style={spaceButtons}>
-                                <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
-                            </label>
-                        </div>
-                    </div>
-                    <div className="col-lg">
-                        <form onSubmit={this.submitSearch.bind(this)}>
-                            <div class="input-group mb-3 bg-dark text-light">
-                                <input type="text" class="form-control bg-dark text-light"
-                                        placeholder="Summoner Name" aria-label="Summoner Name"
-                                        aria-describedby="button-addon2" id="nameFilter" ></input>
-                                <div class="input-group-append text-light bg-secondary">
-                                    <button class="btn btn-outline-dark text-light" type="submit" id="button-addon2">Search</button>
+            <section>
+                <div className="dark-section">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
+                                    {/* TODO: Change these onClick functions */}
+                                    <label className="btn btn-dark" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositionalIcon("TOP")}
+                                    </label>
+                                    <label className="btn btn-dark" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("JUNGLE")}
+                                    </label>
+                                    <label className="btn btn-dark" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("MIDDLE")}
+                                    </label>
+                                    <label className="btn btn-dark" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositionalIcon("BOTTOM")}
+                                    </label>
+                                    <label className="btn btn-dark" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositionalIcon("SUPPORT")}
+                                    </label>
+                                    <label className="btn btn-dark" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
+                                    </label>
                                 </div>
                             </div>
-                        </form>
+                            <div className="col-lg">
+                                <form onSubmit={this.submitSearch.bind(this)}>
+                                    <div class="input-group mb-3 bg-dark text-light">
+                                        <input type="text" class="form-control bg-dark text-light"
+                                                placeholder="Summoner Name" aria-label="Summoner Name"
+                                                aria-describedby="button-addon2" id="nameFilter" ></input>
+                                        <div class="input-group-append text-light bg-secondary">
+                                            <button class="btn btn-outline-dark text-light" type="submit" id="button-addon2">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <table className="table table-responsive-lg risen-table sticky-top table-dark table-striped">
+                            <thead>
+                                <tr>
+                                {/* <th scope="col" className="center">Rank</th> */}
+                                <th scope="col">Summoner Name</th>
+                                <th scope="col" className="center">Lane</th>
+                                <th scope="col" className="center">Win Rate</th>
+                                <th scope="col" className="center">Kills</th>
+                                <th scope="col" className="center">Deaths</th>
+                                <th scope="col" className="center">Assists</th>
+                                {/*<th scope="col" className="center">Gold</th>*/}
+                                {/*<th scope="col" className="center">CS</th>*/}
+                                {/*<th scope="col" className="center">Damage</th>*/}
+                                <th scope="col" className="center">Games</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.filteredData.map((item, index) => {
+                                        return (
+                                            <tr key={"overviewStats-" + index}>
+                                                {/* <td scope="row" className="risen-datum center">{index + 1}</td> */}
+                                                <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player}`} style={whiteText}>{item._id.player}</Link></td>
+                                                <td className="center" name="laneCol">{item._id.lane}</td>
+                                                <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
+                                                <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
+                                                <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
+                                                <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
+                                                {/*<td className="center" name="goldCol">{customRound(item.avg_gold)}</td>*/}
+                                                {/*<td className="center" name="csCol">{customRound(item.avg_cs)}</td>*/}
+                                                {/*<td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>*/}
+                                                <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <table className="table table-responsive-lg risen-table sticky-top table-dark table-striped">
-                    <thead>
-                        <tr>
-                        {/* <th scope="col" className="center">Rank</th> */}
-                        <th scope="col">Summoner Name</th>
-                        <th scope="col" className="center">Lane</th>
-                        <th scope="col" className="center">Win Rate</th>
-                        <th scope="col" className="center">Kills</th>
-                        <th scope="col" className="center">Deaths</th>
-                        <th scope="col" className="center">Assists</th>
-                        {/*<th scope="col" className="center">Gold</th>*/}
-                        {/*<th scope="col" className="center">CS</th>*/}
-                        {/*<th scope="col" className="center">Damage</th>*/}
-                        <th scope="col" className="center">Games</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.filteredData.map((item, index) => {
-                                return (
-                                    <tr key={"overviewStats-" + index}>
-                                        {/* <td scope="row" className="risen-datum center">{index + 1}</td> */}
-                                        <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player}`} style={whiteText}>{item._id.player}</Link></td>
-                                        <td className="center" name="laneCol">{item._id.lane}</td>
-                                        <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
-                                        <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
-                                        <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
-                                        <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
-                                        {/*<td className="center" name="goldCol">{customRound(item.avg_gold)}</td>*/}
-                                        {/*<td className="center" name="csCol">{customRound(item.avg_cs)}</td>*/}
-                                        {/*<td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>*/}
-                                        <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
-                                    </tr>
-                                )
-                            })
-                        }
-
-                    </tbody>
-                </table>
-            </div>
+            </section>
         )
     }
 }
