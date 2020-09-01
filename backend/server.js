@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const http = require('http');
+const process = require('process')
 const {argv} = require('yargs');
 
 const draft = require('./src/draft');
@@ -20,7 +21,9 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 //middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.WEBSITE_BASE
+}));
 //allows us to send/receive json
 app.use(express.json());
 
