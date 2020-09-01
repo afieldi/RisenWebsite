@@ -20,16 +20,18 @@ async function verifyPlayer(accountId) {
 }
 
 async function addPlayerByName(name) {
-    const summoner = (await leagueApi.Summoner.getByName(name).catch((err) => {
+    const summoner = (await leagueApi.Summoner.getByName(name, constants.Regions.AMERICA_NORTH).catch((err) => {
         console.log(err);
         throw Error("Summoner not found!");
     })).response;
 
     let player = await PlayerModel.findOne({ accountId: summoner.accountId });
+
     if (player === null) {
         player = await PlayerModel.create({
             accountId: summoner.accountId,
-            name: summoner.name
+            name: summoner.name,
+            teams: []
         });
     }
     return player;

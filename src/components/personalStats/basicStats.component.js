@@ -181,7 +181,7 @@ export default class BasicStats extends Component {
                 <Container>
                     <div className="row">
                         <div className="col">
-                            <div className="risen-stats-block bg-dark text-light">
+                            <div className="risen-stats-block text-dark">
                                 <div className="risen-stats-header"><h3>General Stats</h3></div>
                                 {/* <hr></hr> */}
                                 <div className="risen-stats-body">
@@ -293,8 +293,8 @@ export default class BasicStats extends Component {
                     {/* Detailed overall stats */}
                     <div className="row">
                         <div className="col">
-                            <div className="risen-stats-block bg-dark text-light">
-                                <div className="risen-stats-header" style={{paddingBottom: '0px'}}>
+                            <div className="risen-stats-block text-dark">
+                                <div className="risen-stats-header">
                                     <h3>Compare Stats</h3>
                                 </div>
                                 <div className="risen-stats-body" style={{paddingTop: '0'}}>
@@ -307,7 +307,7 @@ export default class BasicStats extends Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <table className="table table-black table-responsive-md table-sm table-striped text-light">
+                                        <table className="table table-black table-responsive-md table-sm table-striped">
                                             <tbody>
                                                 {
                                                     // Check to ensure comp data has length. It will once data for the player loads in

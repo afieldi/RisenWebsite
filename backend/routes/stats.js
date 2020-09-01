@@ -62,10 +62,33 @@ router.route('/player/name/:id/agg').get((req, res) => {
                 }
             }
         ]).then(games => {
-            games["wr"] = games["total_games"] > 0 ? games["wins"] / games["total_games"] : 0;
-            games["dpm"] = games["avg_damage"] / games["avg_duration"];
-            games["vspm"] = games["avg_vision"] / games["avg_duration"];
-            res.json(games);
+            if (games.length) {
+                games["wr"] = games["total_games"] > 0 ? games["wins"] / games["total_games"] : 0;
+                games["dpm"] = games["avg_damage"] / games["avg_duration"];
+                games["vspm"] = games["avg_vision"] / games["avg_duration"];
+                res.json(games);
+            }
+            else {
+                res.json([{
+                    _id: { player: player.name, playerId: player._id },
+                    avg_kills: 0,
+                    avg_deaths: 0,
+                    avg_assists: 0,
+                    avg_gold: 0,
+                    avg_cs: 0,
+                    avg_damage: 0,
+                    avg_duration: 0,
+                    avg_dpg: 0,
+                    avg_vision:0,
+                    avg_wards_killed: 0,
+                    avg_damage_taken: 0,
+                    wins: 0,
+                    total_games: 0,
+                    wr: 0,
+                    dpm: 0,
+                    vspm: 0
+                }]);
+            }
         }, (err) => {
             res.status(404).json("Error: " + err);
         });
@@ -159,7 +182,7 @@ router.route('/brief').get((req, res) => {
     // Stuff changes as I make changes, but for some reason items aren't in proper order
     // console.log(page*size)
     GameModel.aggregate(pipe).sort(sortObject).skip(page*size).limit(size).then(games => {
-        res.json(games);
+        res.json(games)
     }, (err) => {
         res.status(404).json("Error: " + err);
     });

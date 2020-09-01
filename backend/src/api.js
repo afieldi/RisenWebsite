@@ -6,8 +6,9 @@ const process = require('process');
 // const leagueJs = new LeagueJS(process.env.RIOT_API);
 const api = new Twisted.LolApi({
     rateLimitRetry: true,
+    rateLimitRetryAttempts: 3,
     key: process.env.RIOT_API
-})
+});
 
 
 module.exports = {

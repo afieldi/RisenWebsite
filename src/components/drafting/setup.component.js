@@ -47,7 +47,7 @@ export default class Setup extends Component {
     render() {
         return (
             <section>
-                <div style={mainDivStyle} className="light-section">
+                <div style={mainDivStyle} className="dark-section text-light">
                     <Container style={fillContainer}>
                     {this.state.showCreate ? <SetupCreate submit={this.createGame.bind(this)}></SetupCreate> : <SetupDisplay links={this.state.gameLinks}></SetupDisplay> }
                     </Container>

@@ -96,6 +96,7 @@ export default class DetailedStats extends Component {
     let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
+        console.log(data)
         let accStats = {
           "wr": 0,
           "games": 0,

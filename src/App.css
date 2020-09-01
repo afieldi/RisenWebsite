@@ -52,7 +52,11 @@
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  background-color: #282c34;
+  background-color: #080808;
+}
+
+.navbar-item {
+  padding: 10px 0;
 }
 
 .risen-main-background {
@@ -126,7 +130,7 @@
   float: right;
   position: relative;
   font-size: 14px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
 }
 
 .select-cols-dropdown-btn {
@@ -141,7 +145,7 @@
   margin: 10px 10px 0px 10px;
   position: relative;
   font-size: 14px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
 }
 
 .filter-button {
@@ -156,7 +160,8 @@
   margin: 30px 10px 10px 60px;
   position: relative;
   font-size: 14px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  height: 50%;
+  /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
 }
 
 .risen-button-small {
@@ -171,7 +176,7 @@
   margin: 5px auto;
   position: relative;
   font-size: 14px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
 }
 
 .risen-radio {
@@ -191,16 +196,17 @@
 
 .risen-stats-block {
   margin: 10px;
-  /* border: 1px solid #dfe3e7;
-  border-radius: .267rem; */
+  border: 1px solid #dfe3e7;
+  border-radius: .267rem;
   /* box-shadow: -8px 12px 18px 0 rgba(25,42,70,.13); */
-  box-shadow: 11px 11px 18px 3px rgb(25 42 70 / 29%);
+  /* box-shadow: 11px 11px 18px 3px rgb(25 42 70 / 29%); */
 }
 
 .risen-stats-header {
-  /* background-color: #f5ebdce1;
-  border: 2px solid #afa9a2; */
+  background-color: #f1f1f1e1;
+  /* border: 2px solid #afa9a2; */
   width: 100%;
+  /* color: black; */
   /* color: white; */
   /* margin-bottom: 5px; */
   padding: 10px 30px;
@@ -256,6 +262,7 @@ hr.risen-dark {
 
 .dark-section {
   background-color: #222222;
+  /* background-color: #0e1018; */
   padding-top: 3em;
   padding-bottom: 3em;
 }

@@ -56,7 +56,8 @@ const vFlex = {
 }
 
 const textWidth = {
-    minWidth: '160px'
+    minWidth: '160px',
+    border: '0'
 }
 
 const fillRow = {

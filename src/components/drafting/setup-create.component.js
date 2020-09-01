@@ -6,9 +6,7 @@ export default class SetupCreate extends Component {
     constructor(props) {
         super(props);
         this.submitCallback = props.submit;
-        
     }
-
 
     createGame() {
         let data = {
@@ -31,7 +29,7 @@ export default class SetupCreate extends Component {
                                 <div className="input-group-prepend">
                                     <span className="input-group-text bg-primary text-light" style={spanStyle} id="blueName">Blue Team Name</span>
                                 </div>
-                                <input type="text" className="form-control" id="blueInput" aria-describedby="blueName"></input>
+                                <input type="text" className="form-control" id="blueInput" aria-describedby="blueName" style={lightishBg}></input>
                             </div>
                         </div>
                     </div>
@@ -41,7 +39,7 @@ export default class SetupCreate extends Component {
                                 <div className="input-group-prepend">
                                     <span className="input-group-text bg-danger text-light" style={spanStyle} id="redName">Red Team Name</span>
                                 </div>
-                                <input type="text" className="form-control" id="redInput" aria-describedby="redName"></input>
+                                <input type="text" className="form-control" id="redInput" aria-describedby="redName" style={lightishBg}></input>
                             </div>
                         </div>
                     </div>
@@ -51,7 +49,7 @@ export default class SetupCreate extends Component {
                                 <div className="input-group-prepend">
                                     <span className="input-group-text" style={spanStyle} id="timeLabel">Time (-1 unlimited)</span>
                                 </div>
-                                <input type="number" className="form-control" id="timeInput" aria-describedby="timeLabel" defaultValue="30"></input>
+                                <input type="number" className="form-control" id="timeInput" aria-describedby="timeLabel" defaultValue="30" style={lightishBg}></input>
                             </div>
                         </div>
                         <div className="col-md-3">
@@ -101,4 +99,8 @@ const hFlex = {
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%'
+}
+
+const lightishBg = {
+    backgroundColor: '#dcdcdc'
 }

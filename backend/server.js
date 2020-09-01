@@ -7,7 +7,6 @@ const {argv} = require('yargs');
 
 const draft = require('./src/draft');
 
-
 //env variables from dotenv file
 
 let envFile = ".env.development";
@@ -42,6 +41,7 @@ const gamesRouter = require('./routes/games');
 const codesRouter = require('./routes/codes');
 const draftRouter = require('./routes/draft');
 const authRouter = require('./routes/auth');
+const seasonRouter = require('./routes/seasons');
 
 app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
@@ -49,6 +49,7 @@ app.use('/stats', statsRouter);
 app.use('/codes', codesRouter);
 app.use('/draft', draftRouter);
 app.use('/auth', authRouter);
+app.use('/season', seasonRouter);
 
 app.route("/").get((req, res) => {
     res.status(200).send("Hello World").end();

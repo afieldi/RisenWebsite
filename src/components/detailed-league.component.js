@@ -16,13 +16,10 @@ export default class DetailedLeague extends Component {
     render() {
         return (
             <section>
-                <br></br>
-                <br></br>
-                <br></br>
-                <div className="light-section">
+                <div className="dark-section text-light">
                     <Container>
-                        <h1 className="center text-dark">{this.state.leagueData.prettyName}</h1>
-                        <hr className="risen-dark"></hr>
+                        <h1 className="center" style={titleColor}>{this.state.leagueData.prettyName}</h1>
+                        <hr className="risen-light"></hr>
                         <img src={require('../images/' + this.state.leagueData.img)} style={iconStyle}></img>
                         <p className="center">{this.state.leagueData.longBlurb}</p>
                         <hr></hr>
@@ -32,8 +29,8 @@ export default class DetailedLeague extends Component {
                                     <div key={index}>
                                         <div className="row">
                                             <div className="col">
-                                                <h3 className="center text-dark">{league.prettyName}</h3>
-                                                <hr className="risen-dark"></hr>
+                                                <h3 className="center" style={titleColor}>{league.prettyName}</h3>
+                                                <hr className="risen-light"></hr>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -65,4 +62,8 @@ const iconStyle = {
     display: 'block',
     margin: 'auto',
     position: 'relative'
+}
+
+const titleColor = {
+    color: '#d6d6d6'
 }

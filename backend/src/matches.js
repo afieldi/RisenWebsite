@@ -35,21 +35,37 @@ async function saveGames(matchIds) {
 
 async function getRoles(gameData, timeline) {
     return new Promise( (resolve, reject) => {
-        const python = spawn('python', ['./src/roles.py']);
-        python.stdin.write(JSON.stringify(gameData));
-        python.stdin.write("\r\n");
-        python.stdin.write(JSON.stringify(timeline));
-        python.stdin.end();
+    //     const python = spawn('python', ['./src/roles.py']);
+    //     python.stdin.write(JSON.stringify(gameData));
+    //     python.stdin.write("\r\n");
+
+    //     python.stdin.write(JSON.stringify(timeline));
+    //     python.stdin.end();
         
-        python.stdout.on('data', function (data) {
-            console.log(data);
+    //     python.stdout.on('data', function (data) {
+    //         console.log(data);
+    //         resolve(data);
+    //     });
 
-        });
-
-        python.stdout.on('error', (data) => {
-            reject();
+    //     python.stdout.on('error', (data) => {
+    //         reject();
+    //     })
+    // The above stuff involving running python doesn't work with GCP as you can't have nodejs and python at the same time
+    // So instead just return filler stuff so nothing else has to be changed. Anything involving role will have to be commented out
+    //  on the front end as well.
+        resolve({
+            "1": "MIDDLE",
+            "2": "MIDDLE",
+            "3": "MIDDLE",
+            "4": "MIDDLE",
+            "5": "MIDDLE",
+            "6": "MIDDLE",
+            "7": "MIDDLE",
+            "8": "MIDDLE",
+            "9": "MIDDLE",
+            "10": "MIDDLE"
         })
-    })
+    });
 
 }
 

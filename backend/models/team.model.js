@@ -6,7 +6,6 @@ const teamSchema = new Schema({
     teamname: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
         minlength: 3
     },
@@ -14,7 +13,9 @@ const teamSchema = new Schema({
         type: String,
         required: true
     },
-    players: [{type: Schema.Types.ObjectId, ref: 'Player'}]
+    division: { type: Number },
+    players: [{type: Schema.Types.ObjectId, ref: 'Player'}],
+    season: {type: Schema.Types.ObjectId, ref: 'Season'}
 }, {
     timestamps: true,
 });

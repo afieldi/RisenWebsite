@@ -1,11 +1,47 @@
 const router = require('express').Router();
 let Team = require('../models/team.model');
+const Season = require("../models/season.model");
 const { addPlayerByName } = require('../src/player');
+const { loadXlFile } = require('../src/gsheets');
+
+const multer  = require('multer');
+const upload = multer({dest: 'uploads'})
 
 router.route('/').get((req, res) => {
-    Team.find()
-        .then(teams => res.json(teams))
-        .catch(err => res.status(400).json('Error: ' + err));
+    const seasonName = req.query.season;
+    Season.findOne({
+        stringid: seasonName
+    }).then(season => {
+        Team.aggregate(
+            [
+                {$match: {season: season._id}},
+                {$lookup: {
+                    from: 'players',
+                    localField: 'players',
+                    foreignField: '_id',
+                    as: 'playerObject'
+                }}
+            ])
+            .then(teams => res.json({
+                season: season,
+                teams: teams
+            }))
+            .catch(err => res.status(400).json('Error: ' + err));
+    }).catch(err => res.status(404).json("Couldn't find season: " + err));
+});
+
+router.route('/:teamshort/:season').put((req, res) => {
+    const seasonName = req.params.season;
+    const tShort = req.params.teamshort;
+    Season.findOne({
+        stringid: seasonName
+    }).then(season => {
+        Team.findOne({season: season, teamshortname: tShort})
+            .then(teams => {
+                res.status(200).send();
+            })
+            .catch(err => res.status(400).json('Error: ' + err));
+    }).catch(err => res.status(404).json("Couldn't find season: " + err));
 });
 
 router.route('/add').post((req, res) => {
@@ -29,6 +65,18 @@ router.route('/add/player').post((req, res) => {
     }).catch((err) => {
         res.status(500).json("Error: " + err);
     })
+});
+
+router.route('/load').post( upload.single('teamSheet'), (req, res) => {
+    const seasonName = req.body.seasonName;
+    
+    if(seasonName.length > 3) {
+        loadXlFile(req.file.path, seasonName);
+        res.redirect(req.headers.referer);
+    }
+    else {
+        res.send("Invalid seasonName sent. Must be longer than 3 characters")
+    }
 });
 
 module.exports = router;

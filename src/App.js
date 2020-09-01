@@ -21,6 +21,9 @@ import Login from './components/login.component';
 import { getCookie } from './Helpers';
 import fetch from 'node-fetch';
 import OfflineDraft from './components/drafting/offline.component';
+import ManageTeams from './components/admin/manageTeams.component';
+import Rosters from './components/teams/rosters.component';
+import Roster from './components/teams/roster.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -101,6 +104,8 @@ export default class App extends Component {
               <Route path="/detailed/:player" component={DetailedStats}></Route>
               <Route path="/leagues" component={AboutLeagues}></Route>
               <Route path="/league/:league" component={DetailedLeague}></Route>
+              <Route path="/rosters" component={Rosters}></Route>
+              <Route path="/roster/:league" component={Roster}></Route>
               <Route path="/contact" component={Contact}></Route>
               <Route path="/drafting" component={Setup}></Route>
               <Route path="/draft" component={Drafting}></Route>
@@ -108,7 +113,10 @@ export default class App extends Component {
               <Route path="/auth" render={this.authRender.bind(this)} ></Route>
               {
                 // Only create route if it is an admin
-                this.state.level === 1 ? <Route path="/admin" component={Admin}></Route> : null
+                this.state.level === 1 ? <div>
+                  <Route path="/admin/basic" component={Admin}></Route>
+                  <Route path="/admin/teams" component={ManageTeams}></Route>
+                </div> : null
               }
             </div>
           </Router>

@@ -12,13 +12,10 @@ export default class AboutLeagues extends Component {
     render() {
         return (
             <section>
-                <br></br>
-                <br></br>
-                <br></br>
-                <div className="light-section">
+                <div className="dark-section text-light">
                     <Container>
-                        <h1 className="center text-dark">Our Leagues</h1>
-                        <hr className="risen-dark"></hr>
+                        <h1 className="center text-light">Our Leagues</h1>
+                        <hr className="risen-light"></hr>
                         <div className="row">
                             <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.rampage.prettyName}</h2>
@@ -114,7 +111,8 @@ const blockStyle = {
     textAlign: 'center',
     margin: '10px',
     padding: '5px',
-    border: '1px solid #dfe3e7',
+    border: '1px solid #696969',
+    backgroundColor: '#191919',
     borderRadius: '.267rem',
     boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)'
 }
