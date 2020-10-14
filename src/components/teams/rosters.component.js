@@ -9,6 +9,9 @@ export default class Rosters extends Component {
     this.state = {
       seasons: []
     }
+  }
+
+  componentDidMount() {
     this.loadSeasons();
   }
 

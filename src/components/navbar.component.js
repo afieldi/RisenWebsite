@@ -37,11 +37,11 @@ export default class Navbar extends Component {
               {/* <li className="navbar-item ml-auto">
                 <Link to="/" className="nav-link">Home</Link>
               </li> */}
-              <li class="navbar-item ml-auto dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <li className="navbar-item ml-auto dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Leagues
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <Link to="/leagues" className="dropdown-item">Info</Link>
                   <Link to="/rosters" className="dropdown-item">Rosters</Link>
                 </div>
@@ -49,11 +49,11 @@ export default class Navbar extends Component {
               {/* <li className="navbar-item ml-auto">
                 <Link to="/stats" className="nav-link">Player Stats</Link>
               </li> */}
-              <li class="navbar-item ml-auto dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <li className="navbar-item ml-auto dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Stats
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <Link to="/stats" className="dropdown-item">Player Stats</Link>
                   <Link to="#" className="dropdown-item">Team Stats(TBD)</Link>
                   <Link to="#" className="dropdown-item">Champion Stats(TBD)</Link>
@@ -70,17 +70,16 @@ export default class Navbar extends Component {
               </li>
               {
                 this.props.admin === 1 ? 
-                <li class="navbar-item ml-auto dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <li className="navbar-item ml-auto dropdown">
+                  <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Admin
                   </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <Link to="/admin/basic" className="dropdown-item">Manage Misc</Link>
                     <Link to="/admin/teams" className="dropdown-item">Manage Teams</Link>
                     <Link to="#" className="dropdown-item">Manage Players</Link>
                   </div>
-                </li>: 
-                null
+                </li>: null
               }
               {
                 this.props.admin === -1 ? 

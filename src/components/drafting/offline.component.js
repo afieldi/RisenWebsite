@@ -60,7 +60,7 @@ export default class OfflineDraft extends Component {
 
   deselectBox(draft, event) {
     event.preventDefault();
-    document.getElementById(draft).style.backgroundImage = null;
+    // document.getElementById(draft).style.backgroundImage = null;
 
     draft = draft.split("-")
     let arr = this.state[draft[0]][draft[1]];
@@ -95,21 +95,32 @@ export default class OfflineDraft extends Component {
         // Selected another element in the same area, champ and champ or draft spot and draft spot
         // Just swap then
         if (this.state.selected.startsWith('champ') && element.startsWith('champ')) {
+          // I'll be honest, idk when this gets hit...
           document.getElementById(this.state.selected).classList.remove('offline-selected');
           document.getElementById(element).classList.add('offline-selected');
           this.setState({
             selected: element
           });
+          console.log("doing swap");
+          let a = element.split('-');
+          let b = this.state.selected.split('-');
+          let assigner = this.state;
+          let temp = assigner[a[0]][a[1]];
+          assigner[a[0]][a[1]] = assigner[b[0]][b[1]];
+          assigner[b[0]][b[1]] = temp;
+          this.setState(assigner);
         }
         else {
-          const temp = document.getElementById(this.state.selected).style.backgroundImage;
-          document.getElementById(this.state.selected).style.backgroundImage = document.getElementById(element).style.backgroundImage;
-          document.getElementById(element).style.backgroundImage = temp;
           document.getElementById(this.state.selected).classList.remove("offline-selected");
           document.getElementById(element).classList.remove("offline-selected");
-          this.setState({
-            selected: null
-          });
+          let a = element.split('-');
+          let b = this.state.selected.split('-');
+          let assigner = this.state;
+          let temp = assigner[a[0]][a[1]][a[2]];
+          assigner[a[0]][a[1]][a[2]] = assigner[b[0]][b[1]][b[2]];
+          assigner[b[0]][b[1]][b[2]] = temp;
+          assigner.selected = null;
+          this.setState(assigner);
         }
       }
       else {
@@ -126,11 +137,11 @@ export default class OfflineDraft extends Component {
         }
         
         champ = champ.split("-")[1];
-        document.getElementById(draft).style.backgroundImage = `url(${require(`../../images/champions/icons/` + champ + `_0.png`)})`;
+        // document.getElementById(draft).style.backgroundImage = `url(${require(`../../images/champions/icons/` + champ + `_0.png`)})`;
 
         draft = draft.split("-")
         let arr = this.state[draft[0]][draft[1]];
-
+        // require(`../../images/champions/icons/` + champ + `_0.png`);
         arr[Number(draft[2])] = champ;
 
         document.getElementById(this.state.selected).classList.remove("offline-selected");
@@ -142,6 +153,7 @@ export default class OfflineDraft extends Component {
         assigner.selected = null;
 
         this.setState(assigner);
+        console.log(assigner);
       }
     }
   }
@@ -153,149 +165,158 @@ export default class OfflineDraft extends Component {
         return true
     }
     return false
-
   }
+
+  getChampPic(champ) {
+    if (champ === null) {
+      return null;
+    }
+    return require(`../../images/champions/icons/` + champ + `_0.png`);
+  }
+
   render() {
     return (
       <section>
         <br></br>
-        <Container style={{backgroundColor: '#2a3343', padding: '15px'}}>
-          <div className='row'>
-            <div className='col'>
-              <div className='row'>
-                <div className='col-4'>
-                  <div className='row'>
-                    <div className="col text-light">
-                      <input defaultValue="Blue Team" style={{...blueBoxStyle, ...nameInputStyle}}></input>
+        <div className="dark-section">
+          <Container style={{backgroundColor: '#2a3343', padding: '15px'}}>
+            <div className='row'>
+              <div className='col'>
+                <div className='row'>
+                  <div className='col-4'>
+                    <div className='row'>
+                      <div className="col text-light">
+                        <input defaultValue="Blue Team" style={{...blueBoxStyle, ...nameInputStyle}}></input>
+                      </div>
+                    </div>
+                    <div className='row'>
+                      <div className='col'>
+                        <div style={banGridStyle}>
+                          <div style={{...blueBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.ban[0])})`}}} className="clickable" id="blue-ban-0"
+                            onClick={this.selectBox.bind(this, "blue-ban-0")}
+                            onContextMenu={this.deselectBox.bind(this, "blue-ban-0")}><div style={numberStyle}>1</div></div>
+                          <div style={{...blueBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.ban[1])})`}}} className="clickable" id="blue-ban-1"
+                            onClick={this.selectBox.bind(this, "blue-ban-1")}
+                            onContextMenu={this.deselectBox.bind(this, "blue-ban-1")}><div style={numberStyle}>2</div></div>
+                          <div style={{...blueBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.ban[2])})`}}} className="clickable" id="blue-ban-2"
+                            onClick={this.selectBox.bind(this, "blue-ban-2")}
+                            onContextMenu={this.deselectBox.bind(this, "blue-ban-2")}><div style={numberStyle}>3</div></div>
+                          <div style={{width: '10px', backgroundColor: 'orange'}}></div>
+                          <div style={{...blueBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.ban[3])})`}}} className="clickable" id="blue-ban-3"
+                            onClick={this.selectBox.bind(this, "blue-ban-3")}
+                            onContextMenu={this.deselectBox.bind(this, "blue-ban-3")}><div style={numberStyle}>4</div></div>
+                          <div style={{...blueBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.ban[4])})`}}} className="clickable" id="blue-ban-4"
+                            onClick={this.selectBox.bind(this, "blue-ban-4")}
+                            onContextMenu={this.deselectBox.bind(this, "blue-ban-4")}><div style={numberStyle}>5</div></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col'>
-                      <div style={banGridStyle}>
-                        <div style={{...blueBoxStyle, ...banBoxStyle}} className="clickable" id="blue-ban-0"
-                          onClick={this.selectBox.bind(this, "blue-ban-0")}
-                          onContextMenu={this.deselectBox.bind(this, "blue-ban-0")}><div style={numberStyle}>1</div></div>
-                        <div style={{...blueBoxStyle, ...banBoxStyle}} className="clickable" id="blue-ban-1"
-                          onClick={this.selectBox.bind(this, "blue-ban-1")}
-                          onContextMenu={this.deselectBox.bind(this, "blue-ban-1")}><div style={numberStyle}>2</div></div>
-                        <div style={{...blueBoxStyle, ...banBoxStyle}} className="clickable" id="blue-ban-2"
-                          onClick={this.selectBox.bind(this, "blue-ban-2")}
-                          onContextMenu={this.deselectBox.bind(this, "blue-ban-2")}><div style={numberStyle}>3</div></div>
-                        <div style={{width: '10px', backgroundColor: 'orange'}}></div>
-                        <div style={{...blueBoxStyle, ...banBoxStyle}} className="clickable" id="blue-ban-3"
-                          onClick={this.selectBox.bind(this, "blue-ban-3")}
-                          onContextMenu={this.deselectBox.bind(this, "blue-ban-3")}><div style={numberStyle}>4</div></div>
-                        <div style={{...blueBoxStyle, ...banBoxStyle}} className="clickable" id="blue-ban-4"
-                          onClick={this.selectBox.bind(this, "blue-ban-4")}
-                          onContextMenu={this.deselectBox.bind(this, "blue-ban-4")}><div style={numberStyle}>5</div></div>
+                  <div className='col'>
+                    <div style={{display: 'flex'}}>
+                      <img src={risenLogo} style={{width: '125px', margin: 'auto'}} alt="Risen Logo"></img>
+                    </div>
+                  </div>
+                  <div className='col-4'>
+                    <div className='row'>
+                      <div className="col text-light" style={{textAlign: "right"}}>
+                        <input defaultValue="Red Team" style={{...redBoxStyle, ...nameInputStyle}}></input>
+                      </div>
+                    </div>
+                    <div className='row'>
+                      <div className='col'>
+                        <div style={banGridStyle}>
+                          <div style={{...redBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.ban[0])})`}}} className="clickable" id="red-ban-0"
+                            onClick={this.selectBox.bind(this, "red-ban-0")}
+                            onContextMenu={this.deselectBox.bind(this, "red-ban-0")}><div style={numberStyle}>1</div></div>
+                          <div style={{...redBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.ban[1])})`}}} className="clickable" id="red-ban-1"
+                            onClick={this.selectBox.bind(this, "red-ban-1")}
+                            onContextMenu={this.deselectBox.bind(this, "red-ban-1")}><div style={numberStyle}>2</div></div> 
+                          <div style={{...redBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.ban[2])})`}}} className="clickable" id="red-ban-2"
+                            onClick={this.selectBox.bind(this, "red-ban-2")}
+                            onContextMenu={this.deselectBox.bind(this, "red-ban-2")}><div style={numberStyle}>3</div></div>
+                          <div style={{width: '10px', backgroundColor: 'orange'}}></div>
+                          <div style={{...redBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.ban[3])})`}}} className="clickable" id="red-ban-3"
+                            onClick={this.selectBox.bind(this, "red-ban-3")}
+                            onContextMenu={this.deselectBox.bind(this, "red-ban-3")}><div style={numberStyle}>4</div></div>
+                          <div style={{...redBoxStyle, ...banBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.ban[4])})`}}} className="clickable" id="red-ban-4"
+                            onClick={this.selectBox.bind(this, "red-ban-4")}
+                            onContextMenu={this.deselectBox.bind(this, "red-ban-4")}><div style={numberStyle}>5</div></div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className='col'>
-                  <div style={{display: 'flex'}}>
-                    <img src={risenLogo} style={{width: '125px', margin: 'auto'}} alt="Risen Logo"></img>
-                  </div>
-                </div>
-                <div className='col-4'>
-                  <div className='row'>
-                    <div className="col text-light" style={{textAlign: "right"}}>
-                      <input defaultValue="Red Team" style={{...redBoxStyle, ...nameInputStyle}}></input>
+                <br></br>
+                <div className="row">
+                  <div className="col-2">
+                    <div style={pickGridStyle}>
+                      <div style={{...blueBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.pick[0])})`}}} className="clickable" id="blue-pick-0"
+                        onClick={this.selectBox.bind(this, "blue-pick-0")}
+                        onContextMenu={this.deselectBox.bind(this, "blue-pick-0")}><div style={numberStyle}>B1</div></div>
+                      <div style={{...blueBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.pick[1])})`}}} className="clickable" id="blue-pick-1"
+                        onClick={this.selectBox.bind(this, "blue-pick-1")}
+                        onContextMenu={this.deselectBox.bind(this, "blue-pick-1")}><div style={numberStyle}>B2</div></div>
+                      <div style={{...blueBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.pick[2])})`}}} className="clickable" id="blue-pick-2"
+                        onClick={this.selectBox.bind(this, "blue-pick-2")}
+                        onContextMenu={this.deselectBox.bind(this, "blue-pick-2")}><div style={numberStyle}>B3</div></div>
+                      <div style={{...blueBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.pick[3])})`}}} className="clickable" id="blue-pick-3"
+                        onClick={this.selectBox.bind(this, "blue-pick-3")}
+                        onContextMenu={this.deselectBox.bind(this, "blue-pick-3")}><div style={numberStyle}>B4</div></div>
+                      <div style={{...blueBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.blue.pick[4])})`}}} className="clickable" id="blue-pick-4"
+                        onClick={this.selectBox.bind(this, "blue-pick-4")}
+                        onContextMenu={this.deselectBox.bind(this, "blue-pick-4")}><div style={numberStyle}>B5</div></div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col'>
-                      <div style={banGridStyle}>
-                        <div style={{...redBoxStyle, ...banBoxStyle}} className="clickable" id="red-ban-0"
-                          onClick={this.selectBox.bind(this, "red-ban-0")}
-                          onContextMenu={this.deselectBox.bind(this, "red-ban-0")}><div style={numberStyle}>1</div></div>
-                        <div style={{...redBoxStyle, ...banBoxStyle}} className="clickable" id="red-ban-1"
-                          onClick={this.selectBox.bind(this, "red-ban-1")}
-                          onContextMenu={this.deselectBox.bind(this, "red-ban-1")}><div style={numberStyle}>2</div></div> 
-                        <div style={{...redBoxStyle, ...banBoxStyle}} className="clickable" id="red-ban-2"
-                          onClick={this.selectBox.bind(this, "red-ban-2")}
-                          onContextMenu={this.deselectBox.bind(this, "red-ban-2")}><div style={numberStyle}>3</div></div>
-                        <div style={{width: '10px', backgroundColor: 'orange'}}></div>
-                        <div style={{...redBoxStyle, ...banBoxStyle}} className="clickable" id="red-ban-3"
-                          onClick={this.selectBox.bind(this, "red-ban-3")}
-                          onContextMenu={this.deselectBox.bind(this, "red-ban-3")}><div style={numberStyle}>4</div></div>
-                        <div style={{...redBoxStyle, ...banBoxStyle}} className="clickable" id="red-ban-4"
-                          onClick={this.selectBox.bind(this, "red-ban-4")}
-                          onContextMenu={this.deselectBox.bind(this, "red-ban-4")}><div style={numberStyle}>5</div></div>
-                      </div>
+                  <div className="col deep-section" style={{padding: '10px'}}>
+                    <div>
+                      <input id="champFilter" type="text" className="text-light" placeholder="Search Champion" style={searchStyle} onChange={this.filterChamps.bind(this)}></input>
+                    </div>
+                    <div style={{...champGridStyle, ...{maxHeight: '60vh', overflowY: 'scroll', boxSizing: 'content-box'}}}>
+                      {
+                        Object.keys(this.state.filteredChamps).map(champ => {
+                          let style = {...iconStyle, ...{backgroundImage: `url(${require(`../../images/champions/icons/` + champ + `_0.png`)})`, margin: 'auto'}};
+                          let onClickFnc = this.selectBox.bind(this, "champ-" + champ);
+                          // console.log(champions)
+                          if (this.champIsSelected(champ)) {
+                            style = Object.assign({}, style, {"filter": "brightness(0.4)"});
+                            onClickFnc = null;
+                          }
+                          return (
+                            <div className="clickable" style={{padding: '5px'}} id={"champ-" + champ}>
+                              <div key={"img" + champ}
+                              style={style} onClick={onClickFnc}></div>
+                              <h6 className="center text-light" style={{fontSize: '12px'}}>{champions[champ].name}</h6>
+                            </div>
+                          )
+                        })
+                      }
                     </div>
                   </div>
-                </div>
-              </div>
-              <br></br>
-              <div className="row">
-                <div className="col-2">
-                  <div style={pickGridStyle}>
-                    <div style={{...blueBoxStyle, ...pickBoxStyle}} className="clickable" id="blue-pick-0"
-                      onClick={this.selectBox.bind(this, "blue-pick-0")}
-                      onContextMenu={this.deselectBox.bind(this, "blue-pick-0")}><div style={numberStyle}>B1</div></div>
-                    <div style={{...blueBoxStyle, ...pickBoxStyle}} className="clickable" id="blue-pick-1"
-                      onClick={this.selectBox.bind(this, "blue-pick-1")}
-                      onContextMenu={this.deselectBox.bind(this, "blue-pick-1")}><div style={numberStyle}>B2</div></div>
-                    <div style={{...blueBoxStyle, ...pickBoxStyle}} className="clickable" id="blue-pick-2"
-                      onClick={this.selectBox.bind(this, "blue-pick-2")}
-                      onContextMenu={this.deselectBox.bind(this, "blue-pick-2")}><div style={numberStyle}>B3</div></div>
-                    <div style={{...blueBoxStyle, ...pickBoxStyle}} className="clickable" id="blue-pick-3"
-                      onClick={this.selectBox.bind(this, "blue-pick-3")}
-                      onContextMenu={this.deselectBox.bind(this, "blue-pick-3")}><div style={numberStyle}>B4</div></div>
-                    <div style={{...blueBoxStyle, ...pickBoxStyle}} className="clickable" id="blue-pick-4"
-                      onClick={this.selectBox.bind(this, "blue-pick-4")}
-                      onContextMenu={this.deselectBox.bind(this, "blue-pick-4")}><div style={numberStyle}>B5</div></div>
-                  </div>
-                </div>
-                <div className="col deep-section" style={{padding: '10px'}}>
-                  <div>
-                    <input id="champFilter" type="text" className="text-light" placeholder="Search Champion" style={searchStyle} onChange={this.filterChamps.bind(this)}></input>
-                  </div>
-                  <div style={{...champGridStyle, ...{maxHeight: '60vh', overflowY: 'scroll', boxSizing: 'content-box'}}}>
-                    {
-                      Object.keys(this.state.filteredChamps).map(champ => {
-                        let style = {...iconStyle, ...{backgroundImage: `url(${require(`../../images/champions/icons/` + champ + `_0.png`)})`, margin: 'auto'}};
-                        let onClickFnc = this.selectBox.bind(this, "champ-" + champ);
-                        // console.log(champions)
-                        if (this.champIsSelected(champ)) {
-                          style = Object.assign({}, style, {"filter": "brightness(0.4)"});
-                          onClickFnc = null;
-                        }
-                        return (
-                          <div className="clickable" style={{padding: '5px'}} id={"champ-" + champ}>
-                            <div key={"img" + champ}
-                            style={style} onClick={onClickFnc}></div>
-                            <h6 className="center text-light" style={{fontSize: '12px'}}>{champions[champ].name}</h6>
-                          </div>
-                        )
-                      })
-                    }
-                  </div>
-                </div>
-                <div className="col-2">
-                  <div style={pickGridStyle}>
-                    <div style={{...redBoxStyle, ...pickBoxStyle}} className="clickable" id="red-pick-0"
-                      onClick={this.selectBox.bind(this, "red-pick-0")}
-                      onContextMenu={this.deselectBox.bind(this, "red-pick-0")}><div style={numberStyle}>R1</div></div>
-                    <div style={{...redBoxStyle, ...pickBoxStyle}} className="clickable" id="red-pick-1"
-                      onClick={this.selectBox.bind(this, "red-pick-1")}
-                      onContextMenu={this.deselectBox.bind(this, "red-pick-1")}><div style={numberStyle}>R2</div></div>
-                    <div style={{...redBoxStyle, ...pickBoxStyle}} className="clickable" id="red-pick-2"
-                      onClick={this.selectBox.bind(this, "red-pick-2")}
-                      onContextMenu={this.deselectBox.bind(this, "red-pick-2")}><div style={numberStyle}>R3</div></div>
-                    <div style={{...redBoxStyle, ...pickBoxStyle}} className="clickable" id="red-pick-3"
-                      onClick={this.selectBox.bind(this, "red-pick-3")}
-                      onContextMenu={this.deselectBox.bind(this, "red-pick-3")}><div style={numberStyle}>R4</div></div>
-                    <div style={{...redBoxStyle, ...pickBoxStyle}} className="clickable" id="red-pick-4"
-                      onClick={this.selectBox.bind(this, "red-pick-4")}
-                      onContextMenu={this.deselectBox.bind(this, "red-pick-4")}><div style={numberStyle}>R5</div></div>
+                  <div className="col-2">
+                    <div style={pickGridStyle}>
+                      <div style={{...redBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.pick[0])})`}}} className="clickable" id="red-pick-0"
+                        onClick={this.selectBox.bind(this, "red-pick-0")}
+                        onContextMenu={this.deselectBox.bind(this, "red-pick-0")}><div style={numberStyle}>R1</div></div>
+                      <div style={{...redBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.pick[1])})`}}} className="clickable" id="red-pick-1"
+                        onClick={this.selectBox.bind(this, "red-pick-1")}
+                        onContextMenu={this.deselectBox.bind(this, "red-pick-1")}><div style={numberStyle}>R2</div></div>
+                      <div style={{...redBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.pick[2])})`}}} className="clickable" id="red-pick-2"
+                        onClick={this.selectBox.bind(this, "red-pick-2")}
+                        onContextMenu={this.deselectBox.bind(this, "red-pick-2")}><div style={numberStyle}>R3</div></div>
+                      <div style={{...redBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.pick[3])})`}}} className="clickable" id="red-pick-3"
+                        onClick={this.selectBox.bind(this, "red-pick-3")}
+                        onContextMenu={this.deselectBox.bind(this, "red-pick-3")}><div style={numberStyle}>R4</div></div>
+                      <div style={{...redBoxStyle, ...pickBoxStyle, ...{backgroundImage: `url(${this.getChampPic(this.state.red.pick[4])})`}}} className="clickable" id="red-pick-4"
+                        onClick={this.selectBox.bind(this, "red-pick-4")}
+                        onContextMenu={this.deselectBox.bind(this, "red-pick-4")}><div style={numberStyle}>R5</div></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </div>
       </section>
     )
   }

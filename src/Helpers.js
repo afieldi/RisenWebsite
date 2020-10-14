@@ -31,3 +31,14 @@ export function setCookie(name,value,days) {
     }
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
+
+// Get color code by strength level, 5 is highest, 1 is lowest
+export function getTextColorByLevel(level) {
+    const map = [
+        "#ff2121",
+        "#ff9e1d",
+        "#ffffff",
+        "#05aaff",
+        "#3eff05"
+    ]
+}

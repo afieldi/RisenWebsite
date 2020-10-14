@@ -14,17 +14,17 @@ export default class Overview extends Component {
         this.filters = {
             "lane": "",
             "name": ""
-        }
+        };
+        this.sort = "_id.sortablePlayer+"
         this.lastLoadedPage = 0;
         this.loadingData = false;
         this.state = {
             statData: [],
             filteredData: []
         }
-        this.getData();
     }
 
-    getData(lane = null, player = null, page = 1, load=true, append=false) {
+    getData(page = 1, load=true, append=false) {
         if (this.loadingData) {
             return;
         }
@@ -32,12 +32,13 @@ export default class Overview extends Component {
         this.lastLoadedPage = page;
         let url = process.env.REACT_APP_BASE_URL + `/stats/brief`;
         url += `?page=${page}&size=${20}`;
-        if(lane) {
-            url += '&lane=' + lane;
+        if(this.filters.lane) {
+            url += '&lane=' + this.filters.lane;
         }
-        if (player) {
-            url += "&player=" + player;
+        if (this.filters.name) {
+            url += "&player=" + this.filters.name;
         }
+        url += "&sort=" + this.sort;
         // url += "&sort=_id.sortablePlayer-"
         fetch(url).then((data) => {
             this.loadingData = false;
@@ -83,32 +84,48 @@ export default class Overview extends Component {
         //  1. To be sync
         //  2. Not to reload the page. That will be done later
         const name = document.getElementById("nameFilter").value ? document.getElementById("nameFilter").value : null;
-        this.getData(this.filters.lane, name, 1, true, false);
+        this.filters.name = name;
+        this.getData(1, true, false);
 
         // Reload state as the above functions change it
         // this.setState({});
     }
 
-    sortData(data, attr, direction) {
-        return data.sort((a, b) => {
-            let res = 0;
-            // Handle special cases where either the stats are a string or
-            //   can't be accessed by a simple attr accessor
-            if (attr === "wr") {
-                res = a.wins/a.total_games - b.wins/b.total_games;
-            }
-            else if (attr === "lane" ) {
-                res = a._id.lane.localeCompare(b._id.lane);
-            }
-            else if (attr === "name" ) {
-                res = a._id.player.localeCompare(b._id.player);
+    sortData(sortCol) {
+        if(this.sort.startsWith(sortCol)) {
+            if(this.sort.endsWith("+")) {
+                this.sort = sortCol + "-";
             }
             else {
-                res = a[attr] - b[attr];
+                this.sort = sortCol + "+";
             }
-            return direction === "ASC" ? res : res * -1;
-        })
+        }
+        else {
+            this.sort = sortCol + "-";
+        }
+        this.getData();
     }
+
+    // sortData(data, attr, direction) {
+    //     return data.sort((a, b) => {
+    //         let res = 0;
+    //         // Handle special cases where either the stats are a string or
+    //         //   can't be accessed by a simple attr accessor
+    //         if (attr === "wr") {
+    //             res = a.wins/a.total_games - b.wins/b.total_games;
+    //         }
+    //         else if (attr === "lane" ) {
+    //             res = a._id.lane.localeCompare(b._id.lane);
+    //         }
+    //         else if (attr === "name" ) {
+    //             res = a._id.player.localeCompare(b._id.player);
+    //         }
+    //         else {
+    //             res = a[attr] - b[attr];
+    //         }
+    //         return direction === "ASC" ? res : res * -1;
+    //     })
+    // }
 
     getPositionalIcon(position) {
         switch (position) {
@@ -129,15 +146,22 @@ export default class Overview extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("scroll", () => {
-            let max = document.documentElement.scrollHeight || document.body.scrollHeight;
-            max -= document.documentElement.clientHeight || document.body.clientHeight;
-            const scroll = document.documentElement.scrollTop || document.body.scrollTop;
-            if (scroll / max > .9) {
-                // console.log(this.lastLoadedPage);
-                this.getData(null, null, this.lastLoadedPage + 1, true, true);
-            }
-        })
+        this.getData();
+        document.addEventListener("scroll", this.scrollFunction.bind(this));
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("scroll", this.scrollFunction.bind(this));
+    }
+
+    scrollFunction() {
+        let max = document.documentElement.scrollHeight || document.body.scrollHeight;
+        max -= document.documentElement.clientHeight || document.body.clientHeight;
+        const scroll = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scroll / max > .9) {
+            // console.log(this.lastLoadedPage);
+            this.getData(this.lastLoadedPage + 1, true, true);
+        }
     }
 
     render() {
@@ -149,29 +173,29 @@ export default class Overview extends Component {
                             <div className="col-lg-6">
                                 <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
                                     {/* TODO: Change these onClick functions */}
-                                    <label className="btn btn-dark" style={spaceButtons}>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
                                         <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositionalIcon("TOP")}
                                     </label>
-                                    <label className="btn btn-dark" style={spaceButtons}>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
                                         <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("JUNGLE")}
                                     </label>
-                                    <label className="btn btn-dark" style={spaceButtons}>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
                                         <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("MIDDLE")}
                                     </label>
-                                    <label className="btn btn-dark" style={spaceButtons}>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
                                         <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositionalIcon("BOTTOM")}
                                     </label>
-                                    <label className="btn btn-dark" style={spaceButtons}>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
                                         <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositionalIcon("SUPPORT")}
                                     </label>
-                                    <label className="btn btn-dark" style={spaceButtons}>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
                                         <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
                                     </label>
                                 </div>
                             </div>
                             <div className="col-lg">
                                 <form onSubmit={this.submitSearch.bind(this)}>
-                                    <div class="input-group mb-3 bg-dark text-light">
+                                    <div class="input-group mb-3 text-light">
                                         <input type="text" class="form-control bg-dark text-light"
                                                 placeholder="Summoner Name" aria-label="Summoner Name"
                                                 aria-describedby="button-addon2" id="nameFilter" ></input>
@@ -182,20 +206,20 @@ export default class Overview extends Component {
                                 </form>
                             </div>
                         </div>
-                        <table className="table table-responsive-lg risen-table sticky-top table-dark table-striped">
+                        <table className="table table-responsive-lg risen-table sticky-top table-striped">
                             <thead>
                                 <tr>
                                 {/* <th scope="col" className="center">Rank</th> */}
-                                <th scope="col">Summoner Name</th>
-                                <th scope="col" className="center">Lane</th>
-                                <th scope="col" className="center">Win Rate</th>
-                                <th scope="col" className="center">Kills</th>
-                                <th scope="col" className="center">Deaths</th>
-                                <th scope="col" className="center">Assists</th>
-                                {/*<th scope="col" className="center">Gold</th>*/}
-                                {/*<th scope="col" className="center">CS</th>*/}
-                                {/*<th scope="col" className="center">Damage</th>*/}
-                                <th scope="col" className="center">Games</th>
+                                <th scope="col" className="clickable" onClick={this.sortData.bind(this, "_id.sortablePlayer")}>Summoner Name</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "_id.lane")}>Lane</th>
+                                <th scope="col" className="center clickable">Win Rate</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_kills")}>Kills</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_deaths")}>Deaths</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_assists")}>Assists</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_gold")}>Gold</th>
+                                {/*<th scope="col" className="center clickable">CS</th>*/}
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_damage")}>Damage</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "total_games")}>Games</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -210,9 +234,9 @@ export default class Overview extends Component {
                                                 <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
                                                 <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
                                                 <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
-                                                {/*<td className="center" name="goldCol">{customRound(item.avg_gold)}</td>*/}
+                                                <td className="center" name="goldCol">{customRound(item.avg_gold)}</td>
                                                 {/*<td className="center" name="csCol">{customRound(item.avg_cs)}</td>*/}
-                                                {/*<td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>*/}
+                                                <td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>
                                                 <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
                                             </tr>
                                         )
@@ -229,7 +253,8 @@ export default class Overview extends Component {
 }
 
 const spaceButtons = {
-    width: '20%'
+    width: '20%',
+    backgroundColor: '#111111'
 }
 
 const whiteText = {

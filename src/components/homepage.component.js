@@ -205,12 +205,93 @@ export default class HomePage extends Component {
                         </div>
                     </Container>
                 </div>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <div className="dark-section">
+                    <Container>
+                        <h1 className="center text-light">Goodies</h1>
+                        <hr className="risen-light"></hr>
+                        <div>
+                            <p className="risen-body-text light center">
+                                {staticText.home.goodies}
+                            </p>
+                        </div>
+                        <div>
+                            <div className='row'>
+                                <div className='col-md-8'>
+                                    <div className='row' style={{paddingBottom: '15px'}}>
+                                        <div className='col-sm-8'>
+                                            <a href="https://discord.com/invite/BwnnBsV" className="clickable">
+                                            <div style={{...imageStyle, ...{backgroundImage: `url(https://cybernews.com/wp-content/uploads/2020/07/Discord-privacy-tips-that-you-should-use-.jpg)`}}}></div>
+                                                <div style={textOverlayStyle}>
+                                                    <h3 style={textStyle}>Join the Discord</h3>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div className='col-sm'>
+                                            <a href="https://www.twitch.tv/risen_esports" className="clickable">
+                                                <div style={{...imageStyle, ...{backgroundImage: `url(https://blog.twitch.tv/assets/uploads/2399c71d2a2bca32d6f39d60ac643a17.png)`}}}></div>
+                                                <div style={textOverlayStyle}>
+                                                    <h3 style={textStyle}>Twitch</h3>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+                                            <Link to="/stats" className="clickable">
+                                                <div style={{...imageStyle, ...{backgroundImage: `url(https://wpforms.com/wp-content/uploads/2019/02/online-business-statistics.jpg)`}}}></div>
+                                                <div style={textOverlayStyle}>
+                                                    <h3 style={textStyle}>Stats</h3>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col'>
+                                    <Link to="/" className="clickable">
+                                        <div style={{...imageStyle, ...{backgroundImage: `url(https://cdn.editage.com/insights/editagecom/production/styles/detail_page_image/public/Using%20the%20active%20and%20passive%20voice%20in%20research%20writing%20%28resized%29_0_0.jpg?itok=eMctYpxm)`}}}></div>
+                                        <div style={textOverlayStyle}>
+                                            <h3 style={textStyle}>Articles</h3>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </Container>
+                </div>
             </section>
         )
     }
 };
 
 // CSS
+
+const imageStyle = {
+    width: '100%',
+    minHeight: '250px',
+    height: '100%',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover'
+}
+
+const textOverlayStyle = {
+    position: 'relative',
+    bottom: '3.5em',
+    backgroundColor: '#000000c9',
+    height: '3.5em',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
+}
+
+const textStyle = {
+    color: 'white',
+    margin: '10px'
+}
 
 // Outermost jumbotron style
 var outerJumboStyle = {

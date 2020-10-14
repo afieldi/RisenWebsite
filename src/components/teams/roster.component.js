@@ -2,15 +2,20 @@ import React, { Component } from 'react';
 import fetch from 'node-fetch';
 import { Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import UserContext from '../../context/UserContext';
 
 export default class Roster extends Component {
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.loadSeason(this.props.match.params.league);
     this.state = {
       seasonName: "",
       sheetUrl: "",
-      teams: []
+      teams: [],
+      modalTeam: {
+        playerObject: []
+      }
     }
   }
 
@@ -32,6 +37,7 @@ export default class Roster extends Component {
           }
           dTeams[v.division].push(v);
         });
+        console.log(dTeams);
         this.setState({
           seasonName: seasonInfo.season.seasonName,
           sheetUrl: seasonInfo.season.spreadsheet,
@@ -61,7 +67,7 @@ export default class Roster extends Component {
             {
               Object.keys(this.state.teams).map(division => {
                 return (
-                  <div>
+                  <div key={division}>
                     <div className="row" style={boxStyle}>
                       <div className="col">
                         <div style={{...nameStyle, ...{fontSize: '28px'}}}>Division {division}</div>
@@ -70,15 +76,25 @@ export default class Roster extends Component {
                     {
                       this.state.teams[division].map((team, i) => {
                         return (
-                          <div className="row text-light" style={boxStyle}>
+                          <div className="row text-light" style={boxStyle} key={i}>
                             <div className="col-1" style={{display: 'flex', justifyContent: 'center', paddingTop: '5px', fontSize: '30px'}}><div style={{display: 'inline-block'}}>{+i + 1}</div></div>
                             <div className="col">
-                              <div style={{fontSize: '1.2em'}}>{team.teamname}: <a style={{...nameStyle, ...{fontSize: '.9em', padding: '0'}}}>0W-0L</a></div>
+                              <div style={{fontSize: '1.2em'}}>
+                                {team.teamname}: <a style={{...nameStyle, ...{fontSize: '.9em', padding: '0'}}}>0W-0L</a>
+                                {
+                                  this.context === 1 ? 
+                                  <Button className="btn btn-primary" style={smallButtonStyle} data-toggle="modal" data-target="#exampleModal"
+                                          onClick={(() => {this.setState({modalTeam: JSON.parse(JSON.stringify(team))})}).bind(this)}>
+                                    Edit Team
+                                  </Button> 
+                                  : null
+                                }
+                              </div>
                               <div className="row">
                                 {team.playerObject.map(p => {
                                   return (
-                                    <div className="col-2" style={{...playerName}}>
-                                      <Link style={playerName} to={`/detailed/${p.name}`}>{p.name}</Link>
+                                    <div className="col-2" style={{...playerName}} key={p._id}>
+                                      <Link style={{...playerName, ...{overflowWrap: 'break-word'}}} to={`/detailed/${p.name}`}>{p.name}</Link>
                                     </div>
                                   )
                                 })}
@@ -93,6 +109,61 @@ export default class Roster extends Component {
               })
             }
           </Container>
+        </div>
+
+        {/* Edit team Modal */}
+        <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Editing {this.state.modalTeam.teamname}</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form>
+                  <div className="form-group">
+                    <label for="edit-teamname">Team Name</label>
+                    <input id="edit-teamname" type="text" value={this.state.modalTeam.teamname} 
+                          onChange={((e)=>{this.state.modalTeam.teamname=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
+                  </div>
+                  <div className="form-group">
+                    <label for="edit-teamshort">Team Short</label>
+                    <input id="edit-teamshort" type="text" value={this.state.modalTeam.teamshortname}
+                      onChange={((e)=>{this.state.modalTeam.teamname=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
+                  </div>
+                  <div className="form-group">
+                    <label for="edit-teamdiv">Division</label>
+                    <input id="edit-teamdiv" type="text" value={this.state.modalTeam.division}
+                      onChange={((e)=>{this.state.modalTeam.teamname=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
+                  </div>
+                  <div className="form-group">
+                    <ul>
+                      {
+                        this.state.modalTeam.playerObject.map(player => {
+                          return (
+                            <li key={player._id}><Button style={smallButtonStyle}>X</Button> {player.name}</li>
+                          )
+                        })
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    {
+                      this.state.modalTeam.playerObject.length < 10 ?
+                      <Button className="btn btn-success">Add Player</Button>
+                      : null
+                    }
+                  </div>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <Button type="button" className="btn btn-primary" onClick={(() => {console.log(this.state.modalTeam)}).bind(this)}>Save changes</Button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     )
@@ -121,4 +192,10 @@ const playerName = {
   display: 'inline-block',
   color: '#bebebe',
   margin: '5px 10px'
+}
+
+const smallButtonStyle = {
+  fontSize: '.75em',
+  padding: '0 10px',
+  margin: '0 10px'
 }
