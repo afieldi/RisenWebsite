@@ -1,15 +1,15 @@
 const fetch = require("node-fetch");
-const Code = require('../models/code.model');
+const CodeModel = require('../models/code.model');
 
 async function generateCodes(count, callback) {
   const codes = await requestMatchCodes(count, process.env.TOURNEY_ID);
   callback(codes);
   for (const code of codes) {
-    let codeInst = await Code.findOne({
+    let codeInst = await CodeModel.findOne({
       "code": code
     });
     if ( codeInst === null ) {
-      Code.create({
+      CodeModel.create({
         "code": code
       })
     }

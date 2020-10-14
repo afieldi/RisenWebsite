@@ -1,5 +1,5 @@
 // Just generates dummy data for testing
-const { leagueApi } = require('./api')
+const { leagueApi, constants } = require('./api')
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -28,7 +28,7 @@ async function genMyStuff() {
 
 
     async function addPlayer(accountId, team) {
-        const summoner = await leagueApi.Summoner.gettingByAccount(accountId);
+        const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
         const player = await PlayerModel.create({
             accountId: accountId,
             name: summoner.name

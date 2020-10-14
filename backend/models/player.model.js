@@ -13,6 +13,7 @@ const playerSchema = new Schema({
     name: {
         type: String
     },
+    notes: { type: String },
     teams: [{type: Schema.Types.ObjectId, ref: 'Team'}]
 }, {
     timestamps: true,

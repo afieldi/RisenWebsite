@@ -20,6 +20,13 @@ const teamSchema = new Schema({
     timestamps: true,
 });
 
+teamSchema.methods.addPlayer = function addPlayer(playerObject) {
+    if (this.players.includes(playerObject._id)) {
+        return;
+    }
+    this.players.push(playerObject);
+}
+
 const Team = mongoose.model('Team', teamSchema);
 
 module.exports = Team;

@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const process = require('process');
+const {argv} = require('yargs');
 
 function getGuildRoles(roleMap, callback) {
   fetch(`https://discord.com/api/guilds/${process.env.DISCORD_SERVER_ID}/roles`, {
@@ -40,7 +41,13 @@ function getGuildUser(userId, callback) {
 
 function exchangeCode(req, code, callback) {
   let redirect = req.headers.host + "/auth/callback";
-  if(req.connection.encrypted) {
+  // if(req.connection.encrypted) {
+  //   redirect = "https://" + redirect;
+  // }
+  // else {
+  //   redirect = "http://" + redirect;
+  // }
+  if (process.env.NODE_ENV === "production") {
     redirect = "https://" + redirect;
   }
   else {

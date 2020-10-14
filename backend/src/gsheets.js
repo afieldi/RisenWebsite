@@ -79,8 +79,9 @@ function loadMatches(scheduleSheet, seasonDO) {
   }
 }
 
-async function loadXlFile(path, season) {
-  const wb = XLSX.readFile(path);
+async function loadXlFile(buffer, season) {
+  console.log(typeof buffer)
+  const wb = XLSX.read(buffer);
   // console.log(wb);
   let teamSheetName = '';
   let scheduleSheetName = '';

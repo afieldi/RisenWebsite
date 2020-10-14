@@ -33,7 +33,7 @@ router.route("/redirect").get((req, res) => {
   const client_id = process.env.DISCORD_CLIENT_ID;
 
   let redirect = req.headers.host + "/auth/callback";
-  if(req.connection.encrypted) {
+  if(process.env.NODE_ENV === "production") {
     redirect = "https%3A%2F%2F" + redirect;
   }
   else {

@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const http = require('http');
-const process = require('process')
+const process = require('process');
 const {argv} = require('yargs');
 
 const draft = require('./src/draft');
@@ -12,7 +12,11 @@ const draft = require('./src/draft');
 
 let envFile = ".env.development";
 if (argv.prod) {
+    process.env.NODE_ENV = 'production';
     envFile = ".env.production";
+}
+else {
+    process.env.NODE_ENV = 'development';
 }
 require('dotenv').config({path: envFile});
 
