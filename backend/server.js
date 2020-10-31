@@ -56,7 +56,7 @@ app.use('/stats', statsRouter);
 app.use('/codes', codesRouter);
 app.use('/draft', draftRouter);
 app.use('/auth', authRouter);
-app.use('/season', seasonRouter);
+app.use('/seasons', seasonRouter);
 
 app.route("/").get((req, res) => {
     res.status(200).send("Hello World").end();

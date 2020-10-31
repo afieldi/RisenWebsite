@@ -48,6 +48,16 @@ export default class Roster extends Component {
     console.log(seasonName);
   }
 
+  saveTeam() {
+    let url = process.env.REACT_APP_BASE_URL + "/teams";
+    fetch(url, {
+      method: "PUT",
+      body: JSON.stringify(this.state.modalTeam)
+    }).then(data => {
+      console.log(data);
+    })
+  }
+
   render() {
     return (
       <section>
@@ -64,6 +74,11 @@ export default class Roster extends Component {
                 </div>
               </div>
             </div>
+            {
+              this.context === 1 ? 
+              <Button>Add New Team</Button>
+              : null
+            }
             {
               Object.keys(this.state.teams).map(division => {
                 return (
@@ -160,7 +175,7 @@ export default class Roster extends Component {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <Button type="button" className="btn btn-primary" onClick={(() => {console.log(this.state.modalTeam)}).bind(this)}>Save changes</Button>
+                <Button type="button" className="btn btn-primary" onClick={this.saveTeam.bind(this)}>Save changes</Button>
               </div>
             </div>
           </div>

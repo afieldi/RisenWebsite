@@ -45,19 +45,55 @@ router.route('/:teamshort/:season').put((req, res) => {
     }).catch(err => res.status(404).json("Couldn't find season: " + err));
 });
 
-router.route('/add').post((req, res) => {
+router.route('/').post((req, res) => {
     const teamname = req.body.teamname;
     const teamshortname = req.body.teamshortname;
+    const division = req.body.division;
+    const seasonId = req.body.seasonId;
 
-    const newTeam = new Team({
-        teamname: teamname,
-        teamshortname: teamshortname
-    });
-
-    newTeam.save()
-    .then(() => res.json(newTeam))
-    .catch(err => res.status(400).json('Error: ' + err));
+    Season.findById(seasonId).then((season) => {
+        if (season != null) {
+            const newTeam = new Team({
+                teamname: teamname,
+                teamshortname: teamshortname,
+                division: division,
+                season: season
+            });
+            newTeam.save()
+                .then(() => res.json(newTeam))
+                .catch(err => res.status(400).json('Error: ' + err));
+        }
+        else {
+            res.json("Season does not exist");
+        }
+    }).catch((error) => {res.json(error)});
 });
+
+router.route("/").put((req, res) => {
+    const teamId = req.body.teamId;
+    Team.findById(teamId).then((team) => {
+        if (team !== null) {
+            if (req.body.teamname) { team.teamname = req.body.teamname; }
+            if (req.body.teamshortname) { team.teamshortname = req.body.teamshortname; }
+            if (req.body.division) { team.division = req.body.division; }
+            if (req.body.seasonId) {
+                Season.findById(req.body.seasonId).then((season) => {
+                    if (season !== null) {
+                        team.season = season;
+                    }
+                    team.save()
+                        .then(() => res.json(team))
+                        .catch(err => res.status(400).json('Error: ' + err));
+                })
+            }
+            else {
+                team.save()
+                    .then(() => res.json(team))
+                    .catch(err => res.status(400).json('Error: ' + err));
+            }
+        }
+    })
+})
 
 router.route('/add/player').post((req, res) => {
     const playername = req.body.player;

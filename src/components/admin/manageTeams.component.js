@@ -16,7 +16,7 @@ export default class ManageTeams extends Component {
     }
 
     getActiveSeasons() {
-        const url = process.env.REACT_APP_BASE_URL + "/season/active";
+        const url = process.env.REACT_APP_BASE_URL + "/seasons/active";
         fetch(url).then(data => {
             data.json().then(activeSeasons => {
                 this.setState({
@@ -30,7 +30,7 @@ export default class ManageTeams extends Component {
         const ele = document.getElementById('seasonName');
         // console.log(ele.value);
         // return;
-        const url = process.env.REACT_APP_BASE_URL + '/season/' + ele.value;
+        const url = process.env.REACT_APP_BASE_URL + '/seasons/' + ele.value;
         fetch(url).then(data => {
             data.json().then(season => {
                 this.setState({
