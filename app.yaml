@@ -1,0 +1,15 @@
+runtime: nodejs12
+service: website
+
+handlers:
+  - url: /riot\.txt
+    static_files: build/riot.txt
+    upload: build/riot\.txt
+  - url: /static
+    static_dir: build/static
+  - url: /
+    static_files: build/index.html
+    upload: build/index.html
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html

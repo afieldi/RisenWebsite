@@ -1,5 +1,5 @@
 // require('dotenv').config();
-const { leagueApi } = require('./api');
+const { leagueApi, constants } = require('./api')
 const { verifyPlayer } = require('./player')
 const {spawn} = require('child_process');
 const mongoose = require('mongoose');
@@ -35,21 +35,37 @@ async function saveGames(matchIds) {
 
 async function getRoles(gameData, timeline) {
     return new Promise( (resolve, reject) => {
-        const python = spawn('python', ['./src/roles.py']);
-        
-        python.stdin.write(JSON.stringify(gameData));
-        python.stdin.write("\r\n");
-        python.stdin.write(JSON.stringify(timeline));
-        python.stdin.end();
-        
-        python.stdout.on('data', function (data) {
-            resolve(JSON.parse(data.toString()));
-        });
+    //     const python = spawn('python', ['./src/roles.py']);
+    //     python.stdin.write(JSON.stringify(gameData));
+    //     python.stdin.write("\r\n");
 
-        python.stdout.on('error', (data) => {
-            reject();
+    //     python.stdin.write(JSON.stringify(timeline));
+    //     python.stdin.end();
+        
+    //     python.stdout.on('data', function (data) {
+    //         console.log(data);
+    //         resolve(data);
+    //     });
+
+    //     python.stdout.on('error', (data) => {
+    //         reject();
+    //     })
+    // The above stuff involving running python doesn't work with GCP as you can't have nodejs and python at the same time
+    // So instead just return filler stuff so nothing else has to be changed. Anything involving role will have to be commented out
+    //  on the front end as well.
+        resolve({
+            "1": "MIDDLE",
+            "2": "MIDDLE",
+            "3": "MIDDLE",
+            "4": "MIDDLE",
+            "5": "MIDDLE",
+            "6": "MIDDLE",
+            "7": "MIDDLE",
+            "8": "MIDDLE",
+            "9": "MIDDLE",
+            "10": "MIDDLE"
         })
-    })
+    });
 
 }
 
@@ -60,12 +76,15 @@ async function saveGame(matchId) {
         return;
     }
     // TODO: change this to tourney
-    await leagueApi.Match.gettingById(matchId).then(
+    await leagueApi.Match.get(matchId, constants.Regions.AMERICA_NORTH).then(
         async gameData => {
+            gameData = gameData.response;
             const teams = await getTeams(gameData.participantIdentities);
-            const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            // const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            const timeline = (await leagueApi.Match.timeline(matchId, constants.Regions.AMERICA_NORTH)).response;
             // const laneAssignments = roles.getRoles(gameData, timeline);
             const laneAssignments = await getRoles(gameData, timeline);
+
             const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
 
             for (const [i, player] of Object.entries(gameData.participants)) {
@@ -199,9 +218,9 @@ async function getTeams(participants) {
     const teams1 = await PlayerModel.find(
         { 'accountId': { "$in": ids } }
     );
-
+    
     const team1 = getTeam(teams1);
-           
+    
     // participants has already been spliced
     ids = participantsCopy.map((p) => {
         return p.player.accountId;
@@ -271,7 +290,8 @@ saveGames([
     3490184363,
     3490068881,
     3490123843,
-    3489994608
+    3489994608,
+    // 3516542892
 ]).then(() => {
     console.log("donezo")
 });

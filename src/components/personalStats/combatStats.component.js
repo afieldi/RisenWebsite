@@ -194,16 +194,16 @@ export default class CombatStats extends Component {
                 <Container>
                     <div className="row">
                         <div className="col-md-6">
-                            <div className="risen-stats-block">
+                            <div className="risen-stats-block text-light">
                                 <div className="risen-stats-header">
                                     <div className="row">
-                                        <div className="col-8">
+                                        <div className="col-8" style={centerTitleStyle}>
                                             <h3>Offensive Stats</h3>
                                         </div>
                                         <div className="col-md-4">
                                             <Form.Group controlId="offensiveType">
                                                 <Form.Label>Type</Form.Label>
-                                                <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateOffensiveStats.bind(this)} >
+                                                <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateOffensiveStats.bind(this)} >
                                                     <option value="TOTAL">Total</option>
                                                     <option value="AVG">Average</option>
                                                 </Form.Control>
@@ -230,16 +230,16 @@ export default class CombatStats extends Component {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <div className="risen-stats-block">
+                            <div className="risen-stats-block text-light">
                                 <div className="risen-stats-header">
                                     <div className="row">
-                                        <div className="col-8">
+                                        <div className="col-8" style={centerTitleStyle}>
                                             <h3>Defensive Stats</h3>
                                         </div>
                                         <div className="col-md-4">
                                             <Form.Group controlId="defensiveType">
                                                 <Form.Label>Type</Form.Label>
-                                                <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateDefensiveStats.bind(this)}>
+                                                <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateDefensiveStats.bind(this)}>
                                                     <option value="TOTAL">Total</option>
                                                     <option value="AVG">Average</option>
                                                 </Form.Control>
@@ -312,4 +312,9 @@ export default class CombatStats extends Component {
             </section>
         )
     }
+}
+
+const centerTitleStyle = {
+    display: 'flex',
+    alignItems: 'center'
 }

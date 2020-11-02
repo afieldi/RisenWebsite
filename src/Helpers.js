@@ -11,7 +11,34 @@ export function matchDict(dict1, dict2) {
     return true;
 }
 
-export function getBaseUrl() {
-    // return "99.79.193.118:5000";
-    return "http://localhost:5000"
+export function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+export function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+// Get color code by strength level, 5 is highest, 1 is lowest
+export function getTextColorByLevel(level) {
+    const map = [
+        "#ff2121",
+        "#ff9e1d",
+        "#ffffff",
+        "#05aaff",
+        "#3eff05"
+    ]
 }

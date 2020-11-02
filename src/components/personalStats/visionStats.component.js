@@ -106,11 +106,11 @@ export default class VisionStats extends Component {
         <Container>
           <div className="row">
             <div className="col-md">
-              <div className="risen-stats-block">
+              <div className="risen-stats-block text-light">
                 <div className="risen-stats-header">
                   <h3>Early Stats</h3>
                   <Form.Group controlId="earlyType">
-                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateEarlyStats.bind(this)}>
+                    <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateEarlyStats.bind(this)}>
                       <option value="TOTAL">Total</option>
                       <option value="AVG">Average</option>
                     </Form.Control>
@@ -135,11 +135,11 @@ export default class VisionStats extends Component {
               </div>
             </div>
             <div className="col-md">
-              <div className="risen-stats-block">
+              <div className="risen-stats-block text-light">
                 <div className="risen-stats-header">
                   <h3>General Stats</h3>
                   <Form.Group controlId="generalType">
-                    <Form.Control as="select" defaultValue="TOTAL" onChange={this.aggregateGeneralStats.bind(this)}>
+                    <Form.Control as="select" defaultValue="AVG" onChange={this.aggregateGeneralStats.bind(this)}>
                       <option value="TOTAL">Total</option>
                       <option value="AVG">Average</option>
                     </Form.Control>

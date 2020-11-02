@@ -5,7 +5,7 @@ import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { Link } from 'react-router-dom'
-import { customRound, getBaseUrl } from '../Helpers';
+import { customRound } from '../Helpers';
 
 
 export default class Overview extends Component {
@@ -14,36 +14,38 @@ export default class Overview extends Component {
         this.filters = {
             "lane": "",
             "name": ""
-        }
+        };
+        this.sort = "_id.sortablePlayer+"
         this.lastLoadedPage = 0;
         this.loadingData = false;
         this.state = {
             statData: [],
             filteredData: []
         }
-        this.getData();
     }
 
-    getData(lane = null, player = null, page = 1, load=true, append=false) {
+    getData(page = 1, load=true, append=false) {
         if (this.loadingData) {
             return;
         }
         this.loadingData = true;
         this.lastLoadedPage = page;
-        let url = getBaseUrl() + `/stats/brief`;
+        let url = process.env.REACT_APP_BASE_URL + `/stats/brief`;
         url += `?page=${page}&size=${20}`;
-        if(lane) {
-            url += '&lane=' + lane;
+        if(this.filters.lane) {
+            url += '&lane=' + this.filters.lane;
         }
-        if (player) {
-            url += "&player=" + player;
+        if (this.filters.name) {
+            url += "&player=" + this.filters.name;
         }
+        url += "&sort=" + this.sort;
+        // url += "&sort=_id.sortablePlayer-"
         fetch(url).then((data) => {
             this.loadingData = false;
             data.json().then(data => {
                 console.log(data);
-                data = this.sortData(data, "lane", "DESC");
-                
+                // data = this.sortData(data, "lane", "DESC");
+
                 if (append) {
                     this.state.statData = this.state.statData.concat(data)
                 }
@@ -74,7 +76,7 @@ export default class Overview extends Component {
 
     filterName() {
         let name = document.getElementById("nameFilter").value;
-        this.state.filteredData = this.state.filteredData.filter(item => item._id.player[0].startsWith(name));
+        this.state.filteredData = this.state.filteredData.filter(item => item._id.player.startsWith(name));
     }
 
     filterData() {
@@ -82,36 +84,50 @@ export default class Overview extends Component {
         //  1. To be sync
         //  2. Not to reload the page. That will be done later
         const name = document.getElementById("nameFilter").value ? document.getElementById("nameFilter").value : null;
-        this.getData(this.filters.lane, name, 1, true, false);
+        this.filters.name = name;
+        this.getData(1, true, false);
 
         // Reload state as the above functions change it
         // this.setState({});
     }
 
-    sortData(data, attr, direction) {
-        return data.sort((a, b) => {
-            let res = 0;
-            // Handle special cases where either the stats are a string or 
-            //   can't be accessed by a simple attr accessor
-            if (attr === "wr") {
-                res = a.wins/a.total_games - b.wins/b.total_games;
-            }
-            else if (attr === "lane" ) {
-                res = a._id.lane.localeCompare(b._id.lane);
-            }
-            else if (attr === "name" ) {
-                res = a._id.player[0].localeCompare(b._id.player[0]);
+    sortData(sortCol) {
+        if(this.sort.startsWith(sortCol)) {
+            if(this.sort.endsWith("+")) {
+                this.sort = sortCol + "-";
             }
             else {
-                res = a[attr] - b[attr];
+                this.sort = sortCol + "+";
             }
-            return direction === "ASC" ? res : res * -1;
-        })
+        }
+        else {
+            this.sort = sortCol + "-";
+        }
+        this.getData();
     }
 
-    
+    // sortData(data, attr, direction) {
+    //     return data.sort((a, b) => {
+    //         let res = 0;
+    //         // Handle special cases where either the stats are a string or
+    //         //   can't be accessed by a simple attr accessor
+    //         if (attr === "wr") {
+    //             res = a.wins/a.total_games - b.wins/b.total_games;
+    //         }
+    //         else if (attr === "lane" ) {
+    //             res = a._id.lane.localeCompare(b._id.lane);
+    //         }
+    //         else if (attr === "name" ) {
+    //             res = a._id.player.localeCompare(b._id.player);
+    //         }
+    //         else {
+    //             res = a[attr] - b[attr];
+    //         }
+    //         return direction === "ASC" ? res : res * -1;
+    //     })
+    // }
 
-    getPositonalIcon(position) {
+    getPositionalIcon(position) {
         switch (position) {
             case "TOP":
                 return (<img src={topLaneIcon} alt="Top Lane"></img>)
@@ -130,98 +146,117 @@ export default class Overview extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("scroll", () => {
-            let max = document.documentElement.scrollHeight || document.body.scrollHeight;
-            max -= document.documentElement.clientHeight || document.body.clientHeight;
-            const scroll = document.documentElement.scrollTop || document.body.scrollTop;
-            if (scroll / max > .9) {
-                // console.log(this.lastLoadedPage);
-                this.getData(null, null, this.lastLoadedPage + 1, true, true);
-            }
-        })
+        this.getData();
+        document.addEventListener("scroll", this.scrollFunction.bind(this));
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("scroll", this.scrollFunction.bind(this));
+    }
+
+    scrollFunction() {
+        let max = document.documentElement.scrollHeight || document.body.scrollHeight;
+        max -= document.documentElement.clientHeight || document.body.clientHeight;
+        const scroll = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scroll / max > .9) {
+            // console.log(this.lastLoadedPage);
+            this.getData(this.lastLoadedPage + 1, true, true);
+        }
     }
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-6">
-                        <div className="btn-group risen-radio" data-toggle="buttons">
-                            {/* TODO: Change these onClick functions */}
-                            <label className="btn btn-light">
-                                <input type="radio" name="options" id="option1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositonalIcon("TOP")}
-                            </label>
-                            <label className="btn btn-light">
-                                <input type="radio" name="options" id="option2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("JUNGLE")}
-                            </label>
-                            <label className="btn btn-light">
-                                <input type="radio" name="options" id="option3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositonalIcon("MIDDLE")}
-                            </label>
-                            <label className="btn btn-light">
-                                <input type="radio" name="options" id="option4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositonalIcon("BOTTOM")}
-                            </label>
-                            <label className="btn btn-light">
-                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositonalIcon("SUPPORT")}
-                            </label>
-                            <label className="btn btn-light">
-                                <input type="radio" name="options" id="option5" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
-                            </label>
-                        </div>
-                    </div>
-                    <div className="col-lg">
-                        {/* <input type="text" id="nameFilter" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Player Name" onChange={this.filterData.bind(this)}></input> */}
-                        <form onSubmit={this.submitSearch.bind(this)}>
-                            <div className="input-group mb-3 bg-light">
-                                <input type="text" class="form-control"
-                                        placeholder="Recipient's username" aria-label="Recipient's username"
-                                        aria-describedby="button-addon2" id="nameFilter" ></input>
-                                <div className="input-group-append text-dark">
-                                    <button className="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+            <section>
+                <div className="dark-section">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">
+                                    {/* TODO: Change these onClick functions */}
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role1" onClick={(() => {this.filters.lane = "TOP"; this.filterData()}).bind(this)} />{this.getPositionalIcon("TOP")}
+                                    </label>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role2" onClick={(() => {this.filters.lane = "JUNGLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("JUNGLE")}
+                                    </label>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role3" onClick={(() => {this.filters.lane = "MIDDLE"; this.filterData()}).bind(this)} />{this.getPositionalIcon("MIDDLE")}
+                                    </label>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role4" onClick={(() => {this.filters.lane = "BOTTOM"; this.filterData()}).bind(this)} />{this.getPositionalIcon("BOTTOM")}
+                                    </label>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role5" onClick={(() => {this.filters.lane = "SUPPORT"; this.filterData()}).bind(this)} />{this.getPositionalIcon("SUPPORT")}
+                                    </label>
+                                    <label className="btn btn-dark white-hover" style={spaceButtons}>
+                                        <input type="radio" name="options" id="role6" onClick={(() => {this.filters.lane = null; this.filterData()}).bind(this)} />All
+                                    </label>
                                 </div>
                             </div>
-                        </form>
+                            <div className="col-lg">
+                                <form onSubmit={this.submitSearch.bind(this)}>
+                                    <div class="input-group mb-3 text-light">
+                                        <input type="text" class="form-control bg-dark text-light"
+                                                placeholder="Summoner Name" aria-label="Summoner Name"
+                                                aria-describedby="button-addon2" id="nameFilter" ></input>
+                                        <div class="input-group-append text-light bg-secondary">
+                                            <button class="btn btn-outline-dark text-light" type="submit" id="button-addon2">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <table className="table table-responsive-lg risen-table sticky-top table-striped">
+                            <thead>
+                                <tr>
+                                {/* <th scope="col" className="center">Rank</th> */}
+                                <th scope="col" className="clickable" onClick={this.sortData.bind(this, "_id.sortablePlayer")}>Summoner Name</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "_id.lane")}>Lane</th>
+                                <th scope="col" className="center clickable">Win Rate</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_kills")}>Kills</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_deaths")}>Deaths</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_assists")}>Assists</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_gold")}>Gold</th>
+                                {/*<th scope="col" className="center clickable">CS</th>*/}
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_damage")}>Damage</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "total_games")}>Games</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.filteredData.map((item, index) => {
+                                        return (
+                                            <tr key={"overviewStats-" + index}>
+                                                {/* <td scope="row" className="risen-datum center">{index + 1}</td> */}
+                                                <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player}`} style={whiteText}>{item._id.player}</Link></td>
+                                                <td className="center" name="laneCol">{item._id.lane}</td>
+                                                <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
+                                                <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
+                                                <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
+                                                <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
+                                                <td className="center" name="goldCol">{customRound(item.avg_gold)}</td>
+                                                {/*<td className="center" name="csCol">{customRound(item.avg_cs)}</td>*/}
+                                                <td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>
+                                                <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
-                    <thead>
-                        <tr>
-                        <th scope="col" className="center">Rank</th>
-                        <th scope="col">Summoner</th>
-                        <th scope="col" className="center">Lane</th>
-                        <th scope="col" className="center">Win Rate</th>
-                        <th scope="col" className="center">Kills</th>
-                        <th scope="col" className="center">Deaths</th>
-                        <th scope="col" className="center">Assists</th>
-                        <th scope="col" className="center">Gold</th>
-                        <th scope="col" className="center">CS</th>
-                        <th scope="col" className="center">Damage</th>
-                        <th scope="col" className="center">Games</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.filteredData.map((item, index) => {
-                                return (
-                                    <tr key={"overviewStats-" + index}>
-                                        <td scope="row" className="risen-datum center">{index + 1}</td>
-                                        <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player[0]}`} >{item._id.player[0]}</Link></td>
-                                        <td className="center" name="laneCol">{item._id.lane}</td>
-                                        <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
-                                        <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
-                                        <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
-                                        <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
-                                        <td className="center" name="goldCol">{customRound(item.avg_gold)}</td>
-                                        <td className="center" name="csCol">{customRound(item.avg_cs)}</td>
-                                        <td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>
-                                        <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
-                                    </tr>
-                                )
-                            })
-                        }
-                        
-                    </tbody>
-                </table>
-            </div>
+            </section>
         )
     }
+}
+
+const spaceButtons = {
+    width: '20%',
+    backgroundColor: '#111111'
+}
+
+const whiteText = {
+    color: '#fff'
 }

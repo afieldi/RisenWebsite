@@ -1,51 +1,53 @@
 {
     "home": {
-        "whoAreWe": "We are an amateur esports organization that strives to bring competitive League of Legends to all skill levels. Started in March of 2017 by a soon-to-be college graduate named Travis Guyer, Risen eSports quickly grew. What started as two leagues of 10 teams each quickly became 4 leagues of varying size - for a total of 72 teams and over 400 players. With more growth on the horizon, Risen eSports continues to work hard to bring quality and fun to the community and players."
+        "whoAreWe": "We are an amateur esports organization that strives to bring competitive League of Legends to all skill levels. Started in March of 2017 by a soon-to-be college graduate named Travis Guyer, Risen eSports quickly grew. What started as two leagues of 10 teams each quickly became 4 leagues of varying size - for a total of 72 teams and over 400 players. With more growth on the horizon, Risen eSports continues to work hard to bring quality and fun to the community and players.",
+        "leagueData": "Currently Risen is not hosting any TFT or Valorant seasons, but instead hosting shorter team tournaments. Join the discord and stay up to date!",
+        "goodies": "At Risen there is plenty going on that extends beyond just the actual games occuring. There is an entire community that has been built. There is the official Risen Twitch channel that shows exciting games every week as well as Risen members independent streams. On top of this Risen creates articles that can help you keep up to date and interested about what is happening. If you want something more personal, head over to our stats page and you will be able to see how you have been doing in our leagues as well as how you and your team match up numerically!"
     },
     "contact": {
-        "blurb": "Here is the information you need to get in contact with the appropriate person. Generally, we all use the same Risen email account (Risenbusiness@gmail.com), so it is best to include the party you intend to contact in the subject line. For example, \"[Bestrin] Missing Discord Role?\"\n\n If requiring a single person, or a more rapid response, either direct discord messages or sending a message in the #staff-help channel of the Risen Offical Discord is best.",
+        "blurb": "Here is the information you need to get in contact with the appropriate person. Even though email information is provided, you will get a much quicker response by reaching out to any of these people via Discord direct message. Don't be shy! We'll help out to the best of our ability.",
         "people": [
             {
                 "title": "President / Chief Technical Officer",
-                "name": "Travis \"Travyburr\" Guyer",
+                "name": "Travis Guyer",
                 "responsibilities": "Business Inquiries, Technical Inquiries, general knowledge/questions",
                 "email": "Risenbusiness@gmail.com",
-                "discord": "Travyburr#6119"
+                "discord": "RSN Travis#6119"
             },
             {
-                "title": "Champions League / Discord Moderation",
-                "name": "Brett \"Bestrin\"",
-                "responsibilities": "Champions & Alumnus inquiries, Discord issues, general questions",
-                "email": "Risenbusiness@gmail.com",
-                "discord": "Bestrin#8881"
-            },
-            {
-                "title": "Graphic Design",
-                "name": "Corey \"Macros2308\"",
-                "responsibilities": "Graphic design inquiries",
-                "email": "Risenbusiness@gmail.com",
-                "discord": "Macros2308#4233"
-            },
-            {
-                "title": "Stream/Broadcast Management",
+                "title": "Broadcast Manager",
                 "name": "Joe \"Randojoe\"",
-                "responsibilities": "General quetions, articles, events",
+                "responsibilities": "Stream/Broadcast inquiries, casting inquiries, general questions",
                 "email": "Risenbusiness@gmail.com",
                 "discord": "Randojoe#6148"
             },
             {
-                "title": "Player Rosters",
-                "name": "Itchy Rat",
-                "responsibilities": "Roster inquiries and questions",
+                "title": "Partnership Manager / Event Coordinator / Social Media",
+                "name": "Julia \"Focùs\"",
+                "responsibilities": "Partnership/sponsorship inquiries, Social media questions, event inquiries",
                 "email": "Risenbusiness@gmail.com",
-                "discord": "itchy rat#3276"
+                "discord": "Focùs#0213"
             },
             {
-                "title": "Player Rosters",
-                "name": "Hurtnandez",
-                "responsibilities": "Roster inquiries and questions",
+                "title": "Discord Moderation",
+                "name": "Brett \"Bestrin\"",
+                "responsibilities": "Discord moderation, player behavior issues, general questions",
                 "email": "Risenbusiness@gmail.com",
-                "discord": "hurtnandez#0009"
+                "discord": "Bestrin#8881"
+            },
+            {
+                "title": "Head of Roster Management",
+                "name": "Cole",
+                "responsibilities": "Roster issues, player behavior issues, general questions",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "Cole#0004"
+            },
+            {
+                "title": "Roster Management",
+                "name": "Richard \"Kruckow\"",
+                "responsibilities": "Roster issues, player behavior issues, general questions",
+                "email": "Risenbusiness@gmail.com",
+                "discord": "Kruckow#7167"
             }
         ]
     },
@@ -56,7 +58,7 @@
             "peak": "Gold 1",
             "img": "rampage.png",
             "blurb": "Competitive 5v5 action for players in the Gold/Silver skill range",
-            "longBlurb": "Rampage is our league for players in the Silver/Gold skill range. \n\n Rampage is for Summoners that are low-mid elo and want to have fun playing in an organized environment. As a Rampage player, you have nowhere to go but up. Playing in this league just might be the catalyst for your overall improvement in League of Legends!",
+            "longBlurb": "Rampage is our league for players in the Silver/Gold skill range. \n\n Rampage is for Summoners that are low-mid elo and want to have fun playing in an organized environment. As a Rampage player, you have nowhere to go but up. Playing in one of these leagues might be the catalyst for your overall improvement in League of Legends!",
             "subLeagues": [
                 {
                     "prettyName": "Rampage Open",
@@ -69,8 +71,8 @@
                     "prettyName": "Rampage Premade",
                     "ranks":"Silver - Gold",
                     "peak":"Gold 1",
-                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league.",
-                    "blurb": "Get 4 friends together and compete against other premade teams. Up to 10 players can sign-up on a single team."
+                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strategies you can come up with to win!",
+                    "blurb": "Get a roster of at least 5 players together and compete against other teams in Rampage Premade. Up to 10 players can be on a single team."
                 }
             ]
         },
@@ -80,14 +82,14 @@
             "peak": "Platinum 1",
             "img": "rampage.png",
             "blurb": "Competitive 5v5 action for players in the Platinum skill range",
-            "longBlurb": "Unstoppable is our league for players in the Platiunum skill range.\n\n Unstoppable is a relativly new league in Risen Esports. Whether you’re an open or premade player, you’ll get to interact with an awesome and very active community, and improve alongside your teammates. Many of our past Unstoppable players have had success climbing in solo queue and say that Risen played a part in them getting better at League of Legends.",
+            "longBlurb": "Unstoppable is our league for players in the Platiunum skill range.\n\n Unstoppable is a relatively new league in Risen Esports. It was created to provide a competitive 5v5 for Platinum players who aren't quite ready to step into the more demanding Dominate Leagues yet. Unstoppable Premade is one of our most popular events.",
             "subLeagues": [
                 {
                     "prettyName": "Unstoppable Premade",
                     "ranks":"Silver - Gold",
-                    "peak":"Gold 1",
-                    "longBlurb": "",
-                    "blurb": "Sign up on your own or with a friend and compete with a new team!"
+                    "peak":"Platinum 1",
+                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
+                    "blurb": "Get a roster of at least 5 players together and compete against other teams in Unstoppable Premade. Up to 10 players can be on a single team."
                 }
             ]
         },
@@ -97,7 +99,7 @@
             "peak": "Diamond",
             "img": "dominate.png",
             "blurb": "Competitive 5v5 action for players in the Platinum/Diamond skill range",
-            "longBlurb": "Dominate is our league for players in the Platiunum/Diamond skill range.\n\nDominate is our most popular league in Risen Esports. Whether you’re an open or premade player, you’ll get to interact with an awesome and very active community, and improve alongside your teammates. Many of our past Dominate players have had success climbing in solo queue and say that Risen played a part in them getting better at League of Legends.",
+            "longBlurb": "Dominate is our league for players in the Platiunum/Diamond skill range.\n\n Whether you’re an open or premade player, you’ll get to interact with an awesome and very active community, and improve alongside your teammates. Many of our past Dominate players have had success climbing in solo queue and say that Risen played a part in them getting better at League of Legends.",
             "subLeagues": [
                 {
                     "prettyName": "Dominate Open",
@@ -110,42 +112,42 @@
                     "prettyName": "Dominate Premade",
                     "ranks":"Platinum - Diamond",
                     "peak":"Diamond 2",
-                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league.",
-                    "blurb": "Get 4 friends together and compete against other premade teams. Up to 10 players can sign-up on a single team."
+                    "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
+                    "blurb": "Get a roster of at least 5 players together and compete against other teams in Dominate Premade. Up to 10 players can be on a single team."
                 }
             ]
         },
         "divine": {
-            "prettyName": "Divine Leagues",
+            "prettyName": "Divine League",
             "ranks": "Diamond",
             "peak": "Diamond 1",
-            "img": "champions.png",
-            "blurb": "Competitive 5v5 action for players in the Gold/Silver skill range",
-            "longBlurb": "",
+            "img": "dominate.png",
+            "blurb": "Competitive, high-stakes 5v5 action for players in the Diamond skill range",
+            "longBlurb": "This is a new league aimed at players who have previously participated in Dominate Premade or an equivalent skill level league but are looking for higher stake matches. Capped at Dimaond 1 Divine League has a pay-in fee as well as an increased prize pool suitable for high-elo teams looking to prove their mettle.",
             "subLeagues": [
                 {
                     "prettyName": "Divine Premade",
-                    "ranks":"Silver - Gold",
-                    "peak":"Gold 1",
-                    "longBlurb": "",
-                    "blurb": "Sign up on your own or with a friend and compete with a new team!"
+                    "ranks":"Platinum - Diamond 1",
+                    "peak":"Diamond 1",
+                    "longBlurb": "Premade teams sign-up and are required to pay an entry fee to play. This fee goes towards the prize pool that is distrubuted to the winning teams at the end of the season.",
+                    "blurb": "Get a roster of at least 5 players together and compete against other teams in Divine Premade. Up to 10 players can be on a single team."
                 }
             ]
         },
         "champions": {
-            "prettyName": "Champions Leagues",
-            "ranks": "Diamond - Challenger",
-            "peak": "Challenger",
+            "prettyName": "Champions League - Scouting Grounds Circuit",
+            "ranks": "Master and above",
+            "peak": "Challenger (No rank cap)",
             "img": "champions.png",
-            "blurb": "Competitive 5v5 action for players in the Gold/Silver skill range",
-            "longBlurb": "Champions League is our premier eSports league, featuring some of the best teams outside of Riot sponsored events. It has a unique and interesting history, and is largely the product of an increase in demand for high-level events run by professional, knowledgeable, and motivated organizers. Over time, the average skill level of Champions League has gone up. Initially mid-plat average, it has since evolved from a mid-Plat skill level to high Diamond average teams.",
+            "blurb": "Competitive, high-stakes action for players in the Master and above skill range",
+            "longBlurb": "Champions League is the best of what we have to offer. This is our most prestigious event, and features some of the best teams outside of professional League of Legends.",
             "subLeagues": [
                 {
-                    "prettyName": "Champions Premade",
-                    "ranks":"Diamond - Challenger",
-                    "peak":"Challenger",
+                    "prettyName": "Champions League",
+                    "ranks":"Master and above",
+                    "peak":"Uncapped",
                     "longBlurb": "",
-                    "blurb": "Champions League will be invite/application only. After feedback from numerous people and teams, we’re also cutting down the length of the season to 10 weeks. Teams who are invited or who are accepted after the application process will need to pay a $75 fee to join the league. All of the fees will go towards the prize pool. We are anticipating 16 teams in Season 6 for a total prize pool of $1200. While there is no rank cap for Champions, we expect the average rank of teams to be around Diamond 2 or higher."
+                    "blurb": "Teams are accepted into Champions League via a vetting process by Risen administration. Even though we do accept applications for this league, Champions League is entry by invitation only. Teams with a history of success and a genuine commitment to competitive integrity are more likely to be accepted. That being said, don't be discouraged from filling out an application if you think your team has got what it takes to compete with some of the best players outside of professional League of Legends. If we think your team looks competitive, we'll be sure to reach out. For any additional information, please reach out to any of the Risen Admin team and we can point you in the right direction."
                 }
             ]
         }

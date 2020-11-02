@@ -16,28 +16,27 @@ export default class DetailedLeague extends Component {
     render() {
         return (
             <section>
-                <br></br>
-                <br></br>
-                <br></br>
-                <div className="light-section">
+                <div className="dark-section text-light">
                     <Container>
-                        <h1 className="center text-dark">{this.state.leagueData.prettyName}</h1>
-                        <hr className="risen-dark"></hr>
+                        <h1 className="center" style={titleColor}>{this.state.leagueData.prettyName}</h1>
+                        <hr className="risen-light"></hr>
+                        <img src={require('../images/' + this.state.leagueData.img)} style={iconStyle}></img>
                         <p className="center">{this.state.leagueData.longBlurb}</p>
+                        <hr></hr>
                         {
                             this.state.leagueData.subLeagues.map((league, index) => {
                                 return (
                                     <div key={index}>
                                         <div className="row">
                                             <div className="col">
-                                                <h3 className="center text-dark">{league.prettyName}</h3>
-                                                <hr className="risen-dark"></hr>
+                                                <h3 className="center" style={titleColor}>{league.prettyName}</h3>
+                                                <hr className="risen-light"></hr>
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-md-4">
+                                            {/* <div className="col-md-4">
                                                 <img src={require('../images/' + this.state.leagueData.img)} style={iconStyle}></img>
-                                            </div>
+                                            </div> */}
                                             <div className="col">
                                                 <p>{league.blurb}</p>
                                                 <p>{league.longBlurb}</p>
@@ -58,9 +57,13 @@ export default class DetailedLeague extends Component {
 
 const iconStyle = {
     // top: '10%',
-    width: '60%',
-    height: '100%',
+    // width: '60%',
+    // height: '100%',
     display: 'block',
     margin: 'auto',
     position: 'relative'
+}
+
+const titleColor = {
+    color: '#d6d6d6'
 }

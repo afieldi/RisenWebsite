@@ -5,13 +5,12 @@ import jngLaneIcon from '../images/roles/Position_Gold-Jungle.png';
 import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
-import { customRound, getBaseUrl } from '../Helpers';
-import { Button, Dropdown, Container, Form } from "react-bootstrap";
+import { customRound } from '../Helpers';
+import { Button, Container, Form } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
 import IncomeStats from "./personalStats/incomeStats.component";
 import VisionStats from "./personalStats/visionStats.component";
-
 
 let champMap = require('../data/champions_map.json');
 // let champions = require('../data/champions.json'); // oof. This is loading a lot of unneeded data
@@ -70,7 +69,7 @@ export default class DetailedStats extends Component {
         "Dmg/Gold": {shown: true, fnc: game => customRound(game["damagePerGold"])}
       }
     }
-    this.loadPlayerData(this.props.match.params.player);    
+    this.loadPlayerData(this.props.match.params.player);
   }
 
   computeAccStats(accStats, data) {
@@ -86,7 +85,7 @@ export default class DetailedStats extends Component {
       deaths += datum["deaths"];
       assists += datum["assists"];
       cs += datum["totalMinionsKilled"];
-      min += datum["gameDuration"] / 60
+      min += datum["gameDuration"] / 60;
     }
     accStats["wr"] = customRound(wins / accStats["games"] * 100, 2);
     accStats["kda"] = customRound((kills + assists) / deaths, 1);
@@ -94,9 +93,10 @@ export default class DetailedStats extends Component {
   }
 
   loadPlayerData(playerName) {
-    let url = getBaseUrl() + "/stats/player/name/" + playerName;
+    let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
+        console.log(data)
         let accStats = {
           "wr": 0,
           "games": 0,
@@ -167,7 +167,7 @@ export default class DetailedStats extends Component {
       }
       return true;
     });
-    
+
     this.setState({
       filteredData: filteredData
     });
@@ -176,12 +176,9 @@ export default class DetailedStats extends Component {
   render() {
     return (
       <section>
-        {/* <br></br>
-        <br></br>
-        <br></br> */}
-        <div className="light-section">
+        <div className="dark-section text-light">
           <div className="container">
-            
+
             {/* Basic Stats */}
             <nav>
               <div>
@@ -245,8 +242,8 @@ export default class DetailedStats extends Component {
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
-                                    <div className="col">
-                                      <Button className="btn risen-button" onClick={this.performFilter.bind(this)}>FILTER</Button>
+                                    <div className="col-md">
+                                      <Button className="btn filter-button" onClick={this.performFilter.bind(this)}>Filter</Button>
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +264,7 @@ export default class DetailedStats extends Component {
                 <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></VisionStats>
               </div>
             </div>
-            
+
           </div>
         </div>
       </section>

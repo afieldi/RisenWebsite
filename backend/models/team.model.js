@@ -6,7 +6,6 @@ const teamSchema = new Schema({
     teamname: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
         minlength: 3
     },
@@ -14,10 +13,19 @@ const teamSchema = new Schema({
         type: String,
         required: true
     },
-    players: [{type: Schema.Types.ObjectId, ref: 'Player'}]
+    division: { type: Number },
+    players: [{type: Schema.Types.ObjectId, ref: 'Player'}],
+    season: {type: Schema.Types.ObjectId, ref: 'Season'}
 }, {
     timestamps: true,
 });
+
+teamSchema.methods.addPlayer = function addPlayer(playerObject) {
+    if (this.players.includes(playerObject._id)) {
+        return;
+    }
+    this.players.push(playerObject);
+}
 
 const Team = mongoose.model('Team', teamSchema);
 

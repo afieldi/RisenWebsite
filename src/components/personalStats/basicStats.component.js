@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { customRound, getBaseUrl } from '../../Helpers';
+import { customRound } from '../../Helpers';
 import { Button, Dropdown, Container } from "react-bootstrap";
 import $ from 'jquery';
 
@@ -63,7 +63,7 @@ export default class BasicStats extends Component {
         }
         this.loadCompareData(this.props.player);
     }
-    
+
     shouldComponentUpdate(newProps, newState) {
         this.filteredData = newProps.playerData;
         this.computeAccStats();
@@ -98,7 +98,7 @@ export default class BasicStats extends Component {
     }
 
     loadCompareData(playerName) {
-        let url = getBaseUrl() + "/stats/player/name/" + playerName + "/agg"
+        let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName + "/agg"
         fetch(url).then((data) => {
           if (data.status != 200) {
             alert("Could not find summoner!");
@@ -107,8 +107,8 @@ export default class BasicStats extends Component {
           data.json().then(jsonData => {
             const playerData = jsonData[0];
             const newData = {}
-    
-            newData["Name"] = playerData._id.player[0];
+
+            newData["Name"] = playerData._id.player;
             newData["Kills"] = customRound(playerData["avg_kills"]);
             newData["Deaths"] = customRound(playerData["avg_deaths"]);
             newData["Assists"] = customRound(playerData["avg_assists"]);
@@ -122,8 +122,8 @@ export default class BasicStats extends Component {
             newData["Vision"] = customRound(playerData["avg_vision"]);
             newData["Wards killed"] = customRound(playerData["avg_wards_killed"]);
             newData["Win Rate"] = customRound((playerData["wins"] / playerData["total_games"]) * 100) + "%";
-    
-    
+
+
             this.setState({
               compData: this.state.compData.concat(newData)
             });
@@ -132,7 +132,7 @@ export default class BasicStats extends Component {
           alert("Could not find summoner!");
         })
       }
-    
+
       // This is an intermediate function so that loadCompareData can be kept general
       loadCompareDataFromSearch() {
         this.loadCompareData(document.getElementById("playerName").value);
@@ -140,30 +140,37 @@ export default class BasicStats extends Component {
 
     componentDidMount() {
         const where = this;
-        $('.dropdown-toggle').on('click', function(event) {
-          $('.dropdown-menu').slideToggle();
+        $('#optionsDropDownLink').on('click', function(event) {
+          $('#optionsDropDownMenu').slideToggle();
           event.stopPropagation();
         });
-      
-        $('.dropdown-menu').on('click', function(event) {
+
+        $('#optionsDropDownMenu').on('click', function(event) {
           event.stopPropagation();
         });
-    
+
         $('.dropdown-option').on('click', function(event) {
           where.handleGameCheck(event.target.getAttribute("name"));
         })
-      
+
         $(window).on('click', function() {
-          $('.dropdown-menu').slideUp();
+          $('#optionsDropDownMenu').slideUp();
         });
 
         // $('[data-toggle="tooltip"]').tooltip()
     }
 
+    removePlayerCompare(i) {
+        this.state.compData.splice(i, 1);
+        this.setState({
+            compData: this.state.compData
+        });
+    }
+
     handleGameCheck(option) {
         // let tempOptions = this.state.gameDataOptions;
         this.state.gameDataOptions[option].shown = !this.state.gameDataOptions[option].shown;
-    
+
         // Just reload the state
         this.setState({})
     }
@@ -175,27 +182,28 @@ export default class BasicStats extends Component {
                     <div className="row">
                         <div className="col">
                             <div className="risen-stats-block">
-                            <div className="risen-stats-header"><h3>General Stats</h3></div>
-                            <div className="risen-stats-body">
-                                <div className="row">
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["wr"]}%</div>
-                                    <div className="center risen-sub-label">Winrate</div>
+                                <div className="risen-stats-header"><h3>General Stats</h3></div>
+                                {/* <hr></hr> */}
+                                <div className="risen-stats-body">
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["wr"]}%</div>
+                                            <div className="center risen-sub-label">Winrate</div>
+                                        </div>
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["kda"]}</div>
+                                            <div className="center risen-sub-label">KDA</div>
+                                        </div>
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["cs"]}</div>
+                                            <div className="center risen-sub-label">CS/Min</div>
+                                        </div>
+                                        <div className="col-sm">
+                                            <div className="center">{this.accumulatedStats["games"]}</div>
+                                            <div className="center risen-sub-label">Games</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["kda"]}</div>
-                                    <div className="center risen-sub-label">KDA</div>
-                                </div>
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["cs"]}</div>
-                                    <div className="center risen-sub-label">CS/Min</div>
-                                </div>
-                                <div className="col-sm">
-                                    <div className="center">{this.accumulatedStats["games"]}</div>
-                                    <div className="center risen-sub-label">Games</div>
-                                </div>
-                                </div>
-                            </div>
                             </div>
                         </div>
                         </div>
@@ -206,28 +214,30 @@ export default class BasicStats extends Component {
                             <div className="risen-stats-block">
                                 <div className="risen-stats-header">
                                     <div className="row">
-                                        <div className="col">
-                                        <h3>Game Stats</h3>
+                                        <div className="col" style={verticalCenter}>
+                                            <h3>Game Stats</h3>
                                         </div>
-                                        <div className="col-3">
-                                        <Dropdown>
-                                            <Button className="dropdown-toggle risen-button" data-toggle="dropdown">STATS</Button>
-                                            <div className="dropdown-menu" style={gameDataDropDown}>
-                                            {
-                                                Object.keys(this.state.gameDataOptions).map((option, index) => {
-                                                return (
-                                                    <div key={"gameOption" + index}
-                                                    className={"dropdown-option clickable " + (this.state.gameDataOptions[option].shown ? "bg-dark text-light" : "bg-light text-dark")} name={option}>{option}</div>
-                                                )
-                                                })
-                                            }
+                                        <div className="col-4">
+                                            <div className="btn-group" style={{float: 'right'}}>
+                                                <Dropdown>
+                                                    <Button className="dropdown-toggle select-cols-dropdown-btn" id="optionsDropDownLink" data-toggle="dropdown">Select Columns</Button>
+                                                    <div className="dropdown-menu" id="optionsDropDownMenu" style={gameDataDropDown} aria-labelledby="optionsDropDownLink">
+                                                        {
+                                                            Object.keys(this.state.gameDataOptions).map((option, index) => {
+                                                            return (
+                                                                <div key={"gameOption" + index}
+                                                                className={"dropdown-option clickable " + (this.state.gameDataOptions[option].shown ? "bg-dark text-light" : "bg-light text-dark")} name={option}>{option}</div>
+                                                            )
+                                                            })
+                                                        }
+                                                    </div>
+                                                </Dropdown>
                                             </div>
-                                        </Dropdown>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="risen-stats-body" style={{overflow: 'scroll', maxHeight: '500px'}}>
-                                    <table className="table risen-table .table-responsive .table-striped">
+                                    <table className="table risen-table table-striped">
                                     <thead>
                                         <tr>
                                         {
@@ -287,32 +297,43 @@ export default class BasicStats extends Component {
                                 <div className="risen-stats-header">
                                     <h3>Compare Stats</h3>
                                 </div>
-                                <div className="risen-stats-body">
+                                <div className="risen-stats-body" style={{paddingTop: '0'}}>
                                     <div className="row">
-                                        Add Player :<input id="playerName"></input>
-                                        <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn risen-button">Search For Player</Button>
+                                        <div className="col-lg-4" style={verticalCenter}>
+                                            <input id="playerName" placeholder="Summoner Name"></input>
+                                        </div>
+                                        <div className="col-lg-8">
+                                            <Button onClick={this.loadCompareDataFromSearch.bind(this)} className="btn search-for-player-button">Search For Player</Button>
+                                        </div>
                                     </div>
                                     <div className="row">
-                                        <table className="table-light table table-responsive-md table-sm table-striped">
+                                        <table className="table table-responsive-md table-sm risen-table table-striped ">
                                             <tbody>
                                                 {
                                                     // Check to ensure comp data has length. It will once data for the player loads in
                                                     //   as the #0 spot will be the players.
-                                                    this.state.compData.length ? 
+                                                    this.state.compData.length ?
                                                     Object.keys(this.state.compData[0]).map((key, index) => {
-                                                    return (
-                                                        <tr key={"CompDataRow" + index}>
-                                                        <th>{key}</th>
-                                                        {
-                                                            this.state.compData.map((player, index2) => {
-                                                            // I really should just make this a new component
-                                                            return (
-                                                                <td key={index2 + "compData"}>{player[key]}</td>
-                                                            )
-                                                            })
-                                                        }
-                                                        </tr>
-                                                    )
+                                                        return (
+                                                            <tr key={"CompDataRow" + index}>
+                                                            <td><b>{key}</b></td>
+                                                            {
+                                                                this.state.compData.map((player, index2) => {
+                                                                    // I really should just make this a new component
+                                                                    if (index2 > 0 && key === "Name") {
+                                                                        return (
+                                                                            <td key={index2 + "compData"}>{player[key]} <Button onClick={(()=> {this.removePlayerCompare(index2)}).bind(this)}>X</Button></td>
+                                                                        )
+                                                                    }
+                                                                    else {
+                                                                        return (
+                                                                            <td key={index2 + "compData"}>{player[key]}</td>
+                                                                        )
+                                                                    }
+                                                                })
+                                                            }
+                                                            </tr>
+                                                        )
                                                     }) : (<tr></tr>)
                                                 }
                                             </tbody>
@@ -331,5 +352,10 @@ export default class BasicStats extends Component {
 const gameDataDropDown = {
     maxHeight: '500px',
     overflow: 'auto'
-  }
-  
+}
+
+const verticalCenter = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -8,39 +8,138 @@ import GamesList from "./components/games-list.component";
 import EditGame from "./components/edit-game.component";
 import CreateGame from "./components/create-game.component";
 import CreateTeam from "./components/create-team.component";
-import Test from "./components/test.component";
 import Overview from "./components/overview-stats.component";
 import DetailedStats from "./components/detailed-stats.component";
 import DetailedLeague from './components/detailed-league.component';
 import AboutLeagues from "./components/about-leagues.component";
 import backgroundImage from "./images/backgroundimage2dark.png";
 import Contact from './components/contact.component';
-import GenerateCodes from './components/admin/generateCodes.component';
+import Setup from './components/drafting/setup.component';
+import Drafting from './components/drafting/drafting.component';
+import Admin from './components/admin/admin.component';
+import Login from './components/login.component';
+import { getCookie } from './Helpers';
+import OfflineDraft from './components/drafting/offline.component';
+import ManageTeams from './components/admin/manageTeams.component';
+import Rosters from './components/teams/rosters.component';
+import Roster from './components/teams/roster.component';
+import UserContext from './context/UserContext';
 
-function App() {
-  return (
-      <div>
-        <div style={ backgroundImageStyle }></div>
-        <Router>
-          <div className="risen-main-background">
-            <RisenNavbar />
-            <br/>
-            <Route path="/" exact component={HomePage} />
-            <Route path="/gameslist" exact component={GamesList} />
-            <Route path="/edit/:id" component={EditGame} />
-            <Route path="/creategame" component={CreateGame} />
-            <Route path="/team" component={CreateTeam} />
-            <Route path="/test" component={Test} />
-            <Route path="/stats" component={Overview} />
-            <Route path="/detailed/:player" component={DetailedStats}></Route>
-            <Route path="/leagues" component={AboutLeagues}></Route>
-            <Route path="/league/:league" component={DetailedLeague}></Route>
-            <Route path="/contact" component={Contact}></Route>
-            <Route path="/admin/codes" component={GenerateCodes}></Route>
-          </div>
-        </Router>
-      </div>
-  );
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      level: -1
+    }
+
+    // Add callback that does nothing. This callback is used in the auth component to let it know
+    //  the check for logged in has finished and the redirect back to home page should occur
+  }
+
+  componentDidMount() {
+    this.checkLoggedIn(() => {});
+  }
+
+  checkLoggedIn(callback) {
+    let code = getCookie("auth");
+    if(process.env.NODE_ENV !== 'production') {
+      console.warn("In dev mode. Automatically logging in as admin");
+      this.setState({
+        level: 1
+      });
+    }
+    if(code) {
+      fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + code).then((res) => {
+        if(res.status === 200 || res.status === 304) {
+          res.json().then(user => {
+            if(user.level) {
+              this.setState({
+                level: user.level
+              });
+            }
+            else {
+              this.setState({
+                level: -1
+              });
+            }
+          });
+        }
+        else {
+          this.setState({
+            level: -1
+          });
+        }
+        callback();
+      }).catch(err => {
+        console.log(err)
+        this.setState({
+          level: -1
+        });
+      })
+    }
+
+  }
+
+  
+  logOut() {
+    fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + getCookie("auth"), {
+      method: "DELETE"
+    }).then(data => {
+      this.checkLoggedIn(() => { this.props.history.push("/"); });
+    });
+  }
+
+  authRender(props) {
+    return (
+      <Login authCheck={this.checkLoggedIn.bind(this)} {...props}></Login>
+    );
+  }
+
+  componentRender(aa, props) {
+    return (
+      <aa {...props}></aa>
+    )
+  }
+  
+
+  render() {
+    return (
+        <div>
+          <div style={ backgroundImageStyle }></div>
+          <Router>
+            <UserContext.Provider value={this.state.level}>
+              <div className="risen-main-background">
+                <RisenNavbar admin={this.state.level} logout={this.logOut.bind(this)} />
+                {/* <br/> */}
+                <Route path="/" exact component={HomePage} />
+                <Route path="/gameslist" exact component={GamesList} />
+                <Route path="/edit/:id" component={EditGame} />
+                <Route path="/creategame" component={CreateGame} />
+                <Route path="/team" component={CreateTeam} />
+                <Route path="/stats" component={Overview} />
+                <Route path="/detailed/:player" component={DetailedStats}></Route>
+                <Route path="/leagues" component={AboutLeagues}></Route>
+                <Route path="/league/:league" component={DetailedLeague}></Route>
+                <Route path="/rosters" component={Rosters}></Route>
+                <Route path="/roster/:league" component={Roster}></Route>
+                <Route path="/contact" component={Contact}></Route>
+                <Route path="/drafting" component={Setup}></Route>
+                <Route path="/draft" component={Drafting}></Route>
+                <Route path="/pbdraft" component={OfflineDraft}></Route>
+                <Route path="/auth" render={this.authRender.bind(this)} ></Route>
+                {
+                  // Only create route if it is an admin
+                  this.state.level === 1 ? <div>
+                    <Route path="/admin/basic" component={Admin}></Route>
+                    <Route path="/admin/teams" component={ManageTeams}></Route>
+                  </div> : null
+                }
+              </div>
+            </UserContext.Provider>
+          </Router>
+        </div>
+    );
+  }
 }
 
 var backgroundImageStyle = {
@@ -53,5 +152,3 @@ var backgroundImageStyle = {
   position: 'fixed',
   zIndex: -10
 };
-
-export default App;
