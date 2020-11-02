@@ -170,16 +170,16 @@ export default class Overview extends Component {
                     </div>
                     <div className="col-lg">
                         {/* <input type="text" id="nameFilter" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Player Name" onChange={this.filterData.bind(this)}></input> */}
-                            <form onSubmit={this.submitSearch.bind(this)}>
-                        <div class="input-group mb-3 bg-light">
+                        <form onSubmit={this.submitSearch.bind(this)}>
+                            <div className="input-group mb-3 bg-light">
                                 <input type="text" class="form-control"
                                         placeholder="Recipient's username" aria-label="Recipient's username"
                                         aria-describedby="button-addon2" id="nameFilter" ></input>
-                                <div class="input-group-append text-dark">
-                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                                <div className="input-group-append text-dark">
+                                    <button className="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
                                 </div>
-                        </div>
-                            </form>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <table className="table table-responsive-lg risen-table sticky-top table-light table-striped">
