@@ -11,6 +11,7 @@ import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
 import IncomeStats from "./personalStats/incomeStats.component";
 import VisionStats from "./personalStats/visionStats.component";
+import ChampionStats from "./personalStats/championStats.component";
 
 let champMap = require('../data/champions_map.json');
 // let champions = require('../data/champions.json'); // oof. This is loading a lot of unneeded data
@@ -25,6 +26,7 @@ export default class DetailedStats extends Component {
       accumulatedStats: {},
       filteredData: [],
       compData: [],
+      avgData: {},
       gameDataOptions: {
         "Champion": {shown: true, fnc: game => champMap[game["championId"]]},
         "Game Duration": {shown: false, fnc: game => game["gameDuration"]},
@@ -69,46 +71,88 @@ export default class DetailedStats extends Component {
         "Dmg/Gold": {shown: true, fnc: game => customRound(game["damagePerGold"])}
       }
     }
+}
+
+componentDidMount() {
+    //   Looks for lane dropdown value so needs to be after mount
     this.loadPlayerData(this.props.match.params.player);
+    this.loadAvgData();
   }
 
-  computeAccStats(accStats, data) {
-    let wins = 0;
-    let kills = 0, deaths = 0, assists = 0;
-    let cs = 0, min = 0;
-    for (let datum of data) {
-      accStats["games"] += 1;
-      if (datum["win"]) {
-        wins += 1;
-      }
-      kills += datum["kills"];
-      deaths += datum["deaths"];
-      assists += datum["assists"];
-      cs += datum["totalMinionsKilled"];
-      min += datum["gameDuration"] / 60;
+  computeAccStats(data, accStats = {}) {
+    for (let game of data) {
+        for (let key in game) {
+            let t = typeof game[key];
+            if (t !== 'boolean' && t !== 'number') {
+                continue;
+            }
+            if (!accStats['avg_' + key]) {
+                accStats['avg_' + key] = 0;
+            }
+            if (t === 'boolean')
+                accStats['avg_' + key] += game[key] ? 1 : 0;
+            else if (t === 'number')
+                accStats['avg_' + key] += game[key] ? game[key] : 0 ;
+        }
     }
-    accStats["wr"] = customRound(wins / accStats["games"] * 100, 2);
-    accStats["kda"] = customRound((kills + assists) / deaths, 1);
-    accStats["cs"] = customRound(cs / min, 1);
+    for (let key in accStats) {
+        accStats[key] /= data.length;
+    }
+    accStats["total_games"] = data.length;
+    console.log(accStats);
+    return accStats;
+  }
+
+  loadAvgData() {
+    let url = process.env.REACT_APP_BASE_URL + "/stats/avg";
+    let laneFilter = document.getElementById("roleFilter").value;
+    if (laneFilter !== "ANY") {
+        url += "/role/" + laneFilter;
+    }
+    fetch(url).then((data) => {
+    data.json().then(data => {
+        this.setState({
+            avgData: data[0]
+        })
+    })
+    });
+  }
+
+  loadPlayerAggData() {
+    let aggUrl = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + this.state.playerName + "/agg";
+    let laneFilter = document.getElementById("roleFilter").value;
+    if (laneFilter !== "ANY") {
+        aggUrl = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + this.state.playerName + "/lane/" + laneFilter + "/agg";
+    }
+    fetch(aggUrl).then(aggData => {
+        aggData.json().then(aggData => {    
+            this.setState({
+              accumulatedStats: aggData[0],
+            });
+        })
+    });
   }
 
   loadPlayerData(playerName) {
     let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
-        console.log(data)
-        let accStats = {
-          "wr": 0,
-          "games": 0,
-          "kda": 0,
-          "cs": 0
-        }
-        this.computeAccStats(accStats, data);
+        // console.log();
         this.setState({
-          statData: data,
-          accumulatedStats: accStats,
-          filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
+            statData: data,
+            accumulatedStats: this.computeAccStats(data),
+            filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
         });
+        // let aggUrl = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName + "/agg";
+        // fetch(aggUrl).then(aggData => {
+        //     aggData.json().then(aggData => {    
+        //         this.setState({
+        //           statData: data,
+        //           accumulatedStats: aggData[0],
+        //           filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
+        //         });
+        //     })
+        // })
       });
     })
   }
@@ -132,6 +176,9 @@ export default class DetailedStats extends Component {
   }
 
   performFilter() {
+    this.loadAvgData();
+
+    // this.loadPlayerAggData();
     let filteredData = this.state.statData.filter(game => {
       let championFilter = document.getElementById("championFilter").value;
       if (championFilter.length > 0) {
@@ -169,7 +216,8 @@ export default class DetailedStats extends Component {
     });
 
     this.setState({
-      filteredData: filteredData
+      filteredData: filteredData,
+      accumulatedStats: this.computeAccStats(filteredData)
     });
   }
 
@@ -178,20 +226,10 @@ export default class DetailedStats extends Component {
       <section>
         <div className="dark-section text-light">
           <div className="container">
-
-            {/* Basic Stats */}
-            <nav>
-              <div>
+            <div>
                 <h1>{this.state.playerName}</h1>
-              </div>
-              <div className="nav nav-tabs" id="nav-tab" role="tablist" style={navStyle}>
-                <a className="nav-item nav-link active" id="nav-basic-tab" data-toggle="tab" href="#nav-basic" role="tab" aria-controls="nav-basic" aria-selected="true">Basic Stats</a>
-                <a className="nav-item nav-link" id="nav-combat-tab" data-toggle="tab" href="#nav-combat" role="tab" aria-controls="nav-combat" aria-selected="false">Combat</a>
-                <a className="nav-item nav-link" id="nav-income-tab" data-toggle="tab" href="#nav-income" role="tab" aria-controls="nav-income" aria-selected="false">Income</a>
-                <a className="nav-item nav-link" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="false">Vision</a>
-              </div>
-            </nav>
-            <div className="tab-content" id="nav-tabContent">
+                <hr style={{backgroundColor: 'white'}}></hr>
+            </div>
               <Container>
                 <div className="row">
                     <div className="col">
@@ -251,17 +289,39 @@ export default class DetailedStats extends Component {
                     </div>
                 </div>
               </Container>
-              <div className="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
-                <BasicStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></BasicStats>
-              </div>
-              <div className="tab-pane fade" id="nav-combat" role="tabpanel" aria-labelledby="nav-combat-tab">
-                <CombatStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></CombatStats>
+              {/* <div className="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab"> */}
+                <BasicStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></BasicStats>
+              {/* </div> */}
+            {/* Basic Stats */}
+            <nav>
+              <ul className="nav nav-tabs" id="nav-tab" role="tablist" style={navStyle}>
+                {/* <a className="nav-item nav-link active" id="nav-basic-tab" data-toggle="tab" href="#nav-basic" role="tab" aria-controls="nav-basic" aria-selected="true">Basic Stats</a> */}
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link active" id="nav-combat-tab" data-toggle="tab" href="#nav-combat" role="tab" aria-controls="nav-combat" aria-selected="true">Combat</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link" id="nav-income-tab" data-toggle="tab" href="#nav-income" role="tab" aria-controls="nav-income" aria-selected="false">Income</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="false">Vision</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link" id="nav-champ-tab" data-toggle="tab" href="#nav-champ" role="tab" aria-controls="nav-champ" aria-selected="false">Champions</a>
+                </li>
+              </ul>
+            </nav>
+            <div className="tab-content" id="nav-tabContent" style={tabStyle}>
+              <div className="tab-pane fade show active" id="nav-combat" role="tabpanel" aria-labelledby="nav-combat-tab">
+                <CombatStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></CombatStats>
               </div>
               <div className="tab-pane fade" id="nav-income" role="tabpanel" aria-labelledby="nav-income-tab">
-                <IncomeStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></IncomeStats>
+                <IncomeStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></IncomeStats>
               </div>
               <div className="tab-pane fade" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
-                <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats}></VisionStats>
+                <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></VisionStats>
+              </div>
+              <div className="tab-pane fade" id="nav-champ" role="tabpanel" aria-labelledby="nav-champ-tab">
+                <ChampionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></ChampionStats>
               </div>
             </div>
 
@@ -273,6 +333,16 @@ export default class DetailedStats extends Component {
 }
 
 const navStyle = {
-  alignItems: "flex-end",
-  justifyContent: "flex-end"
+//   alignItems: "flex-end",
+//   justifyContent: "flex-end"
+    border: 0
+}
+
+const tabStyle = {
+    // border: '1px solid white',
+    // backgroundColor: "#ffffff0f"
+    backgroundColor: "rgb(255 255 255 / 0.01)",
+    border: '2px solid #565656',
+    borderRadius: '15px',
+    borderTopLeftRadius: '0'
 }

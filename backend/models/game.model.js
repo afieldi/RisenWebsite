@@ -38,6 +38,15 @@ const gameSchema = new Schema({
     neutralMinionsKilledTeamJungle: { type: Number },
     neutralMinionsKilledEnemyJungle: { type: Number },
     firstItemTime: { type: Number },
+    goldGen10: { type: Number },
+    goldGen20: { type: Number },
+    goldGen30: { type: Number },
+    xpGen10: { type: Number },
+    xpGen20: { type: Number },
+    xpGen30: { type: Number },
+    csGen10: { type: Number },
+    csGen20: { type: Number },
+    csGen30: { type: Number },
 
     // Damage
     physicalDamageDealtToChampions: { type: Number },
@@ -56,6 +65,7 @@ const gameSchema = new Schema({
     // Vision
     visionScore: { type: Number },
     wardsPlaced15: { type: Number },
+    wardsPlaced: { type: Number },
     wardsKilled15: { type: Number },
     wardsKilled: { type: Number },
     visionWardsBoughtInGame: { type: Number },

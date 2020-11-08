@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const http = require('http');
 const process = require('process');
 const {argv} = require('yargs');
+const compression = require('compression')
 
 const draft = require('./src/draft');
 
@@ -30,6 +31,8 @@ app.use(cors({
 }));
 //allows us to send/receive json
 app.use(express.json());
+
+app.use(compression())
 
 const uri = process.env.ATLAS_URI;
 mongoose

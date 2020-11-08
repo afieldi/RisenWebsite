@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { faDiceOne } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const staticText = require('../data/text.json'); 
-const test = require('../images/rampage.png')
 
 export default class AboutLeagues extends Component {
 
@@ -110,7 +107,7 @@ const iconStyle = {
 const blockStyle = {
     textAlign: 'center',
     margin: '10px',
-    padding: '5px',
+    padding: '20px',
     border: '1px solid #696969',
     backgroundColor: '#191919',
     borderRadius: '.267rem',

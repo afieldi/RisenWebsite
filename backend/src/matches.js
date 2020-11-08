@@ -135,6 +135,15 @@ async function saveGame(matchId) {
                     neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle ? stats.neutralMinionsKilledTeamJungle : 0,
                     neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle ? stats.neutralMinionsKilledEnemyJungle : 0,
                     firstItemTime: timelineStats[+i+1].firstItemTime,
+                    goldGen10: player.timeline.goldPerMinDeltas["0-10"],
+                    goldGen20: player.timeline.goldPerMinDeltas["10-20"],
+                    goldGen30: player.timeline.goldPerMinDeltas["20-30"],
+                    xpGen10: player.timeline.xpPerMinDeltas["0-10"],
+                    xpGen20: player.timeline.xpPerMinDeltas["10-20"],
+                    xpGen30: player.timeline.xpPerMinDeltas["20-30"],
+                    csGen10: player.timeline.creepsPerMinDeltas["0-10"],
+                    csGen20: player.timeline.creepsPerMinDeltas["10-20"],
+                    csGen30: player.timeline.creepsPerMinDeltas["20-30"],
                 
                     // Damage
                     physicalDamageDealtToChampions: stats.physicalDamageDealtToChampions,
@@ -153,6 +162,7 @@ async function saveGame(matchId) {
                     // Vision
                     visionScore: stats.visionScore,
                     wardsPlaced15: timelineStats[+i+1].wardsPlaced15,
+                    wardsPlaced: stats.wardsPlaced ? stats.wardsPlaced : 0,
                     wardsKilled15: timelineStats[+i+1].wardsKilled15,
                     wardsKilled: stats.wardsKilled ? stats.wardsKilled : 0,
                     visionWardsBoughtInGame: stats.visionWardsBoughtInGame,
@@ -173,7 +183,7 @@ async function saveGame(matchId) {
                     csDiff20: timelineStats[+i+1].CSD20,
                     csDiff30: timelineStats[+i+1].CSD30,
                     lane: laneAssignments[+i+1],
-                
+                    
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });

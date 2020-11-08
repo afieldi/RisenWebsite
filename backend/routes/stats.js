@@ -46,17 +46,72 @@ router.route('/player/name/:id/agg').get((req, res) => {
             {
                 $group: {
                     _id: { player: "$playername.name", playerId: "$player" },
+                    avg_gameDuration: { $avg: "$gameDuration" },
                     avg_kills: { $avg: "$kills" },
                     avg_deaths: { $avg: "$deaths" },
                     avg_assists: { $avg: "$assists" },
-                    avg_gold: { $avg: "$goldEarned" },
-                    avg_cs: { $avg: "$totalMinionsKilled" },
-                    avg_damage: { $avg: "$totalDamageDealtToChampions" },
-                    avg_duration: { $avg: "$gameDuration" },
-                    avg_dpg: { $avg: "$damagePerGold"},
-                    avg_vision: { $avg: "$visionScore" },
-                    avg_wards_killed: { $avg: "$wardsKilled" },
-                    avg_damage_taken: { $avg: "$totalDamageTaken" },
+                    avg_goldEarned: { $avg: "$goldEarned" },
+                    avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+                    avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
+
+                    avg_kills15: { $avg: "$kills15"},
+                    avg_soloKills: { $avg: "$soloKills" },
+                    avg_gankKills: { $avg: "$gankKills" },
+                    avg_deaths15: { $avg: "$deaths15" },
+                    avg_soloDeaths: { $avg: "$soloDeaths" },
+                    avg_gankDeaths: { $avg: "$gankDeaths" },
+                    avg_assists15: { $avg: "$assists15" },
+
+                    // Income
+                    avg_neutralMinionsKilled: { $avg: "$neutralMinionsKilled" },
+                    avg_neutralMinionsKilledTeamJungle: { $avg: "$neutralMinionsKilledTeamJungle" },
+                    avg_neutralMinionsKilledEnemyJungle: { $avg: "$neutralMinionsKilledEnemyJungle" },
+                    avg_firstItemTime: { $avg: "$firstItemTime" },
+                    avg_goldGen10: { $avg: "$goldGen10" },
+                    avg_goldGen20: { $avg: "$goldGen20" },
+                    avg_goldGen30: { $avg: "$goldGen30" },
+                    avg_xpGen10: { $avg: "$xpGen10" },
+                    avg_xpGen20: { $avg: "$xpGen20" },
+                    avg_xpGen30: { $avg: "$xpGen30" },
+                    avg_csGen10: { $avg: "$csGen10" },
+                    avg_csGen20: { $avg: "$csGen20" },
+                    avg_csGen30: { $avg: "$csGen30" },
+
+                    // Damage
+                    avg_physicalDamageDealtToChampions: { $avg: "$physicalDamageDealtToChampions" },
+                    avg_magicDamageDealtToChampions: { $avg: "$magicDamageDealtToChampions" },
+                    avg_trueDamageDealtToChampions: { $avg: "$trueDamageDealtToChampions" },
+                    avg_physicalDamageTaken: { $avg: "$physicalDamageTaken" },
+                    avg_magicalDamageTaken: { $avg: "$magicalDamageTaken" },
+                    avg_trueDamageTaken: { $avg: "$trueDamageTaken" },
+                    avg_totalDamageTaken: { $avg: "$totalDamageTaken" },
+                    avg_damageDealtToObjectives: { $avg: "$damageDealtToObjectives" },
+                    avg_damageSelfMitigated: { $avg: "$damageSelfMitigated" },
+
+                    avg_totalHeal: { $avg: "$totalHeal" },
+
+                    // Vision
+                    avg_visionScore: { $avg: "$visionScore" },
+                    avg_wardsPlaced15: { $avg: "$wardsPlaced15" },
+                    avg_wardsKilled15: { $avg: "$wardsKilled15" },
+                    avg_wardsKilled: { $avg: "$wardsKilled" },
+                    avg_visionWardsBoughtInGame: { $avg: "$visionWardsBoughtInGame" },
+
+                    // Fun
+                    avg_firstBloodKill: { $avg: { $cond : [ "$firstBloodKill", 1, 0 ] } },
+                    avg_firstBloodAssist: { $avg: { $cond : [ "$firstBloodAssist", 1, 0 ] } },
+                    avg_firstTowerKill: { $avg: { $cond : [ "$firstTowerKill", 1, 0 ] } },
+                    avg_firstTowerAssist: { $avg: { $cond : [ "$firstTowerAssist", 1, 0 ] } },
+                    avg_turretKills: { $avg: "$turretKills" },
+                    avg_doubleKills: { $avg: "$doubleKills" },
+                    avg_tripleKills: { $avg: "$tripleKills" },
+                    avg_quadraKills: { $avg: "$quadraKills" },
+                    avg_pentaKills: { $avg: "$pentaKills" },
+
+                    // Timeline
+                    avg_csDiff10: { $avg: "$csDiff10" },
+                    avg_csDiff20: { $avg: "$csDiff20" },
+                    avg_csDiff30: { $avg: "$csDiff30" },
                     wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
                     total_games: { $sum: 1 }
                 }
@@ -64,8 +119,8 @@ router.route('/player/name/:id/agg').get((req, res) => {
         ]).then(games => {
             if (games.length) {
                 games["wr"] = games["total_games"] > 0 ? games["wins"] / games["total_games"] : 0;
-                games["dpm"] = games["avg_damage"] / games["avg_duration"];
-                games["vspm"] = games["avg_vision"] / games["avg_duration"];
+                games["avg_dpm"] = games["avg_totalDamageDealtToChampions"] / games["avg_gameDuration"];
+                games["avg_vspm"] = games["avg_visionScore"] / games["avg_gameDuration"];
                 res.json(games);
             }
             else {
@@ -74,10 +129,140 @@ router.route('/player/name/:id/agg').get((req, res) => {
                     avg_kills: 0,
                     avg_deaths: 0,
                     avg_assists: 0,
-                    avg_gold: 0,
-                    avg_cs: 0,
-                    avg_damage: 0,
-                    avg_duration: 0,
+                    avg_goldEarned: 0,
+                    avg_totalMinionsKilled: 0,
+                    avg_totalDamageDealtToChampions: 0,
+                    avg_gameDuration: 0,
+                    avg_dpg: 0,
+                    avg_vision:0,
+                    avg_wards_killed: 0,
+                    avg_damage_taken: 0,
+                    wins: 0,
+                    total_games: 0,
+                    wr: 0,
+                    dpm: 0,
+                    vspm: 0
+                }]);
+            }
+        }, (err) => {
+            res.status(404).json("Error: " + err);
+        });
+    }, (err) => {
+        res.status(404).json("Error: " + err);
+    });
+});
+
+router.route('/player/name/:id/lane/:lane/agg').get((req, res) => {
+    PlayerModel.findOne({name: req.params.id}).then((player) => {
+        if (player == null) {
+            res.status(404).json("Could not find player: " + player);
+            return;
+        }
+        GameModel.aggregate([
+            {
+                $match: {
+                    player: player._id,
+                    lane: req.params.lane
+                }
+            },
+            {
+                $lookup: {
+                    from: 'players',
+                    localField: 'player',
+                    foreignField: '_id',
+                    as: 'playername'
+                }
+            },
+            {
+                $group: {
+                    _id: { player: "$playername.name", playerId: "$player" },
+                    avg_gameDuration: { $avg: "$gameDuration" },
+                    avg_kills: { $avg: "$kills" },
+                    avg_deaths: { $avg: "$deaths" },
+                    avg_assists: { $avg: "$assists" },
+                    avg_goldEarned: { $avg: "$goldEarned" },
+                    avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+                    avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
+
+                    avg_kills15: { $avg: "$kills15"},
+                    avg_soloKills: { $avg: "$soloKills" },
+                    avg_gankKills: { $avg: "$gankKills" },
+                    avg_deaths15: { $avg: "$deaths15" },
+                    avg_soloDeaths: { $avg: "$soloDeaths" },
+                    avg_gankDeaths: { $avg: "$gankDeaths" },
+                    avg_assists15: { $avg: "$assists15" },
+
+                    // Income
+                    avg_neutralMinionsKilled: { $avg: "$neutralMinionsKilled" },
+                    avg_neutralMinionsKilledTeamJungle: { $avg: "$neutralMinionsKilledTeamJungle" },
+                    avg_neutralMinionsKilledEnemyJungle: { $avg: "$neutralMinionsKilledEnemyJungle" },
+                    avg_firstItemTime: { $avg: "$firstItemTime" },
+                    avg_goldGen10: { $avg: "$goldGen10" },
+                    avg_goldGen20: { $avg: "$goldGen20" },
+                    avg_goldGen30: { $avg: "$goldGen30" },
+                    avg_xpGen10: { $avg: "$xpGen10" },
+                    avg_xpGen20: { $avg: "$xpGen20" },
+                    avg_xpGen30: { $avg: "$xpGen30" },
+                    avg_csGen10: { $avg: "$csGen10" },
+                    avg_csGen20: { $avg: "$csGen20" },
+                    avg_csGen30: { $avg: "$csGen30" },
+
+                    // Damage
+                    avg_physicalDamageDealtToChampions: { $avg: "$physicalDamageDealtToChampions" },
+                    avg_magicDamageDealtToChampions: { $avg: "$magicDamageDealtToChampions" },
+                    avg_trueDamageDealtToChampions: { $avg: "$trueDamageDealtToChampions" },
+                    avg_physicalDamageTaken: { $avg: "$physicalDamageTaken" },
+                    avg_magicalDamageTaken: { $avg: "$magicalDamageTaken" },
+                    avg_trueDamageTaken: { $avg: "$trueDamageTaken" },
+                    avg_totalDamageTaken: { $avg: "$totalDamageTaken" },
+                    avg_damageDealtToObjectives: { $avg: "$damageDealtToObjectives" },
+                    avg_damageSelfMitigated: { $avg: "$damageSelfMitigated" },
+
+                    avg_totalHeal: { $avg: "$totalHeal" },
+
+                    // Vision
+                    avg_visionScore: { $avg: "$visionScore" },
+                    avg_wardsPlaced15: { $avg: "$wardsPlaced15" },
+                    avg_wardsKilled15: { $avg: "$wardsKilled15" },
+                    avg_wardsKilled: { $avg: "$wardsKilled" },
+                    avg_visionWardsBoughtInGame: { $avg: "$visionWardsBoughtInGame" },
+
+                    // Fun
+                    avg_firstBloodKill: { $avg: { $cond : [ "$firstBloodKill", 1, 0 ] } },
+                    avg_firstBloodAssist: { $avg: { $cond : [ "$firstBloodAssist", 1, 0 ] } },
+                    avg_firstTowerKill: { $avg: { $cond : [ "$firstTowerKill", 1, 0 ] } },
+                    avg_firstTowerAssist: { $avg: { $cond : [ "$firstTowerAssist", 1, 0 ] } },
+                    avg_turretKills: { $avg: "$turretKills" },
+                    avg_doubleKills: { $avg: "$doubleKills" },
+                    avg_tripleKills: { $avg: "$tripleKills" },
+                    avg_quadraKills: { $avg: "$quadraKills" },
+                    avg_pentaKills: { $avg: "$pentaKills" },
+
+                    // Timeline
+                    avg_csDiff10: { $avg: "$csDiff10" },
+                    avg_csDiff20: { $avg: "$csDiff20" },
+                    avg_csDiff30: { $avg: "$csDiff30" },
+                    wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
+                    total_games: { $sum: 1 }
+                }
+            }
+        ]).then(games => {
+            if (games.length) {
+                games["wr"] = games["total_games"] > 0 ? games["wins"] / games["total_games"] : 0;
+                games["avg_dpm"] = games["avg_totalDamageDealtToChampions"] / games["avg_gameDuration"];
+                games["avg_vspm"] = games["avg_visionScore"] / games["avg_gameDuration"];
+                res.json(games);
+            }
+            else {
+                res.json([{
+                    _id: { player: player.name, playerId: player._id },
+                    avg_kills: 0,
+                    avg_deaths: 0,
+                    avg_assists: 0,
+                    avg_goldEarned: 0,
+                    avg_totalMinionsKilled: 0,
+                    avg_totalDamageDealtToChampions: 0,
+                    avg_gameDuration: 0,
                     avg_dpg: 0,
                     avg_vision:0,
                     avg_wards_killed: 0,
@@ -170,9 +355,9 @@ router.route('/brief').get((req, res) => {
             avg_kills: { $avg: "$kills" },
             avg_deaths: { $avg: "$deaths" },
             avg_assists: { $avg: "$assists" },
-            avg_gold: { $avg: "$goldEarned" },
-            avg_cs: { $avg: "$totalMinionsKilled" },
-            avg_damage: { $avg: "$totalDamageDealtToChampions" },
+            avg_goldEarned: { $avg: "$goldEarned" },
+            avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+            avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
             wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
             total_games: { $sum: 1 }
         }
@@ -211,9 +396,9 @@ router.route('/brief/lane/:lane').get((req, res) => {
                 avg_kills: { $avg: "$kills" },
                 avg_deaths: { $avg: "$deaths" },
                 avg_assists: { $avg: "$assists" },
-                avg_gold: { $avg: "$goldEarned" },
-                avg_cs: { $avg: "$totalMinionsKilled" },
-                avg_damage: { $avg: "$totalDamageDealtToChampions" },
+                avg_goldEarned: { $avg: "$goldEarned" },
+                avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+                avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
                 wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
                 total_games: { $sum: 1 }
             }
@@ -224,6 +409,264 @@ router.route('/brief/lane/:lane').get((req, res) => {
     }, (err) => {
         res.status(404).json("Error: " + err);
     });
+});
+
+router.route('/avg').get((req, res) => {
+    GameModel.aggregate([
+        {
+            $group: {
+                _id: 'avg',
+                avg_gameDuration: { $avg: "$gameDuration" },
+                avg_kills: { $avg: "$kills" },
+                avg_deaths: { $avg: "$deaths" },
+                avg_assists: { $avg: "$assists" },
+                avg_goldEarned: { $avg: "$goldEarned" },
+                avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+                avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
+
+                avg_kills15: { $avg: "$kills15"},
+                avg_soloKills: { $avg: "$soloKills" },
+                avg_gankKills: { $avg: "$gankKills" },
+                avg_deaths15: { $avg: "$deaths15" },
+                avg_soloDeaths: { $avg: "$soloDeaths" },
+                avg_gankDeaths: { $avg: "$gankDeaths" },
+                avg_assists15: { $avg: "$assists15" },
+
+                // Income
+                avg_neutralMinionsKilled: { $avg: "$neutralMinionsKilled" },
+                avg_neutralMinionsKilledTeamJungle: { $avg: "$neutralMinionsKilledTeamJungle" },
+                avg_neutralMinionsKilledEnemyJungle: { $avg: "$neutralMinionsKilledEnemyJungle" },
+                avg_firstItemTime: { $avg: "$firstItemTime" },
+                avg_goldGen10: { $avg: "$goldGen10" },
+                avg_goldGen20: { $avg: "$goldGen20" },
+                avg_goldGen30: { $avg: "$goldGen30" },
+                avg_xpGen10: { $avg: "$xpGen10" },
+                avg_xpGen20: { $avg: "$xpGen20" },
+                avg_xpGen30: { $avg: "$xpGen30" },
+                avg_csGen10: { $avg: "$csGen10" },
+                avg_csGen20: { $avg: "$csGen20" },
+                avg_csGen30: { $avg: "$csGen30" },
+
+                // Damage
+                avg_physicalDamageDealtToChampions: { $avg: "$physicalDamageDealtToChampions" },
+                avg_magicDamageDealtToChampions: { $avg: "$magicDamageDealtToChampions" },
+                avg_trueDamageDealtToChampions: { $avg: "$trueDamageDealtToChampions" },
+                avg_physicalDamageTaken: { $avg: "$physicalDamageTaken" },
+                avg_magicalDamageTaken: { $avg: "$magicalDamageTaken" },
+                avg_trueDamageTaken: { $avg: "$trueDamageTaken" },
+                avg_totalDamageTaken: { $avg: "$totalDamageTaken" },
+                avg_damageDealtToObjectives: { $avg: "$damageDealtToObjectives" },
+                avg_damageSelfMitigated: { $avg: "$damageSelfMitigated" },
+
+                avg_totalHeal: { $avg: "$totalHeal" },
+
+                // Vision
+                avg_visionScore: { $avg: "$visionScore" },
+                avg_wardsPlaced15: { $avg: "$wardsPlaced15" },
+                avg_wardsKilled15: { $avg: "$wardsKilled15" },
+                avg_wardsKilled: { $avg: "$wardsKilled" },
+                avg_visionWardsBoughtInGame: { $avg: "$visionWardsBoughtInGame" },
+
+                // Fun
+                avg_firstBloodKill: { $avg: { $cond : [ "$firstBloodKill", 1, 0 ] } },
+                avg_firstBloodAssist: { $avg: { $cond : [ "$firstBloodAssist", 1, 0 ] } },
+                avg_firstTowerKill: { $avg: { $cond : [ "$firstTowerKill", 1, 0 ] } },
+                avg_firstTowerAssist: { $avg: { $cond : [ "$firstTowerAssist", 1, 0 ] } },
+                avg_turretKills: { $avg: "$turretKills" },
+                avg_doubleKills: { $avg: "$doubleKills" },
+                avg_tripleKills: { $avg: "$tripleKills" },
+                avg_quadraKills: { $avg: "$quadraKills" },
+                avg_pentaKills: { $avg: "$pentaKills" },
+
+                // Timeline
+                avg_csDiff10: { $avg: "$csDiff10" },
+                avg_csDiff20: { $avg: "$csDiff20" },
+                avg_csDiff30: { $avg: "$csDiff30" },
+                
+                total_games: { $sum: 1 }
+            }
+        }
+    ]).then(data => {
+        res.json(data);
+    }, (err) => {
+        res.status(400).json("Error: " + err);
+    })
+});
+
+router.route('/avg/champ/:champid?').get((req, res) => {
+    let pipeline = [];
+    if (req.params.champid) {
+        pipeline.push({
+            $match: {
+                championId: Number(req.params.champid)
+            }
+        })
+    }
+    pipeline.push({
+        $group: {
+            _id: { champion: '$championId'},
+            avg_gameDuration: { $avg: "$gameDuration" },
+            avg_kills: { $avg: "$kills" },
+            avg_deaths: { $avg: "$deaths" },
+            avg_assists: { $avg: "$assists" },
+            avg_goldEarned: { $avg: "$goldEarned" },
+            avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+            avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
+
+            avg_kills15: { $avg: "$kills15"},
+            avg_soloKills: { $avg: "$soloKills" },
+            avg_gankKills: { $avg: "$gankKills" },
+            avg_deaths15: { $avg: "$deaths15" },
+            avg_soloDeaths: { $avg: "$soloDeaths" },
+            avg_gankDeaths: { $avg: "$gankDeaths" },
+            avg_assists15: { $avg: "$assists15" },
+
+            // Income
+            avg_neutralMinionsKilled: { $avg: "$neutralMinionsKilled" },
+            avg_neutralMinionsKilledTeamJungle: { $avg: "$neutralMinionsKilledTeamJungle" },
+            avg_neutralMinionsKilledEnemyJungle: { $avg: "$neutralMinionsKilledEnemyJungle" },
+            avg_firstItemTime: { $avg: "$firstItemTime" },
+            avg_goldGen10: { $avg: "$goldGen10" },
+            avg_goldGen20: { $avg: "$goldGen20" },
+            avg_goldGen30: { $avg: "$goldGen30" },
+            avg_xpGen10: { $avg: "$xpGen10" },
+            avg_xpGen20: { $avg: "$xpGen20" },
+            avg_xpGen30: { $avg: "$xpGen30" },
+            avg_csGen10: { $avg: "$csGen10" },
+            avg_csGen20: { $avg: "$csGen20" },
+            avg_csGen30: { $avg: "$csGen30" },
+
+            // Damage
+            avg_physicalDamageDealtToChampions: { $avg: "$physicalDamageDealtToChampions" },
+            avg_magicDamageDealtToChampions: { $avg: "$magicDamageDealtToChampions" },
+            avg_trueDamageDealtToChampions: { $avg: "$trueDamageDealtToChampions" },
+            avg_physicalDamageTaken: { $avg: "$physicalDamageTaken" },
+            avg_magicalDamageTaken: { $avg: "$magicalDamageTaken" },
+            avg_trueDamageTaken: { $avg: "$trueDamageTaken" },
+            avg_totalDamageTaken: { $avg: "$totalDamageTaken" },
+            avg_damageDealtToObjectives: { $avg: "$damageDealtToObjectives" },
+            avg_damageSelfMitigated: { $avg: "$damageSelfMitigated" },
+
+            avg_totalHeal: { $avg: "$totalHeal" },
+
+            // Vision
+            avg_visionScore: { $avg: "$visionScore" },
+            avg_wardsPlaced15: { $avg: "$wardsPlaced15" },
+            avg_wardsKilled15: { $avg: "$wardsKilled15" },
+            avg_wardsKilled: { $avg: "$wardsKilled" },
+            avg_visionWardsBoughtInGame: { $avg: "$visionWardsBoughtInGame" },
+
+            // Fun
+            avg_firstBloodKill: { $avg: { $cond : [ "$firstBloodKill", 1, 0 ] } },
+            avg_firstBloodAssist: { $avg: { $cond : [ "$firstBloodAssist", 1, 0 ] } },
+            avg_firstTowerKill: { $avg: { $cond : [ "$firstTowerKill", 1, 0 ] } },
+            avg_firstTowerAssist: { $avg: { $cond : [ "$firstTowerAssist", 1, 0 ] } },
+            avg_turretKills: { $avg: "$turretKills" },
+            avg_doubleKills: { $avg: "$doubleKills" },
+            avg_tripleKills: { $avg: "$tripleKills" },
+            avg_quadraKills: { $avg: "$quadraKills" },
+            avg_pentaKills: { $avg: "$pentaKills" },
+
+            // Timeline
+            avg_csDiff10: { $avg: "$csDiff10" },
+            avg_csDiff20: { $avg: "$csDiff20" },
+            avg_csDiff30: { $avg: "$csDiff30" },
+            total_games: { $sum: 1 }
+        }
+    })
+    GameModel.aggregate(pipeline).then(data => {
+        res.json(data);
+    }, (err) => {
+        res.status(400).json("Error: " + err);
+    })
+});
+
+router.route('/avg/role/:rolename?').get((req, res) => {
+    let pipeline = [];
+    if (req.params.rolename) {
+        pipeline.push({
+            $match: {
+                lane: req.params.rolename
+            }
+        })
+    }
+    pipeline.push({
+        $group: {
+            _id: { lane: '$lane'},
+            avg_gameDuration: { $avg: "$gameDuration" },
+            avg_kills: { $avg: "$kills" },
+            avg_deaths: { $avg: "$deaths" },
+            avg_assists: { $avg: "$assists" },
+            avg_goldEarned: { $avg: "$goldEarned" },
+            avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
+            avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
+
+            avg_kills15: { $avg: "$kills15"},
+            avg_soloKills: { $avg: "$soloKills" },
+            avg_gankKills: { $avg: "$gankKills" },
+            avg_deaths15: { $avg: "$deaths15" },
+            avg_soloDeaths: { $avg: "$soloDeaths" },
+            avg_gankDeaths: { $avg: "$gankDeaths" },
+            avg_assists15: { $avg: "$assists15" },
+
+            // Income
+            avg_neutralMinionsKilled: { $avg: "$neutralMinionsKilled" },
+            avg_neutralMinionsKilledTeamJungle: { $avg: "$neutralMinionsKilledTeamJungle" },
+            avg_neutralMinionsKilledEnemyJungle: { $avg: "$neutralMinionsKilledEnemyJungle" },
+            avg_firstItemTime: { $avg: "$firstItemTime" },
+            avg_goldGen10: { $avg: "$goldGen10" },
+            avg_goldGen20: { $avg: "$goldGen20" },
+            avg_goldGen30: { $avg: "$goldGen30" },
+            avg_xpGen10: { $avg: "$xpGen10" },
+            avg_xpGen20: { $avg: "$xpGen20" },
+            avg_xpGen30: { $avg: "$xpGen30" },
+            avg_csGen10: { $avg: "$csGen10" },
+            avg_csGen20: { $avg: "$csGen20" },
+            avg_csGen30: { $avg: "$csGen30" },
+
+            // Damage
+            avg_physicalDamageDealtToChampions: { $avg: "$physicalDamageDealtToChampions" },
+            avg_magicDamageDealtToChampions: { $avg: "$magicDamageDealtToChampions" },
+            avg_trueDamageDealtToChampions: { $avg: "$trueDamageDealtToChampions" },
+            avg_physicalDamageTaken: { $avg: "$physicalDamageTaken" },
+            avg_magicalDamageTaken: { $avg: "$magicalDamageTaken" },
+            avg_trueDamageTaken: { $avg: "$trueDamageTaken" },
+            avg_totalDamageTaken: { $avg: "$totalDamageTaken" },
+            avg_damageDealtToObjectives: { $avg: "$damageDealtToObjectives" },
+            avg_damageSelfMitigated: { $avg: "$damageSelfMitigated" },
+
+            avg_totalHeal: { $avg: "$totalHeal" },
+
+            // Vision
+            avg_visionScore: { $avg: "$visionScore" },
+            avg_wardsPlaced15: { $avg: "$wardsPlaced15" },
+            avg_wardsKilled15: { $avg: "$wardsKilled15" },
+            avg_wardsKilled: { $avg: "$wardsKilled" },
+            avg_visionWardsBoughtInGame: { $avg: "$visionWardsBoughtInGame" },
+
+            // Fun
+            avg_firstBloodKill: { $avg: { $cond : [ "$firstBloodKill", 1, 0 ] } },
+            avg_firstBloodAssist: { $avg: { $cond : [ "$firstBloodAssist", 1, 0 ] } },
+            avg_firstTowerKill: { $avg: { $cond : [ "$firstTowerKill", 1, 0 ] } },
+            avg_firstTowerAssist: { $avg: { $cond : [ "$firstTowerAssist", 1, 0 ] } },
+            avg_turretKills: { $avg: "$turretKills" },
+            avg_doubleKills: { $avg: "$doubleKills" },
+            avg_tripleKills: { $avg: "$tripleKills" },
+            avg_quadraKills: { $avg: "$quadraKills" },
+            avg_pentaKills: { $avg: "$pentaKills" },
+
+            // Timeline
+            avg_csDiff10: { $avg: "$csDiff10" },
+            avg_csDiff20: { $avg: "$csDiff20" },
+            avg_csDiff30: { $avg: "$csDiff30" },
+            total_games: { $sum: 1 }
+        }
+    })
+    GameModel.aggregate(pipeline).then(data => {
+        res.json(data);
+    }, (err) => {
+        res.status(400).json("Error: " + err);
+    })
 });
 
 module.exports = router;

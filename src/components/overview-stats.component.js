@@ -216,9 +216,9 @@ export default class Overview extends Component {
                                 <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_kills")}>Kills</th>
                                 <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_deaths")}>Deaths</th>
                                 <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_assists")}>Assists</th>
-                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_gold")}>Gold</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_goldEarned")}>Gold</th>
                                 {/*<th scope="col" className="center clickable">CS</th>*/}
-                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_damage")}>Damage</th>
+                                <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "avg_totalDamageDealtToChampions")}>Damage</th>
                                 <th scope="col" className="center clickable" onClick={this.sortData.bind(this, "total_games")}>Games</th>
                                 </tr>
                             </thead>
@@ -234,9 +234,9 @@ export default class Overview extends Component {
                                                 <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>
                                                 <td className="center" name="deathsCol">{customRound(item.avg_deaths)}</td>
                                                 <td className="center" name="assistsCol">{customRound(item.avg_assists)}</td>
-                                                <td className="center" name="goldCol">{customRound(item.avg_gold)}</td>
-                                                {/*<td className="center" name="csCol">{customRound(item.avg_cs)}</td>*/}
-                                                <td className="center" name="dmgCol">{customRound(item.avg_damage)}</td>
+                                                <td className="center" name="goldCol">{customRound(item.avg_goldEarned)}</td>
+                                                {/*<td className="center" name="csCol">{customRound(item.avg_totalMinionsKilled)}</td>*/}
+                                                <td className="center" name="dmgCol">{customRound(item.avg_totalDamageDealtToChampions)}</td>
                                                 <td className="center" name="gamesCol">{customRound(item.total_games)}</td>
                                             </tr>
                                         )
