@@ -52,7 +52,7 @@ export default class Roster extends Component {
       method: "PUT",
       body: JSON.stringify(this.state.modalTeam)
     }).then(data => {
-      console.(data);
+      
     })
   }
 
