@@ -21,7 +21,6 @@ export default class BasicStats extends Component {
             filteredData: [],
             compData: []
         }
-        this.loadCompareData(this.props.player);
     }
 
 
@@ -81,7 +80,6 @@ export default class BasicStats extends Component {
                 let v2 = customRound((this.avgData['avg_totalMinionsKilled']*60)/this.avgData['avg_gameDuration'], 4);
                 v1 = v1 ? v1 : 0;
                 v2 = v2 ? v2 : 0;
-                console.log(this.avgData['avg_gameDuration']);
                 let vm = Math.max(v1, v2);
                 return {
                     "subject": `CS/min (${customRound(v1, 1)})`,
@@ -147,47 +145,6 @@ export default class BasicStats extends Component {
         }
         return data;
     }
-
-    loadCompareData(playerName) {
-        let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName + "/agg"
-        fetch(url).then((data) => {
-          if (data.status != 200) {
-            alert("Could not find summoner!");
-            return;
-          }
-          data.json().then(jsonData => {
-            const playerData = jsonData[0];
-            const newData = {}
-
-            newData["Name"] = playerData._id.player;
-            newData["Kills"] = customRound(playerData["avg_kills"]);
-            newData["Deaths"] = customRound(playerData["avg_deaths"]);
-            newData["Assists"] = customRound(playerData["avg_assists"]);
-            newData["KDA"] = customRound((newData["Kills"] + newData["Assists"]) / newData["Deaths"])
-            newData["Gold"] = customRound(playerData["avg_goldEarned"]);
-            newData["CS"] = customRound(playerData["avg_totalMinionsKilled"]);
-            newData["Damage Dealt"] = customRound(playerData["avg_totalDamageDealtToChampions"]);
-            newData["Damage Taken"] = customRound(playerData["avg_totalDamageTaken"]);
-            newData["Game Time"] = customRound(playerData["avg_gameDuration"] / 60) + " min";
-            newData["Damage/Gold"] = customRound(playerData["avg_dpg"]);
-            newData["Vision"] = customRound(playerData["avg_vision"]);
-            newData["Wards killed"] = customRound(playerData["avg_wards_killed"]);
-            newData["Win Rate"] = customRound((playerData["wins"] / playerData["total_games"]) * 100) + "%";
-
-
-            this.setState({
-              compData: this.state.compData.concat(newData)
-            });
-          });
-        }, (error) => {
-          alert("Could not find summoner!");
-        })
-      }
-
-      // This is an intermediate function so that loadCompareData can be kept general
-      loadCompareDataFromSearch() {
-        this.loadCompareData(document.getElementById("playerName").value);
-      }
 
     removePlayerCompare(i) {
         this.state.compData.splice(i, 1);
@@ -275,18 +232,26 @@ export default class BasicStats extends Component {
                 <div className="risen-stats-body">
                   <div className='row' style={{overflow: 'scroll', maxHeight: '300px'}}>
                     <div className='col'>
-                      <ul style={{padding: '0'}}>
-                      {
-                      Object.values(this.filteredData).map(datum => {
-                        return (
-                          <li style={gameStatsInfoBox} className="tiger">
-                            <div>{champMap[datum["championId"]]}</div>
-                            <div>{datum["kills"]}/{datum["deaths"]}/{datum["assists"]}</div>
-                          </li>
-                          )
-                        })
-                      }
-                      </ul>
+                      <table className="table risen-table center">
+                        {/* <thead>
+                          <tr>
+                            <td>Champion</td>
+                            <td>Score</td>
+                          </tr>
+                        </thead> */}
+                        <tbody>
+                          {
+                            Object.values(this.filteredData).map(datum => {
+                              return (
+                                <tr>
+                                  <td>{champMap[datum["championId"]]}</td>
+                                  <td>{datum["kills"]}/{datum["deaths"]}/{datum["assists"]}</td>
+                                </tr>
+                              )
+                            })
+                          }
+                        </tbody>
+                      </table>
                     </div>
                   </div>      
                 </div>

@@ -28,7 +28,7 @@ export default class DotMap extends Component {
         return (
             <section>
                 <div style={holderStyle}>
-                    <img src={Minimap}></img>
+                    <img src={Minimap} style={{width: '100%', maxWidth: '512px'}}></img>
                     {
                         this.state.dots.map((dot, i) => {
                             let curDotStyle = JSON.parse(JSON.stringify(dotStyle));

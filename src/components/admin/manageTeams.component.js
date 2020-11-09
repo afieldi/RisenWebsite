@@ -28,8 +28,6 @@ export default class ManageTeams extends Component {
 
     loadSeason() {
         const ele = document.getElementById('seasonName');
-        // console.log(ele.value);
-        // return;
         const url = process.env.REACT_APP_BASE_URL + '/seasons/' + ele.value;
         fetch(url).then(data => {
             data.json().then(season => {

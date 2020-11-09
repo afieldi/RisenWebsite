@@ -43,7 +43,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "update": "node src/data/update.js",
-    "dev": "react-scripts start"
+    "dev": "react-scripts start",
+    "gcloud": "gcloud app deploy",
+    "deploy": "npm run build && npm run gcloud"
   },
   "eslintConfig": {
     "extends": "react-app"

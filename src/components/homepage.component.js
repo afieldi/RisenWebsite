@@ -139,55 +139,21 @@ export default class HomePage extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Rampage Open</td>
-                                        <td>1-2 Players</td>
-                                        <td>Gold 1</td>
-                                        <td>Silver-Gold</td>
-                                        <td>Free</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Rampage Premade</td>
-                                        <td>5-10 Players</td>
-                                        <td>Gold 1</td>
-                                        <td>Silver-Gold</td>
-                                        <td>Free</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Unstoppable Premade</td>
-                                        <td>5-10 Players</td>
-                                        <td>Platinum 1</td>
-                                        <td>Gold-Platinum</td>
-                                        <td>Free</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dominate Open</td>
-                                        <td>1-2 Players</td>
-                                        <td>Diamond 4</td>
-                                        <td>Platinum-D4</td>
-                                        <td>Free</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dominate Premade</td>
-                                        <td>5-10 Players</td>
-                                        <td>Diamond 2</td>
-                                        <td>Platinum-Diamond</td>
-                                        <td>Free</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Divine League</td>
-                                        <td>5-10 Players</td>
-                                        <td>Diamond 1</td>
-                                        <td>Diamond</td>
-                                        <td>Paid</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Champions League</td>
-                                        <td>5-10 Players</td>
-                                        <td>Challenger</td>
-                                        <td>Any</td>
-                                        <td>Paid</td>
-                                    </tr>
+                                    {
+                                        Object.values(staticText.leagues).map(league => {
+                                            return league.subLeagues.map(subLeague => {
+                                                return (
+                                                    <tr>
+                                                        <td>{subLeague.prettyName}</td>
+                                                        <td>{subLeague.size}</td>
+                                                        <td>{subLeague.peak}</td>
+                                                        <td>{subLeague.ranks}</td>
+                                                        <td>{subLeague.cost}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        })
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -251,7 +217,7 @@ export default class HomePage extends Component {
                                     </div>
                                 </div>
                                 <div className='col'>
-                                    <Link to="/" className="clickable">
+                                    <Link to="/" className="clickable disabled">
                                         <div style={{...imageStyle, ...{backgroundImage: `url(https://cdn.editage.com/insights/editagecom/production/styles/detail_page_image/public/Using%20the%20active%20and%20passive%20voice%20in%20research%20writing%20%28resized%29_0_0.jpg?itok=eMctYpxm)`}}}></div>
                                         <div style={textOverlayStyle}>
                                             <h3 style={textStyle}>Articles</h3>

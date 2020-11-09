@@ -65,9 +65,6 @@ function exchangeCode(req, code, callback) {
   
 
   const formBody = Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
-  console.log(data);
-  console.log(formBody);
-  console.log("making fetch request");
   fetch('https://discord.com/api/oauth2/token', {
     method: 'POST',
     headers: {
@@ -75,7 +72,6 @@ function exchangeCode(req, code, callback) {
     },
     body: formBody
   }).then(data => {
-    console.log("got data from fetch request");
     data.json().then(res => {
       if(res.error) {
         console.log("Error: " + res.error);

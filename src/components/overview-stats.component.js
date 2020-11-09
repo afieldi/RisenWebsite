@@ -43,7 +43,6 @@ export default class Overview extends Component {
         fetch(url).then((data) => {
             this.loadingData = false;
             data.json().then(data => {
-                console.log(data);
                 // data = this.sortData(data, "lane", "DESC");
 
                 if (append) {
@@ -159,7 +158,6 @@ export default class Overview extends Component {
         max -= document.documentElement.clientHeight || document.body.clientHeight;
         const scroll = document.documentElement.scrollTop || document.body.scrollTop;
         if (scroll / max > .9) {
-            // console.log(this.lastLoadedPage);
             this.getData(this.lastLoadedPage + 1, true, true);
         }
     }

@@ -42,7 +42,6 @@ export default class ManageDraft extends Component {
     getBannedChamps() {
         fetch(process.env.REACT_APP_BASE_URL + "/draft/champban").then(data => {
             data.json().then(bans => {
-                console.log(bans);
                 this.setState({
                     bannedChamps: bans
                 });

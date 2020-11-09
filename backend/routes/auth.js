@@ -19,12 +19,10 @@ router.route("/callback").get((req, res) => {
         name: user.username,
         expiry: weekFromNow
       }).then(userDoc => {
-        console.log("Redirecting with success");
         res.redirect(`${process.env.WEBSITE_BASE}/auth?code=${userDoc.auth}`)
       });
     }, () => {
       // Something went wrong
-      console.log("Redirecting with failure");
       res.redirect(`${process.env.WEBSITE_BASE}/auth`)
     })
 });
@@ -42,7 +40,6 @@ router.route("/redirect").get((req, res) => {
   // TODO: Use Host instead once this migrates to an actual server
   // const redirect = "http%3A%2F%2F" + "99.246.224.136:5000" + "/auth/callback";
 
-  //  console.log(req.get("url"));
   // TODO add in the state query param
   res.send(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${client_id}&scope=identify&redirect_uri=${redirect}&prompt=consent`);
 });

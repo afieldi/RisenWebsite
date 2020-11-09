@@ -153,7 +153,6 @@ export default class IncomeStats extends Component {
       playerGold += this.accStats[type+'30'];
       risenGold += this.avgData[type+'30'];
     }
-    console.log(data);
     return data;
   }
 

@@ -4,7 +4,6 @@ const Ban = require('../models/bans.model');
 const { generateNewDraft } = require('../src/draft');
 
 router.route("/create").post((req, res) => {
-    console.log(req.body);
     generateNewDraft(req.body, (draft) => {
         res.json(draft);
     });
@@ -19,8 +18,6 @@ router.route("/champban").get((req, res) => {
 });
 
 router.route("/champban").post((req, res) => {
-    // console.log(new Date(req.body.expiryDate));
-    // return;
     Ban.create({
         champion: req.body.champion,
         expiryDate: new Date(req.body.expiryDate)

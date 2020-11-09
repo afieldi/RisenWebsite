@@ -37,7 +37,6 @@ export default class Roster extends Component {
           }
           dTeams[v.division].push(v);
         });
-        console.log(dTeams);
         this.setState({
           seasonName: seasonInfo.season.seasonName,
           sheetUrl: seasonInfo.season.spreadsheet,
@@ -45,7 +44,6 @@ export default class Roster extends Component {
         });
       }, err => {console.log(err)})
     })
-    console.log(seasonName);
   }
 
   saveTeam() {
@@ -54,7 +52,7 @@ export default class Roster extends Component {
       method: "PUT",
       body: JSON.stringify(this.state.modalTeam)
     }).then(data => {
-      console.log(data);
+      console.(data);
     })
   }
 

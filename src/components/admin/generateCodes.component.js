@@ -20,7 +20,6 @@ export default class GenerateCodes extends Component {
       method: 'POST'
     }).then(res => {
       res.json().then(data => {
-        console.log(data);
         this.setState({
           codes: data.join("\n")
         });

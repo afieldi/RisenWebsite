@@ -63,6 +63,8 @@
                 {
                     "prettyName": "Rampage Open",
                     "ranks":"Silver - Gold",
+                    "cost": "Free",
+                    "size": "1-2 Players",
                     "peak":"Gold 1",
                     "longBlurb": "Open league players can sign up solo or with a duo. The rest of your team is assigned to you by our Roster staff.",
                     "blurb": "Sign up on your own or with a friend and compete with a new team!"
@@ -70,6 +72,8 @@
                 {
                     "prettyName": "Rampage Premade",
                     "ranks":"Silver - Gold",
+                    "cost": "Free",
+                    "size": "5-10 Players",
                     "peak":"Gold 1",
                     "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strategies you can come up with to win!",
                     "blurb": "Get a roster of at least 5 players together and compete against other teams in Rampage Premade. Up to 10 players can be on a single team."
@@ -87,6 +91,8 @@
                 {
                     "prettyName": "Unstoppable Premade",
                     "ranks":"Silver - Gold",
+                    "cost": "Free",
+                    "size": "5-10 Players",
                     "peak":"Platinum 1",
                     "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
                     "blurb": "Get a roster of at least 5 players together and compete against other teams in Unstoppable Premade. Up to 10 players can be on a single team."
@@ -105,6 +111,8 @@
                     "prettyName": "Dominate Open",
                     "ranks":"Platinum/Diamond 4",
                     "peak":"Diamond 4",
+                    "size": "1-2 Players",
+                    "cost": "Free",
                     "longBlurb": "Open league players can sign up solo or with a duo. The rest of your team is assigned to you by our Roster staff.",
                     "blurb": "Sign up on your own or with a friend and compete with a new team!"
                 },
@@ -112,6 +120,8 @@
                     "prettyName": "Dominate Premade",
                     "ranks":"Platinum - Diamond",
                     "peak":"Diamond 2",
+                    "size": "5-10 Players",
+                    "cost": "Free",
                     "longBlurb": "Premade teams can sign up with a maximum of 10 players and must go through a play-ins process to make it into the league. No role restrictions, try whatever new and wacky strat you can come up with to win.",
                     "blurb": "Get a roster of at least 5 players together and compete against other teams in Dominate Premade. Up to 10 players can be on a single team."
                 }
@@ -128,6 +138,8 @@
                 {
                     "prettyName": "Divine Premade",
                     "ranks":"Platinum - Diamond 1",
+                    "cost": "Paid",
+                    "size": "5-10 Players",
                     "peak":"Diamond 1",
                     "longBlurb": "Premade teams sign-up and are required to pay an entry fee to play. This fee goes towards the prize pool that is distrubuted to the winning teams at the end of the season.",
                     "blurb": "Get a roster of at least 5 players together and compete against other teams in Divine Premade. Up to 10 players can be on a single team."
@@ -145,6 +157,8 @@
                 {
                     "prettyName": "Champions League",
                     "ranks":"Master and above",
+                    "cost": "Paid",
+                    "size": "5-10 Players",
                     "peak":"Uncapped",
                     "longBlurb": "",
                     "blurb": "Teams are accepted into Champions League via a vetting process by Risen administration. Even though we do accept applications for this league, Champions League is entry by invitation only. Teams with a history of success and a genuine commitment to competitive integrity are more likely to be accepted. That being said, don't be discouraged from filling out an application if you think your team has got what it takes to compete with some of the best players outside of professional League of Legends. If we think your team looks competitive, we'll be sure to reach out. For any additional information, please reach out to any of the Risen Admin team and we can point you in the right direction."

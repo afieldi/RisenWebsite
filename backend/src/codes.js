@@ -32,7 +32,6 @@ async function requestMatchCodes(count, id) {
       })
   }).then(response => {
       if (!response.ok) {
-        console.log(response)
         return response.statusText
       }
       return response.json();

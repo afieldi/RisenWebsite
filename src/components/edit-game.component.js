@@ -75,8 +75,6 @@ export default class EditGame extends Component {
       date: this.state.date
     }
 
-    console.log(game);
-
     axios.post('http://localhost:5000/games/update/' + this.props.match.params.id, game)
       .then(res => console.log(res.data));
 

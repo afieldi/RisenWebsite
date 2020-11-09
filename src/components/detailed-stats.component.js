@@ -109,6 +109,7 @@ componentDidMount() {
     if (laneFilter !== "ANY") {
         url += "/role/" + laneFilter;
     }
+    console.log(url)
     fetch(url).then((data) => {
     data.json().then(data => {
         this.setState({
@@ -239,14 +240,14 @@ componentDidMount() {
                             </div>
                             <div className="risen-stats-body">
                                 <div className="row">
-                                    <div className="col">
+                                    <div className="col-md">
                                       <Form.Group controlId="championFilter">
                                         <Form.Label>Champion</Form.Label>
                                         <Form.Control as="input">
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
-                                    <div className="col">
+                                    <div className="col-md">
                                       <Form.Group controlId="roleFilter">
                                         <Form.Label>Role</Form.Label>
                                         <Form.Control as="select" defaultValue="ANY">
@@ -259,7 +260,7 @@ componentDidMount() {
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
-                                    <div className="col">
+                                    <div className="col-md">
                                       <Form.Group controlId="durationFilter">
                                         <Form.Label>Duration</Form.Label>
                                         <Form.Control as="select">
@@ -270,7 +271,7 @@ componentDidMount() {
                                         </Form.Control>
                                       </Form.Group>
                                     </div>
-                                    <div className="col">
+                                    <div className="col-md">
                                       <Form.Group controlId="resultFilter">
                                         <Form.Label>Result</Form.Label>
                                         <Form.Control as="select">
@@ -335,7 +336,7 @@ componentDidMount() {
 const navStyle = {
 //   alignItems: "flex-end",
 //   justifyContent: "flex-end"
-    border: 0
+    border: 0,
 }
 
 const tabStyle = {

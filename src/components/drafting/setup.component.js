@@ -20,7 +20,6 @@ export default class Setup extends Component {
     
     createGame(configData) {
         const url = process.env.REACT_APP_BASE_URL + '/draft/create';
-        console.log(configData);
         fetch(url, {
             method: 'POST',
             headers: {
@@ -30,7 +29,6 @@ export default class Setup extends Component {
             body: JSON.stringify(configData)
         }).then(res => {
             res.json().then(data => {
-                console.log(data);
                 this.setState({
                     gameLinks: {
                         blue: `https://${window.location.hostname}/draft?game=${data.gameLink}&auth=${data.blueAuth}`,

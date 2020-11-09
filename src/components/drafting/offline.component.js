@@ -101,7 +101,6 @@ export default class OfflineDraft extends Component {
           this.setState({
             selected: element
           });
-          console.log("doing swap");
           let a = element.split('-');
           let b = this.state.selected.split('-');
           let assigner = this.state;
@@ -148,12 +147,10 @@ export default class OfflineDraft extends Component {
         document.getElementById(element).classList.remove("offline-selected")
 
         let assigner = this.state;
-        // assigner[draft[0]] = {}
         assigner[draft[0]][draft[1]] = arr;
         assigner.selected = null;
 
         this.setState(assigner);
-        console.log(assigner);
       }
     }
   }
@@ -277,7 +274,6 @@ export default class OfflineDraft extends Component {
                         Object.keys(this.state.filteredChamps).map(champ => {
                           let style = {...iconStyle, ...{backgroundImage: `url(${require(`../../images/champions/icons/` + champ + `_0.png`)})`, margin: 'auto'}};
                           let onClickFnc = this.selectBox.bind(this, "champ-" + champ);
-                          // console.log(champions)
                           if (this.champIsSelected(champ)) {
                             style = Object.assign({}, style, {"filter": "brightness(0.4)"});
                             onClickFnc = null;

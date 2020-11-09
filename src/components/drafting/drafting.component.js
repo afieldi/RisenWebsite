@@ -75,9 +75,7 @@ export default class Drafting extends Component {
             data.json().then(bans => {
                 for (let ban of bans) {
                     if (this.allChamps.includes(ban.champion)) {
-                        console.log(this.allChamps.indexOf(ban.champion));
                         this.allChamps.splice(0, 1);
-                        console.log(this.allChamps);
                     }
                 }
                 this.filterChampions();

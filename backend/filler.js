@@ -14,7 +14,7 @@ const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
   GameModel.find().then(games => {
-      fillGolds(games);
+      fillWards(games);
   })
 });
 

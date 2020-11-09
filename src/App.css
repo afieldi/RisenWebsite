@@ -60,6 +60,10 @@
   background-color: #080808;
 }
 
+a.nav-link {
+  color: rgb(122, 190, 245);
+}
+
 .navbar-item {
   padding: 10px 0;
 }
@@ -150,7 +154,6 @@
   margin: 10px 10px 0px 10px;
   position: relative;
   font-size: 14px;
-  /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
 }
 
 .filter-button {
@@ -160,13 +163,12 @@
   border-radius: 300px;
   font-weight: 700;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-  padding: 5px 25px;
   display: block;
-  margin: 30px 10px 10px 60px;
+  margin: 10% auto; 
   position: relative;
   font-size: 14px;
   height: 50%;
-  /* box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
+  width: 80%;
 }
 
 .risen-button-small {

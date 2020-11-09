@@ -30,54 +30,85 @@ export default class ChampionStats extends Component {
   }
 
   generateSankey() {
-      let map = {
-          role: {},
-          champ: {}
-      };
-      let data = {
-        nodes: [
-            {name: "Played", count: this.filteredData.length}
-        ],
-        links: []
-      }
+    let map = {
+        role: {},
+        champ: {}
+    };
+    let data = {
+      nodes: [
+          {name: "Played", count: this.filteredData.length}
+      ],
+      links: []
+    }
 
-      for (let d of this.filteredData) {
-          let champ = champions[champMap[d.championId]];
-          let role = champ.tags;
-          role = role[0] === "Support" ? role[1] : role[0];
-          if (!map.role[role]) {
-            map.role[role] = {index: data.nodes.length, count: 0};
-            data.nodes.push({name: role, count: 0});
-          }
-          data.nodes[map.role[role].index].count += 1;
-          map.role[role].count += 1;
+    for (let d of this.filteredData) {
+        let champ = champions[champMap[d.championId]];
+        let role = champ.tags;
+        role = role[0] === "Support" ? role[1] : role[0];
+        if (!map.role[role]) {
+          map.role[role] = {index: data.nodes.length, count: 0};
+          data.nodes.push({name: role, count: 0});
+        }
+        data.nodes[map.role[role].index].count += 1;
+        map.role[role].count += 1;
 
-          let name = champ.name;
-          if (!map.champ[name]) {
-            map.champ[name] = {index: data.nodes.length, count: 0, role: role};
-            data.nodes.push({name: name, count: 0});
-          }
-          data.nodes[map.champ[name].index].count += 1;
-          map.champ[name].count += 1;
+        let name = champ.name;
+        if (!map.champ[name]) {
+          map.champ[name] = {index: data.nodes.length, count: 0, role: role};
+          data.nodes.push({name: name, count: 0});
+        }
+        data.nodes[map.champ[name].index].count += 1;
+        map.champ[name].count += 1;
 
-        //   data.links.push(role);
+      //   data.links.push(role);
+    }
+    for (let r of Object.values(map.role)) {
+      data.links.push({
+          source: 0,
+          target: r.index,
+          value: r.count
+      })
+    }
+    for (let r of Object.values(map.champ)) {
+      data.links.push({
+          source: map.role[r.role].index,
+          target: r.index,
+          value: r.count
+      })
+    }
+    return data;
+  }
+
+  generateTableData() {
+    let data = {};
+    for (let game of this.filteredData) {
+      let champ = champions[champMap[game.championId]].name;
+      if (!data[champ]) {
+        data[champ] = {
+          games: 0,
+          kills: 0,
+          assists: 0,
+          deaths: 0,
+          cs: 0,
+          winrate: 0
+        }
       }
-      for (let r of Object.values(map.role)) {
-        data.links.push({
-            source: 0,
-            target: r.index,
-            value: r.count
-        })
+      data[champ].games += 1;
+      data[champ].kills += game.kills;
+      data[champ].assists += game.assists;
+      data[champ].deaths += game.deaths;
+      data[champ].cs += game.totalMinionsKilled + game.neutralMinionsKilled;
+      if (game.win) {data[champ].winrate += 100}
+    }
+    
+    for (let c in data) {
+      for (let k in data[c]) {
+        if(k === "games")
+          continue;
+        data[c][k] = customRound(data[c][k]/data[c].games, 2)
       }
-      for (let r of Object.values(map.champ)) {
-        data.links.push({
-            source: map.role[r.role].index,
-            target: r.index,
-            value: r.count
-        })
-      }
-      console.log(data);
-      return data;
+    }
+    return data;
   }
 
   genNode(a) {
@@ -95,33 +126,74 @@ export default class ChampionStats extends Component {
         <Container>
           <div className="row">
             <div className="col-md">
-            <div className="risen-stats-block">
-                <div className="risen-stats-header">
-                    <h3>Player Champions</h3>
-                </div>
-                <div className="risen-stats-body">
-                    <div style={{width: '120%', position: 'relative', left: '-15%'}}>
-                        <ResponsiveContainer width="100%" height={500}>
-                            <Sankey
-                                labelKey="name"
-                                data={this.generateSankey()}
-                                // node={<SankeyNode />}
-                                node={this.genNode}
-                                nodePading={50}
-                                margin={{
-                                left: 200,
-                                    right: 200,
-                                    top: 100,
-                                    bottom: 100,
-                                }}
-                                link={{ stroke: '#77c878' }}
-                                >
-                                <Tooltip />
-                            </Sankey>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
+              <div className="risen-stats-block">
+                  <div className="risen-stats-header">
+                      <h3>Player Champions</h3>
+                  </div>
+                  <div className="risen-stats-body">
+                      <div style={{width: '120%', position: 'relative', left: '-15%'}}>
+                          <ResponsiveContainer width="100%" height={500}>
+                              <Sankey
+                                  labelKey="name"
+                                  data={this.generateSankey()}
+                                  // node={<SankeyNode />}
+                                  node={this.genNode}
+                                  nodePading={50}
+                                  margin={{
+                                  left: 200,
+                                      right: 200,
+                                      top: 100,
+                                      bottom: 100,
+                                  }}
+                                  link={{ stroke: '#77c878' }}
+                                  >
+                                  <Tooltip />
+                              </Sankey>
+                          </ResponsiveContainer>
+                      </div>
+                  </div>
+              </div>
             </div>
+          </div>
+          <div className="row">
+            <div className="col-md">
+              <div className="risen-stats-block">
+                  <div className="risen-stats-header">
+                      <h3>Champion Table</h3>
+                  </div>
+                  <div className="risen-stats-body">
+                    <table className="table risen-table">
+                      <thead>
+                        <tr className="center">
+                          <td>Champion</td>
+                          <td>Kills</td>
+                          <td>Deaths</td>
+                          <td>Assists</td>
+                          <td>CS</td>
+                          <td>WR</td>
+                          <td>Games</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          Object.entries(this.generateTableData()).map(([champ, value]) => {
+                            return (
+                              <tr className="center">
+                                <td>{champ}</td>
+                                <td>{value.kills}</td>
+                                <td>{value.deaths}</td>
+                                <td>{value.assists}</td>
+                                <td>{value.cs}</td>
+                                <td>{value.winrate}%</td>
+                                <td>{value.games}</td>
+                              </tr>
+                            )
+                          })
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
             </div>
           </div>
         </Container>
