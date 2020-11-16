@@ -11,6 +11,7 @@ const draft = require('./src/draft');
 
 //env variables from dotenv file
 
+
 let envFile = ".env.development";
 if (argv.prod) {
     process.env.NODE_ENV = 'production';

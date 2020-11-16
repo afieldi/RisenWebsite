@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const PlayerModel = require('../models/player.model');
 const GameModel = require('../models/game.model');
+const TeamGameModel = require('../models/teamgame.model');
 const mongoose = require('mongoose');
 
 const avgPipe = {
@@ -74,6 +75,8 @@ const avgPipe = {
     total_games: { $sum: 1 }
 }
 
+// What the fuck am I doing here. Check if this route is used and fix it
+// Why am I getting a gamemodel. This makes no sense
 router.route('/player/id/:id').get((req, res) => {
     GameModel.find({player: mongoose.Types.ObjectId(req.params.id)}).then(games => {
         res.json(games);
@@ -246,6 +249,7 @@ router.route('/brief').get((req, res) => {
     const playerName = req.query.player ? req.query.player : null;
     const lane = req.query.lane ? req.query.lane : null;
     const sort = req.query.sort ? req.query.sort : "_id.sortablePlayer+";
+    const season = req.body.season ? Array(req.body.season) : [];
     const sortObject = (() => {
         let dir = sort.substr(sort.length - 1);
         let tmp = {};
@@ -253,7 +257,7 @@ router.route('/brief').get((req, res) => {
         return tmp;
     })();
 
-    let pipe = []
+    let pipe = [];
     pipe.push({
         $lookup: {
             from: 'players',
@@ -396,4 +400,77 @@ router.route('/avg/role/:rolename?').get((req, res) => {
     })
 });
 
+router.route('/avg/role/:rolename?/byplayer').get((req, res) => {
+    let pipeline = [];
+    if (req.params.rolename) {
+        pipeline.push({
+            $match: {
+                lane: req.params.rolename
+            }
+        })
+    }
+    pipeline.push({
+        $group: {
+            _id: { player: '$player'},
+            ...avgPipe
+        }
+    })
+    GameModel.aggregate(pipeline).then(data => {
+        res.json(data);
+    }, (err) => {
+        res.status(400).json("Error: " + err);
+    })
+});
+
+router.route('/avg/byplayer').get((req, res) => {
+    let pipeline = [];
+    pipeline.push({
+        $lookup: {
+            from: 'players',
+            localField: 'player',
+            foreignField: '_id',
+            as: 'playername'
+        }
+    })
+    pipeline.push({
+        $group: {
+            _id: { player: "$playername.name", playerId: "$player" },
+            ...avgPipe
+        }
+    })
+    GameModel.aggregate(pipeline).then(data => {
+        res.json(data);
+    }, (err) => {
+        res.status(400).json("Error: " + err);
+    })
+});
+
+router.route('/general/league').get((req, res) => {
+    let pipeline = []
+    pipeline.push({
+        $group: {
+            _id: "league",
+            blueWins: { $sum: { $cond : [ "$blueWin", 1, 0 ] } },
+            redWins: { $sum: {$cond : [ "$redWin", 1, 0 ] } },
+            blueFirstBlood: { $sum: { $cond : [ "$blueFirstBlood", 1, 0 ] } },
+            redFirstBlood: { $sum: { $cond : [ "$redFirstBlood", 1, 0 ] } },
+            avg_blueTowerKills: { $avg: "$blueTowerKills" },
+            avg_redTowerKills: { $avg: "$redTowerKills" },
+            avg_blueRiftHeraldKills: { $avg: "$blueRiftHeraldKills" },
+            avg_redRiftHeraldKills: { $avg: "$redRiftHeraldKills" },
+            avg_blueInhibitorKills: { $avg: "$blueInhibitorKills" },
+            avg_redInhibitorKills: { $avg: "$redInhibitorKills" },
+            avg_blueDragonKills: { $avg: "$blueDragonKills" },
+            avg_redDragonKills: { $avg: "$redDragonKills" },
+            avg_blueBaronKills: { $avg: "$blueBaronKills" },
+            avg_redBaronKills: { $avg: "$redBaronKills" },
+            total_games: { $sum: 1 }
+        }
+    })
+    TeamGameModel.aggregate(pipeline).then(data => {
+        res.json(data);
+    }, (err) => {
+        res.status(400).json("Error: " + err);
+    });
+});
 module.exports = router;

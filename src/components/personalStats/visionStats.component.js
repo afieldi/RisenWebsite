@@ -159,8 +159,8 @@ export default class VisionStats extends Component {
                     <YAxis type="number" />
                     <Tooltip labelStyle={{color: 'black'}} formatter={this.formatLabels} />
                     {/* <ReferenceLine y={0} stroke="#000" /> */}
-                    <Bar name={this.playerName} dataKey="player" fill="#8884d8" />
-                    <Bar name="Risen" dataKey="risen" fill="#82ca9d" />
+                    <Bar name={this.playerName} dataKey="player" fill="#6d83ff" />
+                    <Bar name="Risen" dataKey="risen" fill="#e5b575" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

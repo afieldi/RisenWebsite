@@ -193,12 +193,12 @@ export default class Overview extends Component {
                             </div>
                             <div className="col-lg">
                                 <form onSubmit={this.submitSearch.bind(this)}>
-                                    <div class="input-group mb-3 text-light">
-                                        <input type="text" class="form-control bg-dark text-light"
+                                    <div className="input-group mb-3 text-light">
+                                        <input type="text" className="form-control bg-dark text-light"
                                                 placeholder="Summoner Name" aria-label="Summoner Name"
                                                 aria-describedby="button-addon2" id="nameFilter" ></input>
-                                        <div class="input-group-append text-light bg-secondary">
-                                            <button class="btn btn-outline-dark text-light" type="submit" id="button-addon2">Search</button>
+                                        <div className="input-group-append text-light bg-secondary">
+                                            <button className="btn btn-outline-dark text-light" type="submit" id="button-addon2">Search</button>
                                         </div>
                                     </div>
                                 </form>

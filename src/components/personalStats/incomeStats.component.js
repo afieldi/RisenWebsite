@@ -195,8 +195,8 @@ export default class IncomeStats extends Component {
                       <CartesianGrid stroke="#ccc" />
                       <XAxis tick={{fill: 'white'}} />
                       <YAxis tick={{fill: 'white'}} />
-                      <Area name="Risen Average" dataKey="risen" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6}></Area>
-                      <Area name="You" dataKey="player" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}></Area>
+                      <Area name="Risen Average" dataKey="risen" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6}></Area>
+                      <Area name="You" dataKey="player" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6}></Area>
                       <Legend />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -215,8 +215,8 @@ export default class IncomeStats extends Component {
                       <CartesianGrid stroke="#ccc" />
                       <XAxis tick={{fill: 'white'}} />
                       <YAxis tick={{fill: 'white'}} />
-                      <Area name="Risen Average" dataKey="risen" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6}></Area>
-                      <Area name="You" dataKey="player" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}></Area>
+                      <Area name="Risen Average" dataKey="risen" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6}></Area>
+                      <Area name="You" dataKey="player" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6}></Area>
                       <Legend />
                     </AreaChart>
                   </ResponsiveContainer>

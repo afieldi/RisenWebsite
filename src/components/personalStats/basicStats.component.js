@@ -212,8 +212,8 @@ export default class BasicStats extends Component {
                         <PolarGrid />
                         <PolarAngleAxis dataKey="subject" tick={{fill: 'white'}}/>
                         {/* <PolarRadiusAxis angle={30} domain={[0, 1]} /> */}
-                        <Radar name="Risen Average" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
-                        <Radar name="You" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                        <Radar name="Risen Average" dataKey="B" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6} />
+                        <Radar name="You" dataKey="A" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6} />
                         <Legend />
                       </RadarChart>
                     </ResponsiveContainer>

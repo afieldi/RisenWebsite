@@ -18,6 +18,7 @@ const timelineAnalyizer = require('./timeline')
 const GameModel = require('../models/game.model');
 const PlayerModel = require('../models/player.model');
 const TeamModel = require('../models/team.model');
+const TeamGameModel = require('../models/teamgame.model');
 
 // This will be used later
 async function saveGames(matchIds) {
@@ -69,20 +70,55 @@ async function getRoles(gameData, timeline) {
 
 }
 
+async function saveTeamGame(gameData, teams) {
+    let bD = gameData.teams[0]; // BlueData
+    let rD = gameData.teams[1]; // RedData
+    return await TeamGameModel.create({
+        gameId: gameData.gameId,
+        gameDuration: gameData.gameDuration,
+        blueTeam: teams[0],
+        redTeam: teams[1],
+        blueTowerKills: bD.towerKills,
+        redTowerKills: rD.towerKills,
+        blueRiftHeraldKills: bD.riftHeraldKills,
+        redRiftHeraldKills: rD.riftHeraldKills,
+        blueFirstBlood: bD.firstBlood,
+        redFirstBlood: rD.firstBlood,
+        blueInhibitorKills: bD.inhibitorKills,
+        redInhibitorKills: rD.inhibitorKills,
+        blueBans: bD.bans.map(b => b.championId),
+        redBans: rD.bans.map(b => b.championId),
+        blueDragonKills: bD.dragonKills,
+        redDragonKills: rD.dragonKills,
+        blueBaronKills: bD.baronKills,
+        redBaronKills: rD.baronKills,
+        blueWin: bD.win,
+        redWin: rD.win
+    });
+}
+
+
 async function saveGame(matchId) {
-    const games = await GameModel.find({gameId: matchId});
-    if (games.length > 0) {
-        // We already have this game in our db. Move on.
-        return;
-    }
+    // const games = await GameModel.find({gameId: matchId});
+    // if (games.length > 0) {
+    //     // We already have this game in our db. Move on.
+    //     return;
+    // }
     // TODO: change this to tourney
     await leagueApi.Match.get(matchId, constants.Regions.AMERICA_NORTH).then(
         async gameData => {
             gameData = gameData.response;
+        
             const teams = await getTeams(gameData.participantIdentities);
-            // const timeline = await leagueApi.Match.gettingTimelineById(matchId);
+            
+            saveTeamGame(gameData, teams);
+            
+            const games = await GameModel.find({gameId: matchId});
+            if (games.length > 0) {
+                // We already have this game in our db. Move on.
+                return;
+            }
             const timeline = (await leagueApi.Match.timeline(matchId, constants.Regions.AMERICA_NORTH)).response;
-            // const laneAssignments = roles.getRoles(gameData, timeline);
             const laneAssignments = await getRoles(gameData, timeline);
 
             const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);

@@ -23,6 +23,7 @@ import OfflineDraft from './components/drafting/offline.component';
 import ManageTeams from './components/admin/manageTeams.component';
 import Rosters from './components/teams/rosters.component';
 import Roster from './components/teams/roster.component';
+import LeagueStats from './components/league-stats.component';
 import UserContext from './context/UserContext';
 
 export default class App extends Component {
@@ -117,6 +118,7 @@ export default class App extends Component {
                 <Route path="/creategame" component={CreateGame} />
                 <Route path="/team" component={CreateTeam} />
                 <Route path="/stats" component={Overview} />
+                <Route path="/leaguestats" component={LeagueStats}></Route>
                 <Route path="/detailed/:player" component={DetailedStats}></Route>
                 <Route path="/leagues" component={AboutLeagues}></Route>
                 <Route path="/league/:league" component={DetailedLeague}></Route>
