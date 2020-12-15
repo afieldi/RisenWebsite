@@ -6,6 +6,7 @@ const seasonSchema = new Schema({
     seasonName: { type: String },
     stringid: { type: String, unique: true }, // An identifier that will be used in urls
     active: { type: Boolean },
+    seasonApiNumber: { type: Number },
     teams: [{type: Schema.Types.ObjectId, ref: 'Team'}],
     spreadsheet: {type: String, required: false} //Spreadsheet url, optional
 }, {

@@ -1,8 +1,36 @@
 const fetch = require("node-fetch");
 const CodeModel = require('../models/code.model');
 
-async function generateCodes(count, callback) {
-  const codes = await requestMatchCodes(count, process.env.TOURNEY_ID);
+async function createNewTournament(name) {
+  let url = process.env.NA_TOURNEY_BASE;
+  if (process.env.NODE_ENV === 'production') {
+    url += `/lol/tournament/v4/tournaments`;
+  }
+  else {
+    url += `/lol/tournament-stub/v4/tournaments`;
+  }
+  console.log(url);
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+        'X-Riot-Token': process.env.RIOT_API,
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "name": name,
+        "providerId": process.env.TOURNEY_ID
+    })
+  }).then(response => {
+    
+      if (!response.ok) {
+        return response.statusText
+      }
+      return response.json();
+  })
+}
+
+async function generateCodes(id, count, seasonDO, callback) {
+  const codes = await requestMatchCodes(count, id);
   callback(codes);
   for (const code of codes) {
     let codeInst = await CodeModel.findOne({
@@ -10,14 +38,22 @@ async function generateCodes(count, callback) {
     });
     if ( codeInst === null ) {
       CodeModel.create({
-        "code": code
+        "code": code,
+        "season": seasonDO
       })
     }
   }
 }
 
 async function requestMatchCodes(count, id) {
-  const url = process.env.NA_TOURNEY_BASE + `/lol/tournament-stub/v4/codes?count=${count}&tournamentId=${id}`;
+  let url = process.env.NA_TOURNEY_BASE;
+  if (process.env.NODE_ENV === "production") {
+    url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
+  }
+  else {
+    url += `/lol/tournament-stub/v4/codes?count=${count}&tournamentId=${id}`;
+  }
+  console.log(url);
   return fetch(url, {
       method: 'POST',
       headers: {
@@ -40,5 +76,6 @@ async function requestMatchCodes(count, id) {
 }
 
 module.exports = {
-  generateCodes: generateCodes
+  generateCodes: generateCodes,
+  createTournament: createNewTournament
 }

@@ -66,7 +66,7 @@ export default class SetupCreate extends Component {
                         </div>
                     </div>
                     <div className="row">
-                        <Button onClick={this.createGame.bind(this)}>Create Game</Button>
+                        <Button onClick={this.createGame.bind(this)} disabled>Create Game</Button>
                     </div>
                     <br></br>
                     <div>

@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const http = require('http');
 const process = require('process');
 const {argv} = require('yargs');
-const compression = require('compression')
+const compression = require('compression');
+const bodyParser = require('body-parser');
 
 const draft = require('./src/draft');
 
@@ -27,17 +28,30 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 //middleware
+
 app.use(cors({
-    origin: process.env.WEBSITE_BASE
+    origin: (origin, callback) => {
+        if (process.env.WEBSITE_BASE.includes(origin))
+            callback(null, origin)
+        else {
+            callback(null, "")
+        }
+    }
 }));
+// app.use(cors({
+//     origin: process.env.WEBSITE_BASE
+// }));
 //allows us to send/receive json
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
 
 app.use(compression())
 
-const uri = process.env.ATLAS_URI;
-mongoose
-    .connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+// const uri = process.env.ATLAS_URI;
+const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -52,6 +66,7 @@ const codesRouter = require('./routes/codes');
 const draftRouter = require('./routes/draft');
 const authRouter = require('./routes/auth');
 const seasonRouter = require('./routes/seasons');
+const textualRouter = require('./routes/text');
 
 app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
@@ -60,6 +75,7 @@ app.use('/codes', codesRouter);
 app.use('/draft', draftRouter);
 app.use('/auth', authRouter);
 app.use('/seasons', seasonRouter);
+app.use('/textual', textualRouter);
 
 app.route("/").get((req, res) => {
     res.status(200).send("Hello World").end();

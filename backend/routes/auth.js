@@ -19,11 +19,21 @@ router.route("/callback").get((req, res) => {
         name: user.username,
         expiry: weekFromNow
       }).then(userDoc => {
-        res.redirect(`${process.env.WEBSITE_BASE}/auth?code=${userDoc.auth}`)
+        if (req.get('origin')) {
+          res.redirect(`${req.get('origin')}/auth?code=${userDoc.auth}`)
+        }
+        else {
+          res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${userDoc.auth}`);
+        }
       });
     }, () => {
       // Something went wrong
-      res.redirect(`${process.env.WEBSITE_BASE}/auth`)
+      if (req.get('origin')) {
+        res.redirect(`${req.get('origin')}/auth`)
+      }
+      else {
+        res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth`)
+      }
     })
 });
 

@@ -4,10 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import RisenNavbar from "./components/navbar.component";
 import HomePage from "./components/homepage.component";
-import GamesList from "./components/games-list.component";
-import EditGame from "./components/edit-game.component";
-import CreateGame from "./components/create-game.component";
-import CreateTeam from "./components/create-team.component";
 import Overview from "./components/overview-stats.component";
 import DetailedStats from "./components/detailed-stats.component";
 import DetailedLeague from './components/detailed-league.component';
@@ -25,6 +21,8 @@ import Rosters from './components/teams/rosters.component';
 import Roster from './components/teams/roster.component';
 import LeagueStats from './components/league-stats.component';
 import UserContext from './context/UserContext';
+import Rules from './components/rules/rules.component';
+import Display from './components/brackets/display.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -113,10 +111,6 @@ export default class App extends Component {
                 <RisenNavbar admin={this.state.level} logout={this.logOut.bind(this)} />
                 {/* <br/> */}
                 <Route path="/" exact component={HomePage} />
-                <Route path="/gameslist" exact component={GamesList} />
-                <Route path="/edit/:id" component={EditGame} />
-                <Route path="/creategame" component={CreateGame} />
-                <Route path="/team" component={CreateTeam} />
                 <Route path="/stats" component={Overview} />
                 <Route path="/leaguestats" component={LeagueStats}></Route>
                 <Route path="/detailed/:player" component={DetailedStats}></Route>
@@ -129,6 +123,8 @@ export default class App extends Component {
                 <Route path="/draft" component={Drafting}></Route>
                 <Route path="/pbdraft" component={OfflineDraft}></Route>
                 <Route path="/auth" render={this.authRender.bind(this)} ></Route>
+                <Route path="/rules" component={Rules}></Route>
+                <Route path="/bracket" component={Display}></Route>
                 {
                   // Only create route if it is an admin
                   this.state.level === 1 ? <div>

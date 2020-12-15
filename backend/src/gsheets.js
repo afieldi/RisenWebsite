@@ -5,6 +5,7 @@ const Season = require('../models/season.model');
 const { leagueApi, constants } = require('./api')
 const { addPlayerByName } = require('./player');
 const { addTeam } = require('./team');
+const { findCreateSeason } = require('./season');
 
 const mapping = {
   'Name': 'A',
@@ -100,16 +101,8 @@ async function loadXlFile(buffer, season) {
   const maxRow = getMaxRow(teamSheet['!ref']);
   const sMaxRow = getMaxRow(scheduleSheet['!ref']);
   
-  let seasonDO = await Season.findOne({seasonName: season, active: true});
-  if (seasonDO === null) {
-    let sId = season.toLocaleLowerCase().split(" ").join('');
-    seasonDO = await Season.create({
-      seasonName: season,
-      stringid: sId,
-      active: true,
-      teams: []
-    });
-  }
+  let seasonDO = findCreateSeason(name);
+  
   console.log(teamSheet['!ref'])
   for (let i = 3; i <= maxRow; i++) {
     // Fuck you DTC who has a 3 letter name

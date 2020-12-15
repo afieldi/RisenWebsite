@@ -41,19 +41,17 @@ function getGuildUser(userId, callback) {
 
 function exchangeCode(req, code, callback) {
   let redirect = req.headers.host + "/auth/callback";
-  // if(req.connection.encrypted) {
+  
+  redirect ="https://api-dot-risenwebsite.ue.r.appspot.com/auth/callback";
+
+  // if (req.connection.encrypted) {
   //   redirect = "https://" + redirect;
   // }
   // else {
   //   redirect = "http://" + redirect;
   // }
-  if (process.env.NODE_ENV === "production") {
-    redirect = "https://" + redirect;
-  }
-  else {
-    redirect = "http://" + redirect;
-  }
 
+  console.log(redirect);
   const data = {
     'client_id': process.env.DISCORD_CLIENT_ID,
     'client_secret': process.env.DISCORD_CLIENT_SECRET,
@@ -73,6 +71,7 @@ function exchangeCode(req, code, callback) {
     body: formBody
   }).then(data => {
     data.json().then(res => {
+      console.log(res);
       if(res.error) {
         console.log("Error: " + res.error);
         return;
@@ -108,14 +107,16 @@ function getUser(request, code, onSuccess, onReject) {
   // AHHHHHHHHH
   // AHHHH CALLBACKS
   let roleMap = {
-    1: ["Admin", "admin", 'Verified'],
-    // 2: ["Verified"]
+    1: ["Admin", "admin", "Developer"],
+    2: ["Verified"]
   }
   try {
     exchangeCode(request, code, (token) => {
       getSelf(token, (user) => {
         getGuildUser(user.id, (guildUser) => {
+          console.log(guildUser);
           getGuildRoles(roleMap, (definedRoles) => {
+            console.log(definedRoles);
             for (let defRoleIndex in definedRoles) {
               for (let role of guildUser.roles) {
                 if (definedRoles[defRoleIndex].includes(role)) {

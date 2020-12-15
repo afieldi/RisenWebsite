@@ -6,7 +6,12 @@ router.route('/').get((req, res) => {
     Game.find()	
         .then(games => res.json(games))	
         .catch(err => res.status(400).json('Error: ' + err));	
-});	
+});
+
+router.route('/callback').post((req, res) => {
+  // Game submission endpoint
+  res.send("TBD");
+})
 
 
 router.route('/add/:gameid').post((req, res) => {	

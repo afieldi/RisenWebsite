@@ -11,6 +11,7 @@ const codeSchema = new Schema({
         trim: true,
         minlength: 3
     },
+    season: {type: Schema.Types.ObjectId, ref: 'Season'}
 }, {
   timestamps: true
 });

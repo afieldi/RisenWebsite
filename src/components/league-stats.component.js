@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import CombatLeagueStats from './leagueStats/combat-league-stats.component';
