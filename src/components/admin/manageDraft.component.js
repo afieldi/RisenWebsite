@@ -18,6 +18,7 @@ export default class ManageDraft extends Component {
     sendBan() {
         fetch(process.env.REACT_APP_BASE_URL + "/draft/champban", {
             method: "POST",
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },

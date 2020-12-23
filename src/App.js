@@ -14,7 +14,7 @@ import Setup from './components/drafting/setup.component';
 import Drafting from './components/drafting/drafting.component';
 import Admin from './components/admin/admin.component';
 import Login from './components/login.component';
-import { getCookie } from './Helpers';
+import { getCookie, deleteCookie } from './Helpers';
 import OfflineDraft from './components/drafting/offline.component';
 import ManageTeams from './components/admin/manageTeams.component';
 import Rosters from './components/teams/rosters.component';
@@ -41,12 +41,12 @@ export default class App extends Component {
 
   checkLoggedIn(callback) {
     let code = getCookie("auth");
-    if(process.env.NODE_ENV !== 'production') {
-      console.warn("In dev mode. Automatically logging in as admin");
-      this.setState({
-        level: 1
-      });
-    }
+    // if(process.env.NODE_ENV !== 'production') {
+    //   console.warn("In dev mode. Automatically logging in as admin");
+    //   this.setState({
+    //     level: 1
+    //   });
+    // }
     if(code) {
       fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + code).then((res) => {
         if(res.status === 200 || res.status === 304) {
@@ -81,11 +81,13 @@ export default class App extends Component {
 
   
   logOut() {
-    fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + getCookie("auth"), {
-      method: "DELETE"
-    }).then(data => {
-      this.checkLoggedIn(() => { this.props.history.push("/"); });
-    });
+    deleteCookie("auth");
+    window.location.reload();
+    // fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + getCookie("auth"), {
+    //   method: "DELETE"
+    // }).then(data => {
+    //   this.checkLoggedIn(() => { this.props.history.push("/"); });
+    // });
   }
 
   authRender(props) {
@@ -93,13 +95,6 @@ export default class App extends Component {
       <Login authCheck={this.checkLoggedIn.bind(this)} {...props}></Login>
     );
   }
-
-  componentRender(aa, props) {
-    return (
-      <aa {...props}></aa>
-    )
-  }
-  
 
   render() {
     return (

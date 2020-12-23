@@ -3,6 +3,7 @@ const process = require('process');
 const auth = require('../src/auth');
 const User = require('../models/user.model');
 const uuid = require('uuid');
+
 // This is cheating, but path is the host name of the website
 // This is so that the calling url can be passed from the /redirect endpoint into this function
 //  via the callback url
@@ -20,10 +21,14 @@ router.route("/callback").get((req, res) => {
         expiry: weekFromNow
       }).then(userDoc => {
         if (req.get('origin')) {
-          res.redirect(`${req.get('origin')}/auth?code=${userDoc.auth}`)
+          res.cookie('auth', user.auth, new Date().setDate(new Date() + 7));
+          res.redirect(302, `${req.get('origin')}`);
+          // res.redirect(`${req.get('origin')}/auth?code=${userDoc.auth}`)
         }
         else {
-          res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${userDoc.auth}`);
+          res.cookie('auth', user.auth, new Date().setDate(new Date() + 7));
+          res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}`);
+          // res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${userDoc.auth}`);
         }
       });
     }, () => {
@@ -46,6 +51,9 @@ router.route("/redirect").get((req, res) => {
   }
   else {
     redirect = "http%3A%2F%2F" + redirect;
+    redirect = `http://localhost:${process.env.PORT}/auth/testLogin`;
+    res.send(redirect);
+    return;
   }
   // TODO: Use Host instead once this migrates to an actual server
   // const redirect = "http%3A%2F%2F" + "99.246.224.136:5000" + "/auth/callback";
@@ -54,12 +62,35 @@ router.route("/redirect").get((req, res) => {
   res.send(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${client_id}&scope=identify&redirect_uri=${redirect}&prompt=consent`);
 });
 
+router.route("/testLogin").get((req, res) => {
+  if (process.env.NODE_ENV !== "production") {
+    User.findOne({
+      name: "TestUser",
+      expiry: { $gt: new Date() }
+    }).then(user => {
+      if(user) {
+        // res.cookie('auth', user.auth, { expires: new Date().setDate(new Date() + 7)});
+        res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${user.auth}`);
+      }
+      else {
+        res.status(404).send("Code not found!");
+      }
+    });
+  }
+  else {
+    res.status(404).send("Page not found");
+  }
+});
+
 router.route("/verify").get((req, res) => {
   let code = req.query.code;
+
   User.findOne({
-    auth: code
+    auth: code,
+    expiry: { $gt: new Date() }
   }).then(user => {
     if(user) {
+      // res.cookie('auth', user.auth, { expires: user.expiry});
       res.json(user);
     }
     else {
@@ -70,18 +101,25 @@ router.route("/verify").get((req, res) => {
   });
 });
 
-router.route("/verify").delete((req, res) => {
-  let code = req.query.code;
-  User.deleteOne({
-    auth: code
-  }).then(d => {
-    if (d.deletedCount > 0) {
-      res.json({});
-    }
-    else {
-      res.status(404).send("No code found");
-    }
-  });
-})
+// router.route("/verify").delete((req, res) => {
+//   res.cookie('auth', {expires: new Date(0)}).send();
+//   console.log("here");
+//   // if (req.get('origin')) {
+//   //   res.json(`${req.get('origin')}`);
+//   // }
+//   // else {
+//   //   res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}`);
+//   // }
+//   // User.deleteOne({
+//   //   auth: code
+//   // }).then(d => {
+//   //   if (d.deletedCount > 0) {
+//   //     res.json({});
+//   //   }
+//   //   else {
+//   //     res.status(404).send("No code found");
+//   //   }
+//   // });
+// })
 
 module.exports = router; 

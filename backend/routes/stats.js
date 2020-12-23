@@ -86,6 +86,7 @@ router.route('/player/id/:id').get((req, res) => {
 });
 
 router.route('/player/name/:id').get((req, res) => {
+    console.log(req.cookies);
     PlayerModel.findOne({name: req.params.id}).then((player) => {
         GameModel.find({player: player._id}).then(games => {
             res.json(games);

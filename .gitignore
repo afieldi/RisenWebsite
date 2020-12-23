@@ -12,6 +12,7 @@
 /build
 
 # misc
+src/images/champions
 .DS_Store
 backend/.env
 .env.local

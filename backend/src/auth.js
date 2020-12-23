@@ -108,7 +108,7 @@ function getUser(request, code, onSuccess, onReject) {
   // AHHHH CALLBACKS
   let roleMap = {
     1: ["Admin", "admin", "Developer"],
-    2: ["Verified"]
+    10: ["Verified"]
   }
   try {
     exchangeCode(request, code, (token) => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
-import { ScatterChart, Scatter, ResponsiveContainer, XAxis, YAxis, ZAxis, CartesianGrid, Legend, Label, Tooltip, PieChart, Pie, Cell } from 'recharts';
+import { ScatterChart, Scatter, ResponsiveContainer, XAxis, YAxis, ZAxis, PolarRadiusAxis, Legend, Label, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import { customRound } from '../../Helpers';
 
 export default class GeneralLeagueStats extends Component {
@@ -174,7 +174,7 @@ export default class GeneralLeagueStats extends Component {
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Tooltip formatter={this.tooltipByGameFormat}></Tooltip>
-                      <Pie data={this.generateDragonPieData()} nameKey="name" dataKey="value" >
+                      <Pie data={this.generateDragonPieData()} nameKey="name" dataKey="value">
                         {
                           this.generateDragonPieData().map(datum => {
                             return (
@@ -182,6 +182,15 @@ export default class GeneralLeagueStats extends Component {
                             )
                           })
                         }
+                        <PolarRadiusAxis>
+                        {
+                          this.generateDragonPieData().map(datum => {
+                            return (
+                              <Label value="Test" position="t"></Label>
+                            )
+                          })
+                        }
+                        </PolarRadiusAxis>
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>

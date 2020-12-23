@@ -30,7 +30,12 @@ async function createNewTournament(name) {
 }
 
 async function generateCodes(id, count, seasonDO, callback) {
-  const codes = await requestMatchCodes(count, id);
+  let codes;
+  try {
+    codes = await requestMatchCodes(count, id)
+  } catch (error) {
+    throw error;
+  }
   callback(codes);
   for (const code of codes) {
     let codeInst = await CodeModel.findOne({
@@ -68,7 +73,7 @@ async function requestMatchCodes(count, id) {
       })
   }).then(response => {
       if (!response.ok) {
-        return response.statusText
+        throw response.statusText;
       }
       return response.json();
   })

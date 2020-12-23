@@ -16,7 +16,7 @@ export default class Rosters extends Component {
   }
 
   loadSeasons() {
-    const url = process.env.REACT_APP_BASE_URL + "/season/active";
+    const url = process.env.REACT_APP_BASE_URL + "/seasons/active";
     fetch(url).then(data => {
       data.json().then(seasons => {
         this.setState({

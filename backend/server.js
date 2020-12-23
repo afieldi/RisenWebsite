@@ -7,7 +7,7 @@ const process = require('process');
 const {argv} = require('yargs');
 const compression = require('compression');
 const bodyParser = require('body-parser');
-
+var cookieParser = require('cookie-parser');
 const draft = require('./src/draft');
 
 //env variables from dotenv file
@@ -36,7 +36,8 @@ app.use(cors({
         else {
             callback(null, "")
         }
-    }
+    },
+    credentials: true,
 }));
 // app.use(cors({
 //     origin: process.env.WEBSITE_BASE
@@ -45,6 +46,7 @@ app.use(cors({
 // app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 
 app.use(compression())

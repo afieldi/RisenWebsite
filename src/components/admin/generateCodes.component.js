@@ -14,7 +14,9 @@ export default class GenerateCodes extends Component {
 
   loadSeasons() {
     const url = process.env.REACT_APP_BASE_URL + "/seasons/codeable";
-    fetch(url).then(data => {
+    fetch(url, {
+      credentials: 'include',
+    }).then(data => {
       data.json().then(data => {
         this.setState({
           seasons: data
@@ -32,6 +34,7 @@ export default class GenerateCodes extends Component {
     const url = process.env.REACT_APP_BASE_URL + "/seasons/new";
     fetch(url, {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify({
         'name': newSeasonString
       }),
@@ -59,6 +62,7 @@ export default class GenerateCodes extends Component {
     const url = process.env.REACT_APP_BASE_URL + "/codes/create";
     fetch(url, {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify({
         count: count,
         season: season

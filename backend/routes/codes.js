@@ -1,10 +1,14 @@
 const router = require('express').Router();	
 const Season = require('../models/season.model');
 const { generateCodes } = require('../src/codes');
+const { blockAll, blockNotGet } = require('../helper');
 
 // console.log(Season.schema);
 
-// TODO AUTH
+router.use('/create', (req, res, next) => {
+  blockNotGet(req, res, next, 1);
+});
+
 router.route("/create").post((req, res) => {
   const count = req.body.count;
   const seasonId = req.body.season;
@@ -26,6 +30,8 @@ router.route("/create").post((req, res) => {
     }
     generateCodes(season.seasonApiNumber, count, season, (codes) => {
       res.json(codes);
+    }).catch((err) => {
+      res.status(500).json("Error!!");
     })
   });
 });

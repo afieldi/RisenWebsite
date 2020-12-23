@@ -32,6 +32,10 @@ export function setCookie(name,value,days) {
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
+export function deleteCookie( name ) {
+    document.cookie = name+'=; Max-Age=-99999999;'; 
+  }
+
 // Get color code by strength level, 5 is highest, 1 is lowest
 export function getTextColorByLevel(level) {
     const map = [

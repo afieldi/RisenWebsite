@@ -3,6 +3,14 @@ let Team = require('../models/team.model');
 const Season = require("../models/season.model");
 const { createTournament } = require('../src/codes');
 const { findCreateSeason } = require('../src/season');
+const { blockAll, blockNotGet } = require('../helper');
+
+router.use('/', (req, res, next) => {
+  blockNotGet(req, res, next, 1);
+});
+router.use('/new', (req, res, next) => {
+  blockAll(req, res, next, 1);
+});
 
 router.route('/').get((req, res) => {
   Season.find().then(data => {

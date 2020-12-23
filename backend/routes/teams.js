@@ -70,7 +70,7 @@ router.route('/').post((req, res) => {
 });
 
 router.route("/").put((req, res) => {
-    const teamId = req.body.teamId;
+    const teamId = req.body._id;
     Team.findById(teamId).then((team) => {
         if (team !== null) {
             if (req.body.teamname) { team.teamname = req.body.teamname; }
@@ -91,6 +91,10 @@ router.route("/").put((req, res) => {
                     .then(() => res.json(team))
                     .catch(err => res.status(400).json('Error: ' + err));
             }
+        }
+        else {
+            console.log(req.body);
+            res.status(404).json("Team not found");
         }
     })
 })

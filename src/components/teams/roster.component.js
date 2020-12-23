@@ -50,6 +50,9 @@ export default class Roster extends Component {
     let url = process.env.REACT_APP_BASE_URL + "/teams";
     fetch(url, {
       method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(this.state.modalTeam)
     }).then(data => {
       
@@ -144,12 +147,12 @@ export default class Roster extends Component {
                   <div className="form-group">
                     <label for="edit-teamshort">Team Short</label>
                     <input id="edit-teamshort" type="text" value={this.state.modalTeam.teamshortname}
-                      onChange={((e)=>{this.state.modalTeam.teamname=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
+                      onChange={((e)=>{this.state.modalTeam.teamshortname=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
                   </div>
                   <div className="form-group">
                     <label for="edit-teamdiv">Division</label>
                     <input id="edit-teamdiv" type="text" value={this.state.modalTeam.division}
-                      onChange={((e)=>{this.state.modalTeam.teamname=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
+                      onChange={((e)=>{this.state.modalTeam.division=e.target.value;this.setState({modalTeam:this.state.modalTeam})}).bind(this)}></input>
                   </div>
                   <div className="form-group">
                     <ul>
