@@ -54,17 +54,18 @@ async function getRoles(gameData, timeline) {
     // The above stuff involving running python doesn't work with GCP as you can't have nodejs and python at the same time
     // So instead just return filler stuff so nothing else has to be changed. Anything involving role will have to be commented out
     //  on the front end as well.
+    // Update: Risen should be using LCS order, so this will be the order they will appear in the match history. Bless
         resolve({
-            "1": "MIDDLE",
-            "2": "MIDDLE",
+            "1": "TOP",
+            "2": "JUNGLE",
             "3": "MIDDLE",
-            "4": "MIDDLE",
-            "5": "MIDDLE",
-            "6": "MIDDLE",
-            "7": "MIDDLE",
+            "4": "BOTTOM",
+            "5": "SUPPORT",
+            "6": "TOP",
+            "7": "JUNGLE",
             "8": "MIDDLE",
-            "9": "MIDDLE",
-            "10": "MIDDLE"
+            "9": "BOTTOM",
+            "10": "SUPPORT"
         })
     });
 
