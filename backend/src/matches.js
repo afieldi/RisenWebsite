@@ -73,37 +73,45 @@ async function getRoles(gameData, timeline) {
 async function saveTeamGame(gameData, teams) {
     let bD = gameData.teams[0]; // BlueData
     let rD = gameData.teams[1]; // RedData
-    return await TeamGameModel.create({
+    let btO = await TeamGameModel.create({
         gameId: gameData.gameId,
         gameDuration: gameData.gameDuration,
-        blueTeam: teams[0],
-        redTeam: teams[1],
-        blueTowerKills: bD.towerKills,
-        redTowerKills: rD.towerKills,
-        blueRiftHeraldKills: bD.riftHeraldKills,
-        redRiftHeraldKills: rD.riftHeraldKills,
-        blueFirstBlood: bD.firstBlood,
-        redFirstBlood: rD.firstBlood,
-        blueInhibitorKills: bD.inhibitorKills,
-        redInhibitorKills: rD.inhibitorKills,
-        blueBans: bD.bans.map(b => b.championId),
-        redBans: rD.bans.map(b => b.championId),
-        blueDragonKills: bD.dragonKills,
-        redDragonKills: rD.dragonKills,
-        blueBaronKills: bD.baronKills,
-        redBaronKills: rD.baronKills,
-        blueWin: bD.win,
-        redWin: rD.win
+        team: teams[0],
+        side: 'blue',
+        towerKills: bD.towerKills,
+        riftHeraldKills: bD.riftHeraldKills,
+        firstBlood: bD.firstBlood,
+        inhibitorKills: bD.inhibitorKills,
+        bans: bD.bans.map(b => b.championId),
+        dragonKills: bD.dragonKills,
+        baronKills: bD.baronKills,
+        win: bD.win,
     });
+
+    let rtO = await TeamGameModel.create({
+        gameId: gameData.gameId,
+        gameDuration: gameData.gameDuration,
+        team: teams[1],
+        side: 'red',
+        towerKills: rD.towerKills,
+        riftHeraldKills: rD.riftHeraldKills,
+        firstBlood: rD.firstBlood,
+        inhibitorKills: rD.inhibitorKills,
+        bans: rD.bans.map(b => b.championId),
+        dragonKills: rD.dragonKills,
+        baronKills: rD.baronKills,
+        win: rD.win
+    });
+    return [btO, rtO];
 }
 
 
 async function saveGame(matchId) {
-    // const games = await GameModel.find({gameId: matchId});
-    // if (games.length > 0) {
-    //     // We already have this game in our db. Move on.
-    //     return;
-    // }
+    const games = await GameModel.find({gameId: matchId});
+    if (games.length > 0) {
+        // We already have this game in our db. Move on.
+        return;
+    }
     // TODO: change this to tourney
     await leagueApi.Match.get(matchId, constants.Regions.AMERICA_NORTH).then(
         async gameData => {

@@ -25,7 +25,7 @@ export default class LeagueStats extends Component {
           lData.json().then(lData => {
             this.setState({
               genData: data,
-              leagueData: lData[0]
+              leagueData: lData
             });
           })
         })

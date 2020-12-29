@@ -2,27 +2,21 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+// Change to be side independent
+// One variable to say which side it is
 const teamgameSchema = new Schema({
     gameId: { type: Number },
     gameDuration: { type: Number },
-    blueTeam: {type: Schema.Types.ObjectId, ref: 'Team' },
-    redTeam: {type: Schema.Types.ObjectId, ref: 'Team' },
-    blueTowerKills: { type: Number },
-    redTowerKills: { type: Number },
-    blueRiftHeraldKills: { type: Number },
-    redRiftHeraldKills: { type: Number },
-    blueFirstBlood: { type: Boolean },
-    redFirstBlood: { type: Boolean },
-    blueInhibitorKills: { type: Number },
-    redInhibitorKills: { type: Number },
-    blueBans: { type: [] },
-    redBans: { type: [] },
-    blueDragonKills: { type: Number },
-    redDragonKills: { type: Number },
-    blueBaronKills: { type: Number },
-    redBaronKills: { type: Number },
-    blueWin: { type: Boolean },
-    redWin: { type: Boolean }
+    team: {type: Schema.Types.ObjectId, ref: 'Team' },
+    towerKills: { type: Number },
+    riftHeraldKills: { type: Number },
+    firstBlood: { type: Boolean },
+    inhibitorKills: { type: Number },
+    bans: { type: [] },
+    side: { type: String, enum: ["red", "blue"], default: "blue" },
+    dragonKills: { type: Number },
+    baronKills: { type: Number },
+    win: { type: Boolean },
 }, {
   timestamps: true
 });

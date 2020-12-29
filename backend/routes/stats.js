@@ -2,6 +2,7 @@ const router = require('express').Router();
 const PlayerModel = require('../models/player.model');
 const GameModel = require('../models/game.model');
 const TeamGameModel = require('../models/teamgame.model');
+const TeamModel = require("../models/team.model");
 const mongoose = require('mongoose');
 
 const avgPipe = {
@@ -448,23 +449,16 @@ router.route('/avg/byplayer').get((req, res) => {
 
 router.route('/general/league').get((req, res) => {
     let pipeline = []
-    pipeline.push({
+    pipeline.push({ 
         $group: {
-            _id: "league",
-            blueWins: { $sum: { $cond : [ "$blueWin", 1, 0 ] } },
-            redWins: { $sum: {$cond : [ "$redWin", 1, 0 ] } },
-            blueFirstBlood: { $sum: { $cond : [ "$blueFirstBlood", 1, 0 ] } },
-            redFirstBlood: { $sum: { $cond : [ "$redFirstBlood", 1, 0 ] } },
-            avg_blueTowerKills: { $avg: "$blueTowerKills" },
-            avg_redTowerKills: { $avg: "$redTowerKills" },
-            avg_blueRiftHeraldKills: { $avg: "$blueRiftHeraldKills" },
-            avg_redRiftHeraldKills: { $avg: "$redRiftHeraldKills" },
-            avg_blueInhibitorKills: { $avg: "$blueInhibitorKills" },
-            avg_redInhibitorKills: { $avg: "$redInhibitorKills" },
-            avg_blueDragonKills: { $avg: "$blueDragonKills" },
-            avg_redDragonKills: { $avg: "$redDragonKills" },
-            avg_blueBaronKills: { $avg: "$blueBaronKills" },
-            avg_redBaronKills: { $avg: "$redBaronKills" },
+            _id: "$side",
+            wins: { $sum: { $cond : [ "$win", 1, 0 ] } },
+            firstBlood: { $sum: { $cond : [ "$firstBlood", 1, 0 ] } },
+            avg_towerKills: { $avg: "$towerKills" },
+            avg_riftHeraldKills: { $avg: "$riftHeraldKills" },
+            avg_inhibitorKills: { $avg: "$inhibitorKills" },
+            avg_dragonKills: { $avg: "$dragonKills" },
+            avg_baronKills: { $avg: "$baronKills" },
             total_games: { $sum: 1 }
         }
     })
@@ -474,4 +468,12 @@ router.route('/general/league').get((req, res) => {
         res.status(400).json("Error: " + err);
     });
 });
+
+router.route('/team/:team').get((req, res) => {
+    let team = req.params.team;
+    TeamGameModel.find({}).then(team => {
+
+    });
+});
+
 module.exports = router;

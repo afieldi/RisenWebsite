@@ -7,11 +7,21 @@ export default class CombatLeagueStats extends Component {
   constructor(props) {
     super(props);
     this.genData = [];
-    this.leagueData = {};
+    // this.leagueData = {};
+    this.blueData = {};
+    this.redData = {};
   }
   shouldComponentUpdate(nextProps, nextState) {
     this.genData = nextProps.genData;
-    this.leagueData = nextProps.leagueData;
+    // this.leagueData = nextProps.leagueData;
+    for(let p of nextProps.leagueData) {
+      if (p._id === "blue") {
+        this.blueData = p;
+      }
+      else {
+        this.redData = p;
+      }
+    }
     return true;
   }
 
@@ -41,14 +51,14 @@ export default class CombatLeagueStats extends Component {
     return [
       {
         "name": "Blue",
-        "value": this.leagueData.blueWins,
-        "pvalue": customRound(this.leagueData.blueWins / this.leagueData.total_games, 2),
+        "value": this.blueData.wins,
+        "pvalue": customRound(this.blueData.wins / this.blueData.total_games, 2),
         "fill": "#777BD1"
       },
       {
         "name": "Red",
-        "value": this.leagueData.redWins,
-        "pvalue": customRound(this.leagueData.redWins / this.leagueData.total_games, 2),
+        "value": this.redData.wins,
+        "pvalue": customRound(this.redData.wins / this.redData.total_games, 2),
         "fill": "#F57979"
       }
     ]
@@ -58,14 +68,14 @@ export default class CombatLeagueStats extends Component {
     return [
       {
         "name": "Blue",
-        "value": this.leagueData.avg_blueRiftHeraldKills,
-        "gvalue": customRound(this.leagueData.avg_blueRiftHeraldKills, 2),
+        "value": this.blueData.avg_riftHeraldKills,
+        "gvalue": customRound(this.blueData.avg_riftHeraldKills, 2),
         "fill": "#777BD1"
       },
       {
         "name": "Red",
-        "value": this.leagueData.avg_redRiftHeraldKills,
-        "gvalue": customRound(this.leagueData.avg_redRiftHeraldKills, 2),
+        "value": this.redData.avg_riftHeraldKills,
+        "gvalue": customRound(this.redData.avg_riftHeraldKills, 2),
         "fill": "#F57979"
       }
     ]
@@ -75,14 +85,14 @@ export default class CombatLeagueStats extends Component {
     return [
       {
         "name": "Blue",
-        "value": this.leagueData.avg_blueDragonKills,
-        "gvalue": customRound(this.leagueData.avg_blueDragonKills, 2),
+        "value": this.blueData.avg_dragonKills,
+        "gvalue": customRound(this.blueData.avg_dragonKills, 2),
         "fill": "#777BD1"
       },
       {
         "name": "Red",
-        "value": this.leagueData.avg_redDragonKills,
-        "gvalue": customRound(this.leagueData.avg_redDragonKills, 2),
+        "value": this.redData.avg_dragonKills,
+        "gvalue": customRound(this.redData.avg_dragonKills, 2),
         "fill": "#F57979"
       }
     ]
