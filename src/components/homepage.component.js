@@ -7,6 +7,7 @@ import { faThumbsUp, faChartLine, faUsers } from '@fortawesome/free-solid-svg-ic
 import "react-datepicker/dist/react-datepicker.css";
 import risenLogo from "../images/RE_TypeLogo_Shading.png";
 import "../App.css";
+import backgroundImage from "../images/backgroundimage2dark.png";
 
 let staticText = require('../data/text.json')
 
@@ -20,7 +21,7 @@ export default class HomePage extends Component {
 
     render() {
         return (
-            <section>
+            <section style={{backgroundImage: "url(" + backgroundImage + ")", backgroundAttachment: 'fixed' }}>
                 <Container className="p-3">
                     <img style={{marginTop: '10vh', marginBottom: '5vh'}} src={ risenLogo } className="risenLogoClass"/>
                     {/* <Jumbotron style={ outerJumboStyle }>

@@ -99,7 +99,7 @@ export default class App extends Component {
   render() {
     return (
         <div>
-          <div style={ backgroundImageStyle }></div>
+          <div className="dark-section" style={ backgroundImageStyle }></div>
           <Router>
             <UserContext.Provider value={this.state.level}>
               <div className="risen-main-background">
@@ -138,7 +138,7 @@ export default class App extends Component {
 var backgroundImageStyle = {
   width: '100%',
   minHeight: '100vh',
-  backgroundImage: "url(" + backgroundImage + ")",
+  // backgroundImage: "url(" + backgroundImage + ")",
   backgroundPosition: 'center',
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
