@@ -99,6 +99,57 @@ export default class GeneralLeagueStats extends Component {
     ]
   }
 
+  generateFirstBloodPieData() {
+    return [
+      {
+        "name": "Blue",
+        "value": this.blueData.firstBlood,
+        "pvalue": customRound(this.blueData.firstBlood / this.redData.total_games, 2),
+        "fill": "#777BD1"
+      },
+      {
+        "name": "Red",
+        "value": this.redData.firstBlood,
+        "pvalue": customRound(this.redData.firstBlood / this.redData.total_games, 2),
+        "fill": "#F57979"
+      }
+    ]
+  }
+
+  generateInhibPieData() {
+    return [
+      {
+        "name": "Blue",
+        "value": this.blueData.avg_inhibitorKills,
+        "gvalue": customRound(this.blueData.avg_inhibitorKills, 2),
+        "fill": "#777BD1"
+      },
+      {
+        "name": "Red",
+        "value": this.redData.avg_inhibitorKills,
+        "gvalue": customRound(this.redData.avg_inhibitorKills, 2),
+        "fill": "#F57979"
+      }
+    ]
+  }
+
+  generateTowerPieData() {
+    return [
+      {
+        "name": "Blue",
+        "value": this.blueData.avg_towerKills,
+        "gvalue": customRound(this.blueData.avg_towerKills, 2),
+        "fill": "#777BD1"
+      },
+      {
+        "name": "Red",
+        "value": this.redData.avg_towerKills,
+        "gvalue": customRound(this.redData.avg_towerKills, 2),
+        "fill": "#F57979"
+      }
+    ]
+  }
+
   tooltipScatterFormat(value, name, props) {
     if (name == "Player") {
       return props.payload.name;
@@ -122,7 +173,7 @@ export default class GeneralLeagueStats extends Component {
             <div className="col">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
-                  
+                  <h3>Red vs. Blue Stats</h3>
                 </div>
               </div>
             </div>
@@ -211,15 +262,15 @@ export default class GeneralLeagueStats extends Component {
             <div className="col-md">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
-                  <h3>Side Winrate</h3>
+                  <h3>First Blood Rate</h3>
                 </div>
                 <div className="risen-stats-body">
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Tooltip formatter={this.tooltipPercentFormat}></Tooltip>
-                      <Pie data={this.generateSidePieData()} nameKey="name" dataKey="value" >
+                      <Pie data={this.generateFirstBloodPieData()} nameKey="name" dataKey="value" >
                         {
-                          this.generateSidePieData().map(datum => {
+                          this.generateFirstBloodPieData().map(datum => {
                             return (
                               <Cell fill={datum.fill}></Cell>
                             )
@@ -234,15 +285,15 @@ export default class GeneralLeagueStats extends Component {
             <div className="col-md">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
-                  <h3>Heralds Taken</h3>
+                  <h3>Inhibitors Taken</h3>
                 </div>
                 <div className="risen-stats-body">
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Tooltip formatter={this.tooltipByGameFormat}></Tooltip>
-                      <Pie data={this.generateHeraldPieData()} nameKey="name" dataKey="value" >
+                      <Pie data={this.generateInhibPieData()} nameKey="name" dataKey="value" >
                         {
-                          this.generateHeraldPieData().map(datum => {
+                          this.generateInhibPieData().map(datum => {
                             return (
                               <Cell fill={datum.fill}></Cell>
                             )
@@ -257,15 +308,15 @@ export default class GeneralLeagueStats extends Component {
             <div className="col-md">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
-                  <h3>Dragons Taken</h3>
+                  <h3>Towers Taken</h3>
                 </div>
                 <div className="risen-stats-body">
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Tooltip formatter={this.tooltipByGameFormat}></Tooltip>
-                      <Pie data={this.generateDragonPieData()} nameKey="name" dataKey="value" >
+                      <Pie data={this.generateTowerPieData()} nameKey="name" dataKey="value" >
                         {
-                          this.generateDragonPieData().map(datum => {
+                          this.generateTowerPieData().map(datum => {
                             return (
                               <Cell fill={datum.fill}></Cell>
                             )

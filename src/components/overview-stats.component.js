@@ -31,7 +31,10 @@ export default class Overview extends Component {
         this.loadingData = true;
         this.lastLoadedPage = page;
         let url = process.env.REACT_APP_BASE_URL + `/stats/brief`;
-        url += `?page=${page}&size=${20}`;
+
+        // Ok, funny bug time. I the size orignally at 20, however, I one day got a bigger monitor. My monitor was taller than the loaded page
+        //  meaning that I couldn't scroll, and hence, couldn't load more images. So I've learned my lesson, and upped page size to 25.
+        url += `?page=${page}&size=${25}`;
         if(this.filters.lane) {
             url += '&lane=' + this.filters.lane;
         }

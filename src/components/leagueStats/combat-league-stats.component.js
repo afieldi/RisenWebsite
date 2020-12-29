@@ -13,6 +13,7 @@ export default class CombatLeagueStats extends Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     this.genData = nextProps.genData;
+      console.log(this.generateDPMVsGold());  
     // this.leagueData = nextProps.leagueData;
     for(let p of nextProps.leagueData) {
       if (p._id === "blue") {
@@ -43,6 +44,17 @@ export default class CombatLeagueStats extends Component {
         nameVal: 1, // This will be the z axis so that we can render the name in the tooltip
         wp: customRound(p.avg_wardsPlaced, 2),
         wk: customRound(p.avg_wardsKilled, 2)
+      }
+    })
+  }
+
+  generateDPMVsGold() {
+    return this.genData.map(p => {
+      return {
+        name: p._id.player[0],
+        nameVal: 1, // This will be the z axis so that we can render the name in the tooltip
+        dpm: customRound(p.avg_totalDamageDealtToChampions/p.avg_gameDuration, 2),
+        gold: customRound(p.avg_goldEarned, 2)
       }
     })
   }
@@ -171,27 +183,28 @@ export default class CombatLeagueStats extends Component {
             <div className="col-md">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
-                  <h3>Side Winrate</h3>
+                  <h3>Gold vs DPM</h3>
                 </div>
                 <div className="risen-stats-body">
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Tooltip formatter={this.tooltipPercentFormat}></Tooltip>
-                      <Pie data={this.generateSidePieData()} nameKey="name" dataKey="value" >
-                        {
-                          this.generateSidePieData().map(datum => {
-                            return (
-                              <Cell fill={datum.fill}></Cell>
-                            )
-                          })
-                        }
-                      </Pie>
-                    </PieChart>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <ScatterChart 
+                      margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <ZAxis dataKey="nameVal" name="Player"></ZAxis>
+                      <XAxis type="number" dataKey="gold" name="Gold" tick={{fill: "white"}} >
+                        <Label value="Gold" position="insideBottom" offset={-8} style={{fill: 'white'}} />
+                      </XAxis>
+                      <YAxis dataKey="dpm" name="DPM" tick={{fill: "white"}} >
+                        <Label value="Damage/min" angle={-90} position="insideLeft" style={{textAnchor: 'middle', fill: 'white'}} />
+                      </YAxis>
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} formatter={this.tooltipScatterFormat}/>
+                      <Scatter data={this.generateDPMVsGold()} fill="#6d83ff" />
+                    </ScatterChart>
                   </ResponsiveContainer>
                 </div>
               </div>
             </div>
-            <div className="col-md">
+            {/* <div className="col-md">
               <div className="risen-stats-block">
                 <div className="risen-stats-header">
                   <h3>Heralds Taken</h3>
@@ -236,7 +249,7 @@ export default class CombatLeagueStats extends Component {
                   </ResponsiveContainer>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </Container>
       </section>

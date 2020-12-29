@@ -28,9 +28,9 @@ export default class DetailedStats extends Component {
       compData: [],
       avgData: {}
     }
-}
+  }
 
-componentDidMount() {
+  componentDidMount() {
     //   Looks for lane dropdown value so needs to be after mount
     this.loadPlayerData(this.props.match.params.player);
     this.loadAvgData();
@@ -72,7 +72,21 @@ componentDidMount() {
         this.setState({
             avgData: data[0]
         })
-    })
+      })
+    });
+  }
+
+  loadAvgDataCallback(callback) {
+    let url = process.env.REACT_APP_BASE_URL + "/stats/avg";
+    let laneFilter = document.getElementById("roleFilter").value;
+    if (laneFilter !== "ANY") {
+        url += "/role/" + laneFilter;
+    }
+    console.log(url)
+    fetch(url).then((data) => {
+    data.json().then(data => {
+        callback(data[0]);
+      })
     });
   }
 
@@ -134,48 +148,50 @@ componentDidMount() {
   }
 
   performFilter() {
-    this.loadAvgData();
-
-    // this.loadPlayerAggData();
-    let filteredData = this.state.statData.filter(game => {
-      let championFilter = document.getElementById("championFilter").value;
-      if (championFilter.length > 0) {
-        if(!champMap[game.championId].startsWith(championFilter)) {
-          return false;
+    this.loadAvgDataCallback((data) => {
+      // this.loadPlayerAggData();
+      let filteredData = this.state.statData.filter(game => {
+        let championFilter = document.getElementById("championFilter").value;
+        if (championFilter.length > 0) {
+          if(!champMap[game.championId].startsWith(championFilter)) {
+            return false;
+          }
         }
-      }
-
-      let laneFilter = document.getElementById("roleFilter").value;
-      if (laneFilter !== "ANY") {
-        if (game.lane !== laneFilter) {
-          return false;
+  
+        let laneFilter = document.getElementById("roleFilter").value;
+        if (laneFilter !== "ANY") {
+          if (game.lane !== laneFilter) {
+            return false;
+          }
         }
-      }
-
-      let timeFilter = document.getElementById("durationFilter").value;
-      if (timeFilter !== "ANY") {
-        let t1 = timeFilter.split("-")[0];
-        let t2 = timeFilter.split("-")[1];
-        if (game.gameDuration < t1 * 60 || game.gameDuration > t2 * 60) {
-          return false;
+  
+        let timeFilter = document.getElementById("durationFilter").value;
+        if (timeFilter !== "ANY") {
+          let t1 = timeFilter.split("-")[0];
+          let t2 = timeFilter.split("-")[1];
+          if (game.gameDuration < t1 * 60 || game.gameDuration > t2 * 60) {
+            return false;
+          }
         }
-      }
-
-      let winFilter = document.getElementById("resultFilter").value;
-      if (winFilter !== "ANY") {
-        if (winFilter === "WIN" && game.win !== true) {
-          return false;
+  
+        let winFilter = document.getElementById("resultFilter").value;
+        if (winFilter !== "ANY") {
+          if (winFilter === "WIN" && game.win !== true) {
+            return false;
+          }
+          else if (winFilter === "LOSS" && game.win === true) {
+            return false;
+          }
         }
-        else if (winFilter === "LOSS" && game.win === true) {
-          return false;
-        }
-      }
-      return true;
-    });
+        return true;
+      });
+  
+      this.setState({
+        avgData: data,
+        filteredData: filteredData,
+        accumulatedStats: this.computeAccStats(filteredData)
+      });
 
-    this.setState({
-      filteredData: filteredData,
-      accumulatedStats: this.computeAccStats(filteredData)
     });
   }
 

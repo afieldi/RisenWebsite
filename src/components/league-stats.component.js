@@ -37,6 +37,10 @@ export default class LeagueStats extends Component {
       <section>
         <div className="dark-section text-light">
           <Container>
+          <div>
+            <h1>League Stats</h1>
+            <hr style={{backgroundColor: 'white'}}></hr>
+          </div>
 
           <nav>
             <ul className="nav nav-tabs" id="nav-tab" role="tablist" style={navStyle}>
