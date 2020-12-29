@@ -235,6 +235,65 @@ router.route('/player/id/:id/team/:team').get((req, res) => {
     });
 });
 
+router.route('/multi/name').get((req, res) => {
+    let names = req.body.names;
+    // for (let i in names) {
+    //     names[i] = mongoose.Types.ObjectId(req.params.id);
+    // }
+    if (names.length > 10) {
+        res.status(400).json("Too many names passed");
+        return;
+    }
+
+    let pipeline = [];
+    
+    // pipeline.push({
+    //     $group: {
+    //         _id: "$_player"
+    //     }
+    // });
+    PlayerModel.find({name: {$in: names}}).then((players) => {
+        let ids = players.map(p => p._id);
+        pipeline.push({
+            $match: {
+                player: {$in: ids}
+            }
+        });
+        GameModel.aggregate(pipeline).then(games => {
+            res.json(games);
+        }, (err) => {
+            res.status(404).json("Error: " + err);
+        });
+    }, (err) => {
+        res.status(404).json("Error: " + err);
+    });
+});
+
+router.route('/multi/id').get((req, res) => {
+    let ids = req.body.ids;
+    if (ids.length > 10) {
+        res.status(400).json("Too many names passed");
+        return;
+    }
+    for (let i in ids) {
+        ids[i] = mongoose.Types.ObjectId(ids[i]);
+    }
+
+    let pipeline = [];
+
+    pipeline.push({
+        $match: {
+            player: {$in: ids}
+        }
+    });
+    GameModel.aggregate(pipeline).then(games => {
+        res.json(games);
+    }, (err) => {
+        res.status(404).json("Error: " + err);
+    });
+
+})
+
 router.route('/lane/:lane').get((req, res) => {
     GameModel.find(
         { lane: req.params.lane }
