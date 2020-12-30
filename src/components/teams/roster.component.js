@@ -59,6 +59,10 @@ export default class Roster extends Component {
     })
   }
 
+  getURI(playerObjects) {
+    return encodeURIComponent(playerObjects.map(p => p.name.replace(/\s/g, "")).join(","));
+  }
+
   render() {
     return (
       <section>
@@ -97,6 +101,7 @@ export default class Roster extends Component {
                             <div className="col">
                               <div style={{fontSize: '1.2em'}}>
                                 {team.teamname}: <a style={{...nameStyle, ...{fontSize: '.9em', padding: '0'}}}>0W-0L</a>
+                                <a style={{padding: "0 10px"}} href={"https://na.op.gg/multi/query="+ this.getURI(team.playerObject)}>OP.GG</a>
                                 {
                                   this.context === 1 ? 
                                   <Button className="btn btn-primary" style={smallButtonStyle} data-toggle="modal" data-target="#exampleModal"
