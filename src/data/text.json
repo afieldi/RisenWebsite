@@ -133,19 +133,19 @@
             ]
         },
         "champions": {
-            "prettyName": "Champions League - Scouting Grounds Circuit",
+            "prettyName": "Champions League - LCS Proving Grounds",
             "ranks": "Master and above",
-            "peak": "Challenger (No rank cap)",
-            "img": "champions.png",
-            "blurb": "Competitive, high-stakes action for players in the Master and above skill range",
-            "longBlurb": "Champions League is the best of what we have to offer. This is our most prestigious event, and features some of the best teams outside of professional League of Legends.",
+            "peak": "None",
+            "img": "RE_TypeLogo_Shading.png",
+            "blurb": "Competitive, high-stakes action for the best players in North America. If you're looking to start your path to pro - this is it.",
+            "longBlurb": "Champions League is the best of what we have to offer. This Riot-sanctioned event is part of the LCS Proving Grounds - a tournament that aims to bring amateur and professional League of Legends closer together. This is our most prestigious event, and teams participating in this league may end up being streamed on official Riot channels such as the Academy LCS Twitch channel.",
             "subLeagues": [
                 {
                     "prettyName": "Champions League",
                     "ranks":"Master and above",
-                    "peak":"Uncapped",
-                    "longBlurb": "",
-                    "blurb": "Teams are accepted into Champions League via a vetting process by Risen administration. Even though we do accept applications for this league, Champions League is entry by invitation only. Teams with a history of success and a genuine commitment to competitive integrity are more likely to be accepted. That being said, don't be discouraged from filling out an application if you think your team has got what it takes to compete with some of the best players outside of professional League of Legends. If we think your team looks competitive, we'll be sure to reach out. For any additional information, please reach out to any of the Risen Admin team and we can point you in the right direction."
+                    "peak":"None",
+                    "longBlurb": "The tournament will take place during the 2nd and 3rd weeks of January 2021. Applications closed on 12/30. You can find more information such as tournament dates and the format in our application.",
+                    "blurb": "There are two different ways to enter this league - one is by direct acceptance into the league after a vetting process by Risen administration, and the other is by performing well in an open qualifier event. Teams with a history of success and a genuine commitment to competitive integrity are more likely to receive direct acceptance. That being said, if you think your team has got what it takes to compete with some of the best North American League of Legends players, consider entering into the open qualifier event. For any additional information, please reach out to any of the Risen Admin team and we can point you in the right direction."
                 }
             ]
         }

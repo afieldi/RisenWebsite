@@ -111,6 +111,7 @@
   "142": "Zoe",
   "143": "Zyra",
   "145": "Kaisa",
+  "147": "Seraphine",
   "150": "Gnar",
   "154": "Zac",
   "157": "Yasuo",
@@ -133,6 +134,7 @@
   "267": "Nami",
   "268": "Azir",
   "350": "Yuumi",
+  "360": "Samira",
   "412": "Thresh",
   "420": "Illaoi",
   "421": "RekSai",
@@ -145,7 +147,9 @@
   "517": "Sylas",
   "518": "Neeko",
   "523": "Aphelios",
+  "526": "Rell",
   "555": "Pyke",
+  "777": "Yone",
   "875": "Sett",
   "876": "Lillia"
 }

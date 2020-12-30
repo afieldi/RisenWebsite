@@ -19,6 +19,7 @@ import Setup from './components/drafting/setup.component';
 import Drafting from './components/drafting/drafting.component';
 import Admin from './components/admin/admin.component';
 import Login from './components/login.component';
+import Watch from "./components/watch.component";
 import { getBaseUrl, getCookie } from './Helpers';
 import fetch from 'node-fetch';
 
@@ -93,6 +94,7 @@ export default class App extends Component {
               <Route path="/contact" component={Contact}></Route>
               <Route path="/drafting" component={Setup}></Route>
               <Route path="/draft" component={Drafting}></Route>
+              <Route path="/watch" component={Watch} ></Route>
               <Route path="/auth" render={this.authRender.bind(this)} ></Route>
               {
                 // Only create route if it is an admin

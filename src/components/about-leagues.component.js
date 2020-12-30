@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import { faDiceOne } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const staticText = require('../data/text.json'); 
-const test = require('../images/rampage.png')
+const staticText = require('../data/text.json');
 
 export default class AboutLeagues extends Component {
 
@@ -19,6 +18,22 @@ export default class AboutLeagues extends Component {
                     <Container>
                         <h1 className="center text-dark">Our Leagues</h1>
                         <hr className="risen-dark"></hr>
+                        <div className="row">
+                            <div className="col" style={blockStyle}>
+                                <h2>{staticText.leagues.champions.prettyName}</h2>
+                                <img src={require('../images/RE_TypeLogo_Shading.png')} style={iconStyle}></img>
+                                <p>{staticText.leagues.champions.blurb}</p>
+                                <div>
+                                    <div><b>Ranks</b></div>
+                                    <p> {staticText.leagues.champions.ranks}</p>
+                                </div>
+                                <div>
+                                    <div><b>Max Rank</b></div>
+                                    <p> {staticText.leagues.champions.peak}</p>
+                                </div>
+                                <Link to={"/league/champions"}><Button className="risen-button">Learn More</Button></Link>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.rampage.prettyName}</h2>
@@ -79,22 +94,6 @@ export default class AboutLeagues extends Component {
                                 <Link to={"/league/divine"}><Button className="risen-button">Learn More</Button></Link>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col" style={blockStyle}>
-                                <h2>{staticText.leagues.champions.prettyName}</h2>
-                                <img src={require('../images/' + staticText.leagues.champions.img)} style={iconStyle}></img>
-                                <p>{staticText.leagues.champions.blurb}</p>
-                                <div>
-                                    <div><b>Ranks</b></div>
-                                    <p> {staticText.leagues.champions.ranks}</p>
-                                </div>
-                                <div>
-                                    <div><b>Max Rank</b></div>
-                                    <p> {staticText.leagues.champions.peak}</p>
-                                </div>
-                                <Link to={"/league/champions"}><Button className="risen-button">Learn More</Button></Link>
-                            </div>
-                        </div>
                     </Container>
                 </div>
             </section>
@@ -115,6 +114,7 @@ const blockStyle = {
     margin: '10px',
     padding: '5px',
     border: '1px solid #dfe3e7',
-    borderRadius: '.267rem',
-    boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)'
+    borderRadius: '.3rem',
+    boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)',
+    backgroundColor: 'rgba(25,42,70,.13)'
 }

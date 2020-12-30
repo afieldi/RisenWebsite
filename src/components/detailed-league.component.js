@@ -59,10 +59,8 @@ export default class DetailedLeague extends Component {
 }
 
 const iconStyle = {
-    // top: '10%',
-    // width: '60%',
-    // height: '100%',
+    // width: '150px',
+    height: '150px',
     display: 'block',
-    margin: 'auto',
-    position: 'relative'
+    margin: 'auto'
 }
