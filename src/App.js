@@ -23,6 +23,7 @@ import LeagueStats from './components/league-stats.component';
 import UserContext from './context/UserContext';
 import Rules from './components/rules/rules.component';
 import Display from './components/brackets/display.component';
+import Watch from "./components/watch.component";
 
 export default class App extends Component {
   constructor(props) {
@@ -117,6 +118,7 @@ export default class App extends Component {
                 <Route path="/drafting" component={Setup}></Route>
                 <Route path="/draft" component={Drafting}></Route>
                 <Route path="/pbdraft" component={OfflineDraft}></Route>
+                <Route path="/watch" component={Watch} ></Route>
                 <Route path="/auth" render={this.authRender.bind(this)} ></Route>
                 <Route path="/rules" component={Rules}></Route>
                 <Route path="/bracket" component={Display}></Route>

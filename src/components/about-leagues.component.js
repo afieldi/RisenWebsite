@@ -14,6 +14,22 @@ export default class AboutLeagues extends Component {
                         <h1 className="center text-light">Our Leagues</h1>
                         <hr className="risen-light"></hr>
                         <div className="row">
+                            <div className="col" style={blockStyle}>
+                                <h2>{staticText.leagues.champions.prettyName}</h2>
+                                <img src={require('../images/RE_TypeLogo_Shading.png')} style={iconStyle}></img>
+                                <p>{staticText.leagues.champions.blurb}</p>
+                                <div>
+                                    <div><b>Ranks</b></div>
+                                    <p> {staticText.leagues.champions.ranks}</p>
+                                </div>
+                                <div>
+                                    <div><b>Max Rank</b></div>
+                                    <p> {staticText.leagues.champions.peak}</p>
+                                </div>
+                                <Link to={"/league/champions"}><Button className="risen-button">Learn More</Button></Link>
+                            </div>
+                        </div>
+                        <div className="row">
                             <div className="col-md" style={blockStyle}>
                                 <h2>{staticText.leagues.rampage.prettyName}</h2>
                                 <img src={require('../images/' + staticText.leagues.rampage.img)} style={iconStyle}></img>
@@ -73,22 +89,6 @@ export default class AboutLeagues extends Component {
                                 <Link to={"/league/divine"}><Button className="risen-button">Learn More</Button></Link>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col" style={blockStyle}>
-                                <h2>{staticText.leagues.champions.prettyName}</h2>
-                                <img src={require('../images/' + staticText.leagues.champions.img)} style={iconStyle}></img>
-                                <p>{staticText.leagues.champions.blurb}</p>
-                                <div>
-                                    <div><b>Ranks</b></div>
-                                    <p> {staticText.leagues.champions.ranks}</p>
-                                </div>
-                                <div>
-                                    <div><b>Max Rank</b></div>
-                                    <p> {staticText.leagues.champions.peak}</p>
-                                </div>
-                                <Link to={"/league/champions"}><Button className="risen-button">Learn More</Button></Link>
-                            </div>
-                        </div>
                     </Container>
                 </div>
             </section>
@@ -107,9 +107,14 @@ const iconStyle = {
 const blockStyle = {
     textAlign: 'center',
     margin: '10px',
-    padding: '20px',
-    border: '1px solid #696969',
-    backgroundColor: '#191919',
-    borderRadius: '.267rem',
-    boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)'
+    // padding: '20px',
+    // border: '1px solid #696969',
+    // backgroundColor: '#191919',
+    // borderRadius: '.267rem',
+    // boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)'
+    padding: '5px',
+    border: '1px solid #dfe3e7',
+    borderRadius: '.3rem',
+    boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)',
+    backgroundColor: 'rgba(25,42,70,.13)'
 }
