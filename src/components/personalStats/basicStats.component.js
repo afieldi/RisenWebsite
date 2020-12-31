@@ -76,8 +76,8 @@ export default class BasicStats extends Component {
                 }
               },
               () => { 
-                let v1 = customRound((this.accStats['avg_totalMinionsKilled']*60)/this.accStats['avg_gameDuration'], 4);
-                let v2 = customRound((this.avgData['avg_totalMinionsKilled']*60)/this.avgData['avg_gameDuration'], 4);
+                let v1 = customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.accStats['avg_gameDuration'], 4);
+                let v2 = customRound(((this.avgData['avg_totalMinionsKilled'] + this.avgData['avg_neutralMinionsKilled'])*60)/this.avgData['avg_gameDuration'], 4);
                 v1 = v1 ? v1 : 0;
                 v2 = v2 ? v2 : 0;
                 let vm = Math.max(v1, v2);

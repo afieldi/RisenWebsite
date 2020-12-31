@@ -8,7 +8,7 @@ export default class LeagueStats extends Component {
     super(props);
     this.state = {
       genData: [],
-      leagueData: {}
+      leagueData: []
     }
   }
 

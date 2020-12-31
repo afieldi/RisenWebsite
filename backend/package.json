@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js --prod",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "deploy": "gcloud app deploy"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
