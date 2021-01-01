@@ -2,7 +2,6 @@ import discord
 import sys
 import os
 import argparse
-from dotenv import load_dotenv
 from discord.ext import commands
 from pathlib import Path
 
@@ -25,6 +24,7 @@ def main ( ):
     args = parser.parse_args ( )
 
     if not args.prod:
+      from dotenv import load_dotenv
       env_path = Path('.', '.env.development')
       load_dotenv(dotenv_path=env_path)
 
