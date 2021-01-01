@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 import requests
 import os
 import io
-from IPython.display import Image
 
 class Radar (commands.Cog):
   def __init__ ( self, bot ):
