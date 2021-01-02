@@ -85,6 +85,23 @@ const gameSchema = new Schema({
     csDiff10: { type: Number },
     csDiff20: { type: Number },
     csDiff30: { type: Number },
+    xpDiff10: { type: Number },
+    xpDiff20: { type: Number },
+    xpDiff30: { type: Number },
+    goldDiff10: { type: Number },
+    goldDiff20: { type: Number },
+    goldDiff30: { type: Number },
+
+    // cs10: { type: Number },
+    // cs20: { type: Number },
+    // cs30: { type: Number },
+    // xp10: { type: Number },
+    // xp20: { type: Number },
+    // xp30: { type: Number },
+    // gold10: { type: Number },
+    // gold20: { type: Number },
+    // gold30: { type: Number },
+
     lane: { type: String },
 
     // Computed

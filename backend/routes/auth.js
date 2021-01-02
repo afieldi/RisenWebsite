@@ -30,6 +30,7 @@ router.route("/callback").get((req, res) => {
         else {
           let d = new Date();
           d.setDate(new Date().getDate() + 7);
+          console.log("setting new auth")
           res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000});
           res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}`);
           // res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${userDoc.auth}`);
@@ -89,8 +90,9 @@ router.route("/testLogin").get((req, res) => {
 });
 
 router.route("/verify").get((req, res) => {
-  let code = req.query.code;
-
+  let code = req.cookies.auth;
+  console.log(req.cookies);
+  console.log("********************")
   User.findOne({
     auth: code,
     expiry: { $gt: new Date().toUTCString() }

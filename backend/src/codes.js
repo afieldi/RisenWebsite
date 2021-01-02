@@ -56,7 +56,8 @@ async function requestMatchCodes(count, id) {
     url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   else {
-    url += `/lol/tournament-stub/v4/codes?count=${count}&tournamentId=${id}`;
+    // url += `/lol/tournament-stub/v4/codes?count=${count}&tournamentId=${id}`;
+    url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   console.log(url);
   return fetch(url, {

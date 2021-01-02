@@ -38,6 +38,7 @@ app.use(cors({
         }
     },
     credentials: true,
+    // allowedHeaders: 'Content-Type,Authorization,auth',
 }));
 // app.use(cors({
 //     origin: process.env.WEBSITE_BASE
@@ -52,7 +53,7 @@ app.use(cookieParser());
 app.use(compression())
 
 // const uri = process.env.ATLAS_URI;
-const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
+const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 
 const connection = mongoose.connection;

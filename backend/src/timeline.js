@@ -19,7 +19,13 @@ const statInterface = {
     "CS30": "number",
     "CSD10": "number",
     "CSD20": "number",
-    "CSD30": "number"
+    "CSD30": "number",
+    "XP10": "number",
+    "XP20": "number",
+    "XP30": "number",
+    "XPD10": "number",
+    "XPD20": "number",
+    "XPD30": "number"
 }
 
 function getStats(timeline, playerRoles) {
@@ -44,21 +50,39 @@ function getStats(timeline, playerRoles) {
             "CS30": 0,
             "CSD10": 0,
             "CSD20": 0,
-            "CSD30": 0
+            "CSD30": 0,
+            "XP10": 0,
+            "XP20": 0,
+            "XP30": 0,
+            "XPD10": 0,
+            "XPD20": 0,
+            "XPD30": 0,
+            "GD10": 0,
+            "GD20": 0,
+            "GD30": 0,
+            "GDD10": 0,
+            "GDD20": 0,
+            "GDD30": 0
         }
     }
     for (let frame of timeline.frames) {
 
         // Get CS
         for (let participant of Object.values(frame.participantFrames)) {
-            if (frame.timestamp < 600000) {
+            if (Math.abs(frame.timestamp-600000) < 1000) {
                 stats[participant.participantId].CS10 = participant.minionsKilled + participant.jungleMinionsKilled;
+                stats[participant.participantId].XP10 = participant.xp;
+                stats[participant.participantId].GD10 = participant.totalGold;
             }
-            else if (frame.timestamp < 1200000) {
+            else if (Math.abs(frame.timestamp-1200000) < 1000) {
                 stats[participant.participantId].CS20 = participant.minionsKilled + participant.jungleMinionsKilled;
+                stats[participant.participantId].XP20 = participant.xp;
+                stats[participant.participantId].GD20 = participant.totalGold;
             }
-            else if (frame.timestamp < 1800000) {
+            else if (Math.abs(frame.timestamp-1800000) < 1000) {
                 stats[participant.participantId].CS30 = participant.minionsKilled + participant.jungleMinionsKilled;
+                stats[participant.participantId].XP30 = participant.xp;
+                stats[participant.participantId].GD30 = participant.totalGold;
             }
         }
 
@@ -135,6 +159,7 @@ function getStats(timeline, playerRoles) {
         if (ids.length != 2) {
             continue;
         }
+        // CS
         stats[ids[0]].CSD10 = stats[ids[0]].CS10 - stats[ids[1]].CS10;
         stats[ids[1]].CSD10 = stats[ids[1]].CS10 - stats[ids[0]].CS10;
 
@@ -143,6 +168,26 @@ function getStats(timeline, playerRoles) {
 
         stats[ids[0]].CSD30 = stats[ids[0]].CS30 - stats[ids[1]].CS30;
         stats[ids[1]].CSD30 = stats[ids[1]].CS30 - stats[ids[0]].CS30;
+
+        // XP
+        stats[ids[0]].XPD10 = stats[ids[0]].XP10 - stats[ids[1]].XP10;
+        stats[ids[1]].XPD10 = stats[ids[1]].XP10 - stats[ids[0]].XP10;
+
+        stats[ids[0]].XPD20 = stats[ids[0]].XP20 - stats[ids[1]].XP20;
+        stats[ids[1]].XPD20 = stats[ids[1]].XP20 - stats[ids[0]].XP20;
+
+        stats[ids[0]].XPD30 = stats[ids[0]].XP30 - stats[ids[1]].XP30;
+        stats[ids[1]].XPD30 = stats[ids[1]].XP30 - stats[ids[0]].XP30;
+
+        // GOLD
+        stats[ids[0]].GDD10 = stats[ids[0]].GD10 - stats[ids[1]].GD10;
+        stats[ids[1]].GDD10 = stats[ids[1]].GD10 - stats[ids[0]].GD10;
+
+        stats[ids[0]].GDD20 = stats[ids[0]].GD20 - stats[ids[1]].GD20;
+        stats[ids[1]].GDD20 = stats[ids[1]].GD20 - stats[ids[0]].GD20;
+
+        stats[ids[0]].GDD30 = stats[ids[0]].GD30 - stats[ids[1]].GD30;
+        stats[ids[1]].GDD30 = stats[ids[1]].GD30 - stats[ids[0]].GD30;
     }
 
     return stats;

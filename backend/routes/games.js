@@ -1,6 +1,6 @@
 const router = require('express').Router();	
 let Game = require('../models/game.model');	
-const matcher = require('../src/matches');	
+const matcher = require('../src/matches');
 
 router.route('/').get((req, res) => {	
     Game.find()	
@@ -10,7 +10,11 @@ router.route('/').get((req, res) => {
 
 router.route('/callback').post((req, res) => {
   // Game submission endpoint
-  res.send("TBD");
+  matcher.saveGames([req.body.gameId]).then(data => {
+    res.json("Success");
+  }, err => {
+    res.status(500).send(err);
+  })
 })
 
 

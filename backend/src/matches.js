@@ -106,9 +106,8 @@ async function saveTeamGame(gameData, teams) {
     return [btO, rtO];
 }
 
-
 async function saveGame(matchId) {
-    const games = await GameModel.find({gameId: matchId});
+    const games = await TeamGameModel.find({gameId: matchId});
     if (games.length > 0) {
         // We already have this game in our db. Move on.
         return;
@@ -227,12 +226,18 @@ async function saveGame(matchId) {
                     csDiff10: timelineStats[+i+1].CSD10,
                     csDiff20: timelineStats[+i+1].CSD20,
                     csDiff30: timelineStats[+i+1].CSD30,
+                    xpDiff10: timelineStats[+i+1].XPD10,
+                    xpDiff20: timelineStats[+i+1].XPD20,
+                    xpDiff30: timelineStats[+i+1].XPD30,
+                    goldDiff10: timelineStats[+i+1].GDD10,
+                    goldDiff20: timelineStats[+i+1].GDD20,
+                    goldDiff30: timelineStats[+i+1].GDD30,
                     lane: laneAssignments[+i+1],
                     
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-                console.log("Added game entry");
+                // console.log("Added game entry");
             }
         },
         (error) => {

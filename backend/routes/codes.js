@@ -31,7 +31,7 @@ router.route("/create").post((req, res) => {
     generateCodes(season.seasonApiNumber, count, season, (codes) => {
       res.json(codes);
     }).catch((err) => {
-      res.status(500).json("Error!!");
+      res.status(500).json(err);
     })
   });
 });

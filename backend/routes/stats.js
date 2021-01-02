@@ -73,6 +73,12 @@ const avgPipe = {
     avg_csDiff10: { $avg: "$csDiff10" },
     avg_csDiff20: { $avg: "$csDiff20" },
     avg_csDiff30: { $avg: "$csDiff30" },
+    avg_xpDiff10: { $avg: "$xpDiff10" },
+    avg_xpDiff20: { $avg: "$xpDiff20" },
+    avg_xpDiff30: { $avg: "$xpDiff30" },
+    avg_goldDiff10: { $avg: "$goldDiff10" },
+    avg_goldDiff20: { $avg: "$goldDiff20" },
+    avg_goldDiff30: { $avg: "$goldDiff30" },
     total_wins: { $sum: { $cond : [ "$win", 1, 0 ] } },
     total_games: { $sum: 1 }
 }
@@ -128,10 +134,12 @@ router.route('/player/name/:id/agg').get((req, res) => {
             }
         ]).then(games => {
             if (games.length) {
-                games[0]["wr"] = games[0]["total_games"] > 0 ? games[0]["total_wins"] / games[0]["total_games"] : 0;
-                games[0]["avg_dpm"] = games[0]["avg_totalDamageDealtToChampions"] / games[0]["avg_gameDuration"];
-                games[0]["avg_vspm"] = games[0]["avg_visionScore"] / games[0]["avg_gameDuration"];
-                console.log(games["avg_dpm"])
+                for (let game of games) {
+                    game["wr"] = game["total_games"] > 0 ? game["total_wins"] / game["total_games"] : 0;
+                    game["avg_dpm"] = game["avg_totalDamageDealtToChampions"] / (game["avg_gameDuration"]/60);
+                    game["avg_vspm"] = game["avg_visionScore"] / game["avg_gameDuration"];
+                    game["avg_cspm"] = (game["avg_totalMinionsKilled"] + game["avg_neutralMinionsKilled"]) / (game["avg_gameDuration"]/60);
+                }
                 res.json(games);
             }
             else {
@@ -192,9 +200,12 @@ router.route('/player/name/:id/lane/:lane/agg').get((req, res) => {
             }
         ]).then(games => {
             if (games.length) {
-                games["wr"] = games["total_games"] > 0 ? games["wins"] / games["total_games"] : 0;
-                games["avg_dpm"] = games["avg_totalDamageDealtToChampions"] / games["avg_gameDuration"];
-                games["avg_vspm"] = games["avg_visionScore"] / games["avg_gameDuration"];
+                for (let game of games) {
+                    game["wr"] = game["total_games"] > 0 ? game["total_wins"] / game["total_games"] : 0;
+                    game["avg_dpm"] = game["avg_totalDamageDealtToChampions"] / (game["avg_gameDuration"]/60);
+                    game["avg_vspm"] = game["avg_visionScore"] / game["avg_gameDuration"];
+                    game["avg_cspm"] = (game["avg_totalMinionsKilled"] + game["avg_neutralMinionsKilled"]) / (game["avg_gameDuration"]/60);
+                }
                 res.json(games);
             }
             else {
@@ -413,6 +424,12 @@ router.route('/avg').get((req, res) => {
             }
         }
     ]).then(data => {
+        for (let game of data) {
+            game["wr"] = game["total_games"] > 0 ? game["total_wins"] / game["total_games"] : 0;
+            game["avg_dpm"] = game["avg_totalDamageDealtToChampions"] / (game["avg_gameDuration"]/60);
+            game["avg_vspm"] = game["avg_visionScore"] / game["avg_gameDuration"];
+            game["avg_cspm"] = (game["avg_totalMinionsKilled"] + game["avg_neutralMinionsKilled"]) / (game["avg_gameDuration"]/60);
+        }
         res.json(data);
     }, (err) => {
         res.status(400).json("Error: " + err);
