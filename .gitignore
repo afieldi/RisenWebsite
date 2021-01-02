@@ -23,6 +23,7 @@ backend/.env
 .env.development
 .env.test
 .env.production
+*.pyc
 
 npm-debug.log*
 yarn-debug.log*

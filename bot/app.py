@@ -16,8 +16,12 @@ def main ( ):
     )
     # Register commands
     from commands.radar import Radar
+    from commands.leaderboard import Leaderboards
+    from commands.stats import Stats
 
     bot.add_cog ( Radar ( bot ) )
+    bot.add_cog ( Leaderboards ( bot ) )
+    bot.add_cog ( Stats ( bot ) )
 
     parser = argparse.ArgumentParser ( description="Discord bot" )
     parser.add_argument ( "-p", "--prod", default=False, action='store_true' )
