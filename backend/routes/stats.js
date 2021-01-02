@@ -73,6 +73,7 @@ const avgPipe = {
     avg_csDiff10: { $avg: "$csDiff10" },
     avg_csDiff20: { $avg: "$csDiff20" },
     avg_csDiff30: { $avg: "$csDiff30" },
+    total_wins: { $sum: { $cond : [ "$win", 1, 0 ] } },
     total_games: { $sum: 1 }
 }
 
@@ -127,9 +128,10 @@ router.route('/player/name/:id/agg').get((req, res) => {
             }
         ]).then(games => {
             if (games.length) {
-                games["wr"] = games["total_games"] > 0 ? games["wins"] / games["total_games"] : 0;
-                games["avg_dpm"] = games["avg_totalDamageDealtToChampions"] / games["avg_gameDuration"];
-                games["avg_vspm"] = games["avg_visionScore"] / games["avg_gameDuration"];
+                games[0]["wr"] = games[0]["total_games"] > 0 ? games[0]["total_wins"] / games[0]["total_games"] : 0;
+                games[0]["avg_dpm"] = games[0]["avg_totalDamageDealtToChampions"] / games[0]["avg_gameDuration"];
+                games[0]["avg_vspm"] = games[0]["avg_visionScore"] / games[0]["avg_gameDuration"];
+                console.log(games["avg_dpm"])
                 res.json(games);
             }
             else {
