@@ -41,44 +41,46 @@ export default class App extends Component {
   }
 
   checkLoggedIn(callback) {
-    let code = getCookie("auth");
+    // let code = getCookie("auth");
     // if(process.env.NODE_ENV !== 'production') {
     //   console.warn("In dev mode. Automatically logging in as admin");
     //   this.setState({
     //     level: 1
     //   });
     // }
-    if(code) {
-      fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + code).then((res) => {
-        if(res.status === 200 || res.status === 304) {
-          res.json().then(user => {
-            if(user.level) {
-              this.setState({
-                level: user.level
-              });
-            }
-            else {
-              this.setState({
-                level: -1
-              });
-            }
-          });
-        }
-        else {
-          this.setState({
-            level: -1
-          });
-        }
-        callback();
-      }).catch(err => {
-        console.log(err)
+    // if(code) {
+    fetch(process.env.REACT_APP_BASE_URL + "/auth/verify", {
+      credentials: "include"
+    }).then((res) => {
+      if(res.status === 200 || res.status === 304) {
+        res.json().then(user => {
+          if(user.level) {
+            this.setState({
+              level: user.level
+            });
+          }
+          else {
+            this.setState({
+              level: -1
+            });
+          }
+        });
+      }
+      else {
         this.setState({
           level: -1
         });
-      })
-    }
-
+      }
+      callback();
+    }).catch(err => {
+      console.log(err)
+      this.setState({
+        level: -1
+      });
+    })
   }
+
+  // }
 
   
   logOut() {
