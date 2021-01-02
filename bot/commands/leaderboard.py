@@ -59,6 +59,12 @@ lb_keys = {
   "csDiff10": "avg_csDiff10",
   "csDiff20": "avg_csDiff20",
   "csDiff30": "avg_csDiff30",
+  "xpDiff10": "avg_xpDiff10",
+  "xpDiff20": "avg_xpDiff20",
+  "xpDiff30": "avg_xpDiff30",
+  "goldDiff10": "avg_goldDiff10",
+  "goldDiff20": "avg_goldDiff20",
+  "goldDiff30": "avg_goldDiff30",
   "totalGames": "total_games"
 }
 
