@@ -21,12 +21,16 @@ router.route("/callback").get((req, res) => {
         expiry: weekFromNow
       }).then(userDoc => {
         if (req.get('origin')) {
-          res.cookie('auth', user.auth, new Date().setDate(new Date() + 7));
+          let d = new Date();
+          d.setDate(new Date().getDate() + 7);
+          res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000});
           res.redirect(302, `${req.get('origin')}`);
           // res.redirect(`${req.get('origin')}/auth?code=${userDoc.auth}`)
         }
         else {
-          res.cookie('auth', user.auth, new Date().setDate(new Date() + 7));
+          let d = new Date();
+          d.setDate(new Date().getDate() + 7);
+          res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000});
           res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}`);
           // res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${userDoc.auth}`);
         }
@@ -69,8 +73,10 @@ router.route("/testLogin").get((req, res) => {
       expiry: { $gt: new Date() }
     }).then(user => {
       if(user) {
-        // res.cookie('auth', user.auth, { expires: new Date().setDate(new Date() + 7)});
-        res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${user.auth}`);
+        let d = new Date();
+        d.setDate(new Date().getDate() + 7);
+        res.cookie('auth', user.auth, { maxAge: 7* 24 * 60 * 60 * 1000});
+        res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}`);
       }
       else {
         res.status(404).send("Code not found!");
@@ -87,7 +93,7 @@ router.route("/verify").get((req, res) => {
 
   User.findOne({
     auth: code,
-    expiry: { $gt: new Date() }
+    expiry: { $gt: new Date().toUTCString() }
   }).then(user => {
     if(user) {
       // res.cookie('auth', user.auth, { expires: user.expiry});
