@@ -15,11 +15,11 @@ def main ( ):
         command_prefix='%'
     )
     # Register commands
-    from commands.radar import Radar
+    from commands.charts import Charts
     from commands.leaderboard import Leaderboards
     from commands.stats import Stats
 
-    bot.add_cog ( Radar ( bot ) )
+    bot.add_cog ( Charts ( bot ) )
     bot.add_cog ( Leaderboards ( bot ) )
     bot.add_cog ( Stats ( bot ) )
 

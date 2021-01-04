@@ -5,7 +5,7 @@ import requests
 import os
 import io
 
-class Radar (commands.Cog):
+class Charts (commands.Cog):
   def __init__ ( self, bot ):
     self.bot = bot
 
@@ -74,7 +74,10 @@ class Radar (commands.Cog):
     )
 
     img = fig.to_image(format="png", )
-    print(fig.to_image.__code__.co_varnames)
-    print(type(img))
     f = discord.File(io.BytesIO(img), filename="chart.png")
     await ctx.send(file=f)
+
+
+  @commands.command()
+  def heat(self, ctx, *args):
+    name = " ".join(args)
