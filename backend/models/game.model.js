@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const gameSchema = new Schema({
     player: {type: Schema.Types.ObjectId, ref: 'Player', required: true },
     team: {type: Schema.Types.ObjectId, ref: 'Team', required: true },
+    season: {type: Schema.Types.ObjectId, ref: 'Season', required: true },
     gameId: { type: Number },
     gameDuration: { type: Number },
     championId: { type: Number },

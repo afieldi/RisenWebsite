@@ -21,6 +21,21 @@ async function verifyPlayer(accountId) {
     return player;
 }
 
+async function createPlayer(summonerData) {
+    let player = await PlayerModel.findOne({ accountId: summonerData.player.accountId });
+
+    if (player === null) {
+        console.log(summonerData);
+        player = await PlayerModel.create({
+            accountId: summonerData.player.accountId,
+            name: summonerData.player.summonerName,
+            teams: [],
+            notes: ''
+        });
+    }
+    return player;
+}
+
 async function addPlayerByName(name) {
     const summoner = (await leagueApi.Summoner.getByName(name, constants.Regions.AMERICA_NORTH).catch((err) => {
         console.log(err);
@@ -51,4 +66,5 @@ module.exports = {
     'verifyPlayer': verifyPlayer,
     'addPlayerByName': addPlayerByName,
     'searchPlayer': searchPlayer,
+    'createPlayer': createPlayer
 }

@@ -10,9 +10,14 @@ router.route('/').get((req, res) => {
 
 router.route('/callback').post((req, res) => {
   // Game submission endpoint
-  matcher.saveGames([req.body.gameId]).then(data => {
+  let seasonNumber = 0;
+  try {
+    seasonNumber = Number(req.body.metaData);
+  } catch (error) { }
+  matcher.saveGame(req.body.gameId, req.body.shortCode).then(data => {
     res.json("Success");
   }, err => {
+    console.log("crying")
     res.status(500).send(err);
   })
 })

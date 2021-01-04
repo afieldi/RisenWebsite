@@ -13,7 +13,7 @@ async function createNewTournament(name) {
   return fetch(url, {
     method: 'POST',
     headers: {
-        'X-Riot-Token': process.env.RIOT_API,
+        'X-Riot-Token': process.env.RIOT_TOURNEY_API,
         'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -56,18 +56,19 @@ async function requestMatchCodes(count, id) {
     url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   else {
-    // url += `/lol/tournament-stub/v4/codes?count=${count}&tournamentId=${id}`;
-    url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
+    url += `/lol/tournament-stub/v4/codes?count=${count}&tournamentId=${id}`;
+    // url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   console.log(url);
   return fetch(url, {
       method: 'POST',
       headers: {
-          'X-Riot-Token': process.env.RIOT_API,
+          'X-Riot-Token': process.env.RIOT_TOURNEY_API,
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
           "mapType": "SUMMONERS_RIFT",
+          "metadata": `${id}`,
           "pickType": "TOURNAMENT_DRAFT",
           "spectatorType": "ALL",
           "teamSize": 5

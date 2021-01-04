@@ -1,8 +1,9 @@
 // require('dotenv').config();
 const { leagueApi, constants } = require('./api')
-const { verifyPlayer } = require('./player')
+const { verifyPlayer, createPlayer } = require('./player')
 const {spawn} = require('child_process');
 const mongoose = require('mongoose');
+const fetch = require("node-fetch");
 
 // const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
 // mongoose
@@ -19,13 +20,16 @@ const GameModel = require('../models/game.model');
 const PlayerModel = require('../models/player.model');
 const TeamModel = require('../models/team.model');
 const TeamGameModel = require('../models/teamgame.model');
+const SeasonModel = require('../models/season.model');
+const CodeModel = require('../models/code.model');
+const { exception } = require('console');
 
 // This will be used later
 async function saveGames(matchIds) {
     for ( const matchId of matchIds ) {
         try {
             console.log("adding game: " + matchId);
-            await saveGame(matchId);
+            await saveGame(matchId, 0);
             console.log("Saved game: " + matchId);
         } catch (error) {
             console.log(error);
@@ -86,7 +90,7 @@ async function saveTeamGame(gameData, teams) {
         bans: bD.bans.map(b => b.championId),
         dragonKills: bD.dragonKills,
         baronKills: bD.baronKills,
-        win: bD.win,
+        win: bD.win === "Win",
     });
 
     let rtO = await TeamGameModel.create({
@@ -101,37 +105,55 @@ async function saveTeamGame(gameData, teams) {
         bans: rD.bans.map(b => b.championId),
         dragonKills: rD.dragonKills,
         baronKills: rD.baronKills,
-        win: rD.win
+        win: rD.win === "Win"
     });
+    console.log("aa")
     return [btO, rtO];
 }
 
-async function saveGame(matchId) {
-    const games = await TeamGameModel.find({gameId: matchId});
-    if (games.length > 0) {
-        // We already have this game in our db. Move on.
-        return;
-    }
+async function saveGame(matchId, tCode) {
+    // const games = await TeamGameModel.find({gameId: matchId});
+    // if (games.length > 0) {
+    //     // We already have this game in our db. Move on.
+    //     return;
+    // }
+
+    // const code = await CodeModel.findOne({code: tCode});
+    // if ( code === null ) {
+    //     throw new Error("Code not valid");
+    // }
     // TODO: change this to tourney
-    await leagueApi.Match.get(matchId, constants.Regions.AMERICA_NORTH).then(
+    let url = `https://na1.api.riotgames.com/lol/match/v4/matches/${matchId}/by-tournament-code/${tCode}`;
+    console.log(url)
+    data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-Riot-Token': process.env.RIOT_TOURNEY_API,
+            'Content-Type': 'application/json',
+        }
+    }).then(
         async gameData => {
-            gameData = gameData.response;
+            gameData = await gameData.json();
+            // console.log(gameData);
+            // gameData = gameData.response;
         
             const teams = await getTeams(gameData.participantIdentities);
             
             saveTeamGame(gameData, teams);
             
             const games = await GameModel.find({gameId: matchId});
+            const code = await CodeModel.findOne({code: tCode});
             if (games.length > 0) {
                 // We already have this game in our db. Move on.
                 return;
             }
             const timeline = (await leagueApi.Match.timeline(matchId, constants.Regions.AMERICA_NORTH)).response;
             const laneAssignments = await getRoles(gameData, timeline);
-
+            
             const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
-
+            
             for (const [i, player] of Object.entries(gameData.participants)) {
+                console.log(matchId);
                 const playerTeam = await verifyExistence(
                     gameData.participantIdentities[i].player.accountId,
                     i < 5 ? teams[0] : teams[1]
@@ -146,6 +168,7 @@ async function saveGame(matchId) {
                 await GameModel.create({
                     player: playerTeam[0]._id,
                     team: playerTeam[1]._id,
+                    season: code.season,
                     gameId: matchId,
                     gameDuration: gameData.gameDuration,
                     championId: player.championId,
@@ -237,7 +260,7 @@ async function saveGame(matchId) {
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-                // console.log("Added game entry");
+                console.log("Added game entry");
             }
         },
         (error) => {
@@ -263,34 +286,39 @@ async function getTeams(participants) {
         }
 
         if (0 === Object.keys(teamCounter).length) {
-            return -1;
+            return "000000000000";
         }
 
         // Get the key with the largest value. This will be the valid team
         // https://stackoverflow.com/questions/27376295/getting-key-with-the-highest-value-from-object
         return Object.keys(teamCounter).reduce((a, b) => teamCounter[a] > teamCounter[b] ? a : b);
     }
+    for ( let p of participantsCopy ) {
+        await createPlayer(p);
+    }
 
     let ids = participantsCopy.splice(0, 5).map((p) => {
         return p.player.accountId;
     });
-
+    
     const teams1 = await PlayerModel.find(
         { 'accountId': { "$in": ids } }
     );
     
-    const team1 = getTeam(teams1);
-    
+    let team1 = getTeam(teams1);
+    team1 = await verifyTeam(team1);
     // participants has already been spliced
     ids = participantsCopy.map((p) => {
         return p.player.accountId;
     });
+
     const teams2 = await PlayerModel.find(
         { 'accountId': { "$in": ids } }
     );
-    const team2 = getTeam(teams2);
+    let team2 = getTeam(teams2);
+    team2 = await verifyTeam(team2);
     // [blue, red]
-    return [team1, team2];
+    return [team1._id, team2._id];
 }
 
 // Ensure team exists and create if it doesn't
@@ -305,6 +333,7 @@ async function verifyTeam(teamId) {
             });
         }
     }
+    console.log(team);
     return team;
 }
 
@@ -315,9 +344,9 @@ async function verifyExistence(accountId, teamId) {
     // Check/create player
     let player = await verifyPlayer(accountId);
     
-
     // Check/create Team
     let team = await verifyTeam(teamId);
+    console.log("p");    
 
     if (!player.teams.includes(team._id)) {
         player.teams.push(team._id);
@@ -357,5 +386,6 @@ async function verifyExistence(accountId, teamId) {
 // });
 
 module.exports = {
-    'saveGames': saveGames
+    'saveGames': saveGames,
+    'saveGame': saveGame
 }
