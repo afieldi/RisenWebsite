@@ -1,5 +1,5 @@
 // require('dotenv').config();
-const { leagueApi, constants } = require('./api')
+const { leagueApi, constants, makeRequest } = require('./api')
 const { verifyPlayer, createPlayer } = require('./player')
 const {spawn} = require('child_process');
 const mongoose = require('mongoose');
@@ -25,12 +25,12 @@ const CodeModel = require('../models/code.model');
 const { exception } = require('console');
 
 // This will be used later
-async function saveGames(matchIds) {
+async function saveGames(matchIds, tCode) {
     for ( const matchId of matchIds ) {
         try {
-            console.log("adding game: " + matchId);
-            await saveGame(matchId, 0);
-            console.log("Saved game: " + matchId);
+            // console.log("adding game: " + matchId);
+            await saveGame(matchId, tCode);
+            // console.log("Saved game: " + matchId);
         } catch (error) {
             console.log(error);
             console.log("Failed saving game: " + matchId);
@@ -112,26 +112,20 @@ async function saveTeamGame(gameData, teams) {
 }
 
 async function saveGame(matchId, tCode) {
-    // const games = await TeamGameModel.find({gameId: matchId});
-    // if (games.length > 0) {
-    //     // We already have this game in our db. Move on.
-    //     return;
-    // }
+    const games = await TeamGameModel.find({gameId: matchId});
+    if (games.length > 0) {
+        console.log(`Already had game ${matchId} in db`);
+        // We already have this game in our db. Move on.
+        return;
+    }
 
-    // const code = await CodeModel.findOne({code: tCode});
-    // if ( code === null ) {
-    //     throw new Error("Code not valid");
-    // }
-    // TODO: change this to tourney
     let url = `https://na1.api.riotgames.com/lol/match/v4/matches/${matchId}/by-tournament-code/${tCode}`;
-    console.log(url)
-    data = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'X-Riot-Token': process.env.RIOT_TOURNEY_API,
-            'Content-Type': 'application/json',
-        }
-    }).then(
+    // console.log(url)
+    // Wait 1.3 seconds so we can't overload the api key. 
+    // await setTimeout(() => {}, 1300);
+    makeRequest(
+        url, "GET", process.env.RIOT_TOURNEY_API
+    ).then(
         async gameData => {
             gameData = await gameData.json();
             // console.log(gameData);
@@ -260,8 +254,8 @@ async function saveGame(matchId, tCode) {
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
                 });
-                console.log("Added game entry");
             }
+            console.log(`Added ${matchId} to db`);
         },
         (error) => {
             console.log(error.message);

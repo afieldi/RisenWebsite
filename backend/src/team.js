@@ -1,13 +1,11 @@
 const TeamModel = require('../models/team.model');
 
 async function addTeam(teamName, teamShort, players, seasonDO) {
-  console.log("A")
   let team = await TeamModel.findOne({
     teamshortname: teamShort,
     season: seasonDO
   });
   if (team === null) {
-    console.log("B")
     team = await TeamModel.create({
       teamname: teamName,
       teamshortname: teamShort,
@@ -19,7 +17,6 @@ async function addTeam(teamName, teamShort, players, seasonDO) {
     await seasonDO.save();
   }
   else {
-    console.log("C");
     team.players = players;
     team.save();
   }

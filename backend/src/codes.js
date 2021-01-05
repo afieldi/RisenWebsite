@@ -1,5 +1,7 @@
 const fetch = require("node-fetch");
 const CodeModel = require('../models/code.model');
+const { makeRequest } = require('./api');
+const { saveGames } = require('./matches');
 
 async function createNewTournament(name) {
   let url = process.env.NA_TOURNEY_BASE;
@@ -10,17 +12,12 @@ async function createNewTournament(name) {
     url += `/lol/tournament-stub/v4/tournaments`;
   }
   console.log(url);
-  return fetch(url, {
-    method: 'POST',
-    headers: {
-        'X-Riot-Token': process.env.RIOT_TOURNEY_API,
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  return makeRequest(url, "POST",
+    {
         "name": name,
         "providerId": process.env.TOURNEY_ID
-    })
-  }).then(response => {
+    }
+  ).then(response => {
     
       if (!response.ok) {
         return response.statusText
@@ -60,20 +57,15 @@ async function requestMatchCodes(count, id) {
     // url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   console.log(url);
-  return fetch(url, {
-      method: 'POST',
-      headers: {
-          'X-Riot-Token': process.env.RIOT_TOURNEY_API,
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  return makeRequest(url, "POST",
+      {
           "mapType": "SUMMONERS_RIFT",
           "metadata": `${id}`,
           "pickType": "TOURNAMENT_DRAFT",
           "spectatorType": "ALL",
           "teamSize": 5
-      })
-  }).then(response => {
+      }
+  ).then(response => {
       if (!response.ok) {
         throw response.statusText;
       }
@@ -82,7 +74,19 @@ async function requestMatchCodes(count, id) {
   
 }
 
+async function updateCodes(codes) {
+  for (let code of codes) {
+    let url = process.env.NA_BASE + `/lol/match/v4/matches/by-tournament-code/${code.code}/ids`
+    try {
+      let response = await makeRequest(url, "GET", process.env.RIOT_TOURNEY_API);
+      let ids = await response.json();
+      saveGames(ids, code.code);
+    } catch (error) { }
+  }
+}
+
 module.exports = {
   generateCodes: generateCodes,
-  createTournament: createNewTournament
+  createTournament: createNewTournament,
+  updateCodes: updateCodes
 }
