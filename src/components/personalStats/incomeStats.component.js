@@ -164,7 +164,11 @@ export default class IncomeStats extends Component {
   }
   getXPM() {
     // This one sucks lol
-    let xpavg = this.accStats['avg_xpGen10'] + this.accStats['avg_xpGen20'] + this.accStats['avg_xpGen30'];
+    let xpavg = 0;
+    xpavg += this.accStats['avg_xpGen10'] ? this.accStats['avg_xpGen10'] : 0;
+    xpavg += this.accStats['avg_xpGen20'] ? this.accStats['avg_xpGen20'] : 0;
+    xpavg += this.accStats['avg_xpGen30'] ? this.accStats['avg_xpGen30'] : 0;
+    // let xpavg = this.accStats['avg_xpGen10'] + this.accStats['avg_xpGen20'] + this.accStats['avg_xpGen30'];
     xpavg /= 3;
     return customRound(xpavg, 0);
   }
