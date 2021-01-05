@@ -1,6 +1,9 @@
 const router = require('express').Router();	
-let Game = require('../models/game.model');	
+let Game = require('../models/game.model');
+let CodeModel = require('../models/code.model');
+const mongoose = require('mongoose');
 const matcher = require('../src/matches');
+const { updateCodes } = require('../src/codes');
 
 router.route('/').get((req, res) => {	
     Game.find()	
@@ -22,8 +25,25 @@ router.route('/callback').post((req, res) => {
   })
 })
 
+router.route('/update/tournament/:season').put((req, res) => {
+  let id;
+  try {
+    id = mongoose.Types.ObjectId(req.params.season);
+  } catch (error) {
+    res.status(400).json("Bad season ID");
+    return;
+  }
+  CodeModel.find({season: id}).then(codes => {
+    updateCodes(codes).then(d => {
+      res.json("Updated");
+    }).catch(err => res.status(500).json('Error: ' + err));
+  }).catch(err => res.status(400).json('Error: ' + err));	
+});
+
 
 router.route('/add/:gameid').post((req, res) => {	
+  res.status(404).json("Nothing to see here");
+  return;
   matcher.saveGames([req.params.gameid]).then(data => {	
     res.send("Game added");	
   }, (err) => {	
