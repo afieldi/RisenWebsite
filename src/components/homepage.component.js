@@ -21,7 +21,7 @@ export default class HomePage extends Component {
 
     render() {
         return (
-            <section style={{backgroundImage: "url(" + backgroundImage + ")", backgroundAttachment: 'fixed' }}>
+            <section style={{backgroundImage: "url(" + backgroundImage + ")", backgroundAttachment: 'fixed', backgroundSize: 'cover' }}>
                 <Container className="p-3">
                     <img style={{marginTop: '10vh', marginBottom: '5vh'}} src={ risenLogo } className="risenLogoClass"/>
                     {/* <Jumbotron style={ outerJumboStyle }>
