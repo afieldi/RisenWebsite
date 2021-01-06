@@ -75,11 +75,12 @@ async function getRoles(gameData, timeline) {
 
 }
 
-async function saveTeamGame(gameData, teams) {
+async function saveTeamGame(gameData, teams, season) {
     let bD = gameData.teams[0]; // BlueData
     let rD = gameData.teams[1]; // RedData
     let btO = await TeamGameModel.create({
         gameId: gameData.gameId,
+        season: season,
         gameDuration: gameData.gameDuration,
         team: teams[0],
         side: 'blue',
@@ -95,6 +96,7 @@ async function saveTeamGame(gameData, teams) {
 
     let rtO = await TeamGameModel.create({
         gameId: gameData.gameId,
+        season: season,
         gameDuration: gameData.gameDuration,
         team: teams[1],
         side: 'red',
@@ -112,8 +114,9 @@ async function saveTeamGame(gameData, teams) {
 }
 
 async function saveGame(matchId, tCode) {
-    const games = await TeamGameModel.find({gameId: matchId});
-    if (games.length > 0) {
+    const teamgames = await TeamGameModel.find({gameId: matchId});
+    const games = await GameModel.find({gameId: matchId});
+    if (teamgames.length > 0 && games.length > 0) {
         console.log(`Already had game ${matchId} in db`);
         // We already have this game in our db. Move on.
         return;
@@ -128,15 +131,18 @@ async function saveGame(matchId, tCode) {
     ).then(
         async gameData => {
             gameData = await gameData.json();
-            // console.log(gameData);
-            // gameData = gameData.response;
         
             const teams = await getTeams(gameData.participantIdentities);
-            
-            saveTeamGame(gameData, teams);
-            
-            const games = await GameModel.find({gameId: matchId});
             const code = await CodeModel.findOne({code: tCode});
+
+            if (teamgames.length === 0) {
+                saveTeamGame(gameData, teams, code.season);
+            }
+            if (games.length !== 0) {
+                return;
+            }
+            
+            // const games = await GameModel.find({gameId: matchId});
             if (games.length > 0) {
                 // We already have this game in our db. Move on.
                 return;
