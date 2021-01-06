@@ -160,7 +160,7 @@ export default class BasicStats extends Component {
         return customRound((this.props.accStats['avg_kills'] + this.props.accStats['avg_assists'])/this.props.accStats['avg_deaths'], 2);
     }
     getCspm() {
-        return customRound((this.props.accStats['avg_totalMinionsKilled']*60)/this.props.accStats['avg_gameDuration']);
+        return customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.props.accStats['avg_gameDuration']);
     }
     getKDAP() {
         // return

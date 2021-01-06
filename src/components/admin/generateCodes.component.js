@@ -51,6 +51,23 @@ export default class GenerateCodes extends Component {
     })
   }
   
+  updateSeason() {
+    let season = document.getElementById("season-select").value;
+    const url = process.env.REACT_APP_BASE_URL + `/games/update/tournament/${season}`;
+    fetch(url, {
+      method: "PUT",
+      credentials: 'include'
+    }).then(res => {
+      if (res.status !== 200) {
+        alert(res.statusText);
+      }
+      else {
+        alert("Season updated");
+      }
+    }, (err) => {
+      alert("Failed requesting codes: \n" + err);
+    })
+  }
 
   getCodes() {
     let count = document.getElementById("tournament-teams").value;
@@ -95,6 +112,15 @@ export default class GenerateCodes extends Component {
         </div>
         <div className="row">
           <div className="col">
+              <input id="new-season-name" placeholder="New Season Name"></input>
+          </div>
+          <div className="col">
+              <Button onClick={this.createNewSeason.bind(this)}>Create New Season</Button>
+          </div>
+        </div>
+        <br></br>
+        <div className="row">
+          <div className="col">
             Season: 
             <select id="season-select">
               {
@@ -107,13 +133,9 @@ export default class GenerateCodes extends Component {
             </select>
           </div>
         </div>
-        <br></br>
         <div className="row">
           <div className="col">
-              <input id="new-season-name" placeholder="New Season Name"></input>
-          </div>
-          <div className="col">
-              <Button onClick={this.createNewSeason.bind(this)}>Create New Season</Button>
+            <Button onClick={this.updateSeason.bind(this)}>Update Season's Games</Button>
           </div>
         </div>
         <div className="row">
