@@ -22,6 +22,7 @@ export default class DetailedStats extends Component {
     super(props);
     this.state = {
       playerName: this.props.match.params.player,
+      seasons: [],
       statData: [],
       accumulatedStats: {},
       filteredData: [],
@@ -32,8 +33,20 @@ export default class DetailedStats extends Component {
 
   componentDidMount() {
     //   Looks for lane dropdown value so needs to be after mount
+    this.loadSeasons();
     this.loadPlayerData(this.props.match.params.player);
     this.loadAvgData();
+  }
+
+  loadSeasons() {
+    const url = process.env.REACT_APP_BASE_URL + "/seasons";
+    fetch(url).then(data => {
+      data.json().then(data => {
+        this.setState({
+          seasons: data
+        })
+      })
+    })
   }
 
   computeAccStats(data, accStats = {}) {
@@ -173,6 +186,13 @@ export default class DetailedStats extends Component {
             return false;
           }
         }
+
+        let seasonFilter = document.getElementById("seasonFilter").value;
+        if (seasonFilter !== "ANY") {
+          if (game.season !== seasonFilter) {
+            return false;
+          }
+        }
   
         let winFilter = document.getElementById("resultFilter").value;
         if (winFilter !== "ANY") {
@@ -206,61 +226,76 @@ export default class DetailedStats extends Component {
             </div>
               <Container>
                 <div className="row">
-                    <div className="col">
-                        <div className="risen-stats-block">
-                            <div className="risen-stats-header">
-                                <h3>Filters</h3>
-                            </div>
-                            <div className="risen-stats-body">
-                                <div className="row">
-                                    <div className="col-md">
-                                      <Form.Group controlId="championFilter">
-                                        <Form.Label>Champion</Form.Label>
-                                        <Form.Control as="input">
-                                        </Form.Control>
-                                      </Form.Group>
-                                    </div>
-                                    <div className="col-md">
-                                      <Form.Group controlId="roleFilter">
-                                        <Form.Label>Role</Form.Label>
-                                        <Form.Control as="select" defaultValue="ANY">
-                                          <option value="ANY">Any</option>
-                                          <option value="TOP">Top</option>
-                                          <option value="JUNGLE">Jungle</option>
-                                          <option value="MIDDLE">Mid</option>
-                                          <option value="BOTTOM">Bot</option>
-                                          <option value="SUPPORT">Support</option>
-                                        </Form.Control>
-                                      </Form.Group>
-                                    </div>
-                                    <div className="col-md">
-                                      <Form.Group controlId="durationFilter">
-                                        <Form.Label>Duration</Form.Label>
-                                        <Form.Control as="select">
-                                          <option value="ANY">Any</option>
-                                          <option value="0-20">20min</option>
-                                          <option value="20-30">20-30min</option>
-                                          <option value="30-120">30+min</option>
-                                        </Form.Control>
-                                      </Form.Group>
-                                    </div>
-                                    <div className="col-md">
-                                      <Form.Group controlId="resultFilter">
-                                        <Form.Label>Result</Form.Label>
-                                        <Form.Control as="select">
-                                          <option value="ANY">Any</option>
-                                          <option value="WIN">Win</option>
-                                          <option value="LOSS">Loss</option>
-                                        </Form.Control>
-                                      </Form.Group>
-                                    </div>
-                                    <div className="col-md">
-                                      <Button className="btn filter-button" onClick={this.performFilter.bind(this)}>Filter</Button>
-                                    </div>
-                                </div>
-                            </div>
+                  <div className="col">
+                    <div className="risen-stats-block">
+                      <div className="risen-stats-header">
+                        <h3>Filters</h3>
+                      </div>
+                      <div className="risen-stats-body">
+                        <div className="row">
+                          <div className="col-md">
+                            <Form.Group controlId="championFilter">
+                              <Form.Label>Champion</Form.Label>
+                              <Form.Control as="input">
+                              </Form.Control>
+                            </Form.Group>
+                          </div>
+                          <div className="col-md">
+                            <Form.Group controlId="roleFilter">
+                              <Form.Label>Role</Form.Label>
+                              <Form.Control as="select" defaultValue="ANY">
+                                <option value="ANY">Any</option>
+                                <option value="TOP">Top</option>
+                                <option value="JUNGLE">Jungle</option>
+                                <option value="MIDDLE">Mid</option>
+                                <option value="BOTTOM">Bot</option>
+                                <option value="SUPPORT">Support</option>
+                              </Form.Control>
+                            </Form.Group>
+                          </div>
+                          <div className="col-md">
+                            <Form.Group controlId="durationFilter">
+                              <Form.Label>Duration</Form.Label>
+                              <Form.Control as="select">
+                                <option value="ANY">Any</option>
+                                <option value="0-20">20min</option>
+                                <option value="20-30">20-30min</option>
+                                <option value="30-120">30+min</option>
+                              </Form.Control>
+                            </Form.Group>
+                          </div>
+                          <div className="col-md">
+                            <Form.Group controlId="seasonFilter">
+                              <Form.Label>Season</Form.Label>
+                              <Form.Control as="select">
+                              <option value="ANY">Any</option>
+                              {
+                                this.state.seasons.map(s => {
+                                  return (
+                                    <option value={s._id}>{s.seasonName}</option>
+                                  )
+                                })
+                              }
+                              </Form.Control>
+                            </Form.Group>
+                          </div>
+                          <div className="col-md">
+                            <Form.Group controlId="resultFilter">
+                              <Form.Label>Result</Form.Label>
+                              <Form.Control as="select">
+                                <option value="ANY">Any</option>
+                                <option value="WIN">Win</option>
+                                <option value="LOSS">Loss</option>
+                              </Form.Control>
+                            </Form.Group>
+                          </div>
+                          <div className="col-md">
+                            <Button className="btn filter-button" onClick={this.performFilter.bind(this)}>Filter</Button>
+                          </div>
                         </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
               </Container>
               {/* <div className="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab"> */}

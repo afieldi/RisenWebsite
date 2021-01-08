@@ -503,7 +503,17 @@ router.route('/avg/role/:rolename?/byplayer').get((req, res) => {
 });
 
 router.route('/avg/byplayer').get((req, res) => {
+    let season = req.query.season;
     let pipeline = [];
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {
+                    season: mongoose.Types.ObjectId(season)
+                }
+            })
+        } catch (error) {}
+    }
     pipeline.push({
         $lookup: {
             from: 'players',
@@ -511,7 +521,7 @@ router.route('/avg/byplayer').get((req, res) => {
             foreignField: '_id',
             as: 'playername'
         }
-    })
+    });
     pipeline.push({
         $group: {
             _id: { player: "$playername.name", playerId: "$player" },
@@ -526,7 +536,18 @@ router.route('/avg/byplayer').get((req, res) => {
 });
 
 router.route('/general/league').get((req, res) => {
+    let season = req.query.season;
+    console.log(season);
     let pipeline = []
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {
+                    season: mongoose.Types.ObjectId(season)
+                }
+            })
+        } catch (error) {}
+    }
     pipeline.push({ 
         $group: {
             _id: "$side",
@@ -540,6 +561,7 @@ router.route('/general/league').get((req, res) => {
             total_games: { $sum: 1 }
         }
     })
+    
     TeamGameModel.aggregate(pipeline).then(data => {
         res.json(data);
     }, (err) => {

@@ -298,7 +298,7 @@ export default class CombatStats extends Component {
                                             }}
                                         >
                                             <CartesianGrid vertical horizontal={false} strokeDasharray="1 1" />
-                                            <XAxis type="number" hide="true" />
+                                            <XAxis type="number" hide={false} />
                                             <YAxis type="category" dataKey="name" tick={{ fill: 'white' }}/>
                                             <Tooltip labelStyle={{color: 'black'}} formatter={this.format} />
                                             {/* <Legend /> */}
@@ -333,7 +333,7 @@ export default class CombatStats extends Component {
                                             }}
                                         >
                                             <CartesianGrid vertical={false} horizontal={false} opacity={1} strokeDasharray="1 1" />
-                                            <YAxis type="number" hide="false" />
+                                            <YAxis type="number" hide={false} />
                                             <XAxis type="category" dataKey="name" tick={{ fill: 'white' }}/>
                                             <Tooltip labelStyle={{color: 'black'}} formatter={this.format} />
                                             <Legend />

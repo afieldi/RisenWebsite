@@ -10,7 +10,7 @@ export default class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: ""
+      url: "#"
     };
     fetch(process.env.REACT_APP_BASE_URL + "/auth/redirect").then(data => {
       data.text().then(url => {
@@ -67,7 +67,7 @@ export default class Navbar extends Component {
                 <Link to="/pbdraft" className="nav-link">Drafting</Link>
               </li>
               <li className="navbar-item ml-auto">
-                <Link className="nav-link">Watch (Soon)</Link>
+                <Link to="#" className="nav-link">Watch (Soon)</Link>
               </li>
               <li className="navbar-item ml-auto">
                 <Link to="/contact" className="nav-link">Contact Us</Link>

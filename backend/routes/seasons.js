@@ -4,6 +4,7 @@ const Season = require("../models/season.model");
 const { createTournament } = require('../src/codes');
 const { findCreateSeason } = require('../src/season');
 const { blockAll, blockNotGet } = require('../helper');
+const mongoose = require('mongoose');
 
 router.use('/', (req, res, next) => {
   blockNotGet(req, res, next, 1);
@@ -53,9 +54,14 @@ router.route('/new').post((req, res) => {
 
 router.route('/:season').get((req, res) => {
   const season = req.params.season;
-  Season.findOne({
-      stringid: season
-  }).then(season => {
+  let id;
+  try {
+    id = mongoose.Types.ObjectId(season);
+  } catch (error) {
+    res.status(400).json("Invalid season ID");
+    return;
+  }
+  Season.findById().then(season => {
       Team.aggregate(
           [
               {$match: {season: season._id}},

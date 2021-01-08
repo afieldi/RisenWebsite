@@ -129,6 +129,15 @@ export default class CombatLeagueStats extends Component {
     return (
       <section>
         <Container>
+        <div className="row">
+            <div className="col">
+              <div className="risen-stats-block">
+                <div className="risen-stats-header">
+                  <h3>By Player Stats</h3>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="row">
             <div className="col">
               <div className="risen-stats-block">
@@ -165,12 +174,12 @@ export default class CombatLeagueStats extends Component {
                       margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <ZAxis dataKey="nameVal" name="Player"></ZAxis>
-                      <XAxis type="number" dataKey="wp" name="Placed" tick={{fill: "white"}} >
-                        <Label value="Wards Placed" position="insideBottom" offset={-8} style={{fill: 'white'}} />
-                      </XAxis>
                       <YAxis dataKey="wk" name="Killed" tick={{fill: "white"}} >
                         <Label value="Wards Killed" angle={-90} position="insideLeft" style={{textAnchor: 'middle', fill: 'white'}} />
                       </YAxis>
+                      <XAxis type="number" dataKey="wp" name="Placed" tick={{fill: "white"}} >
+                        <Label value="Wards Placed" position="insideBottom" offset={-8} style={{fill: 'white'}} />
+                      </XAxis>
                       <Tooltip cursor={{ strokeDasharray: '3 3' }} formatter={this.tooltipScatterFormat}/>
                       <Scatter data={this.generateWardsPlacedVsKilled()} fill="#6d83ff" />
                     </ScatterChart>

@@ -178,7 +178,7 @@ export default class ChampionStats extends Component {
                         {
                           Object.entries(this.generateTableData()).map(([champ, value]) => {
                             return (
-                              <tr className="center">
+                              <tr key={champ} className="center">
                                 <td>{champ}</td>
                                 <td>{value.kills}</td>
                                 <td>{value.deaths}</td>

@@ -18,6 +18,10 @@ if (argv.prod) {
     process.env.NODE_ENV = 'production';
     envFile = ".env.production";
 }
+else if (argv.stg) {
+    process.env.NODE_ENV = 'development';
+    envFile = ".env.staging";
+}
 else {
     process.env.NODE_ENV = 'development';
 }

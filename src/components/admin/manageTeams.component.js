@@ -96,7 +96,7 @@ export default class ManageTeams extends Component {
                                 {
                                     this.state.activeSeasons.map(season => {
                                         return (
-                                            <option key={season.stringid} value={season.stringid}>{season.seasonName}</option>
+                                            <option key={season._id} value={season._id}>{season.seasonName}</option>
                                         )
                                     })
                                 }

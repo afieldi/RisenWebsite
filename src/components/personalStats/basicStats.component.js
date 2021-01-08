@@ -147,20 +147,24 @@ export default class BasicStats extends Component {
     }
 
     removePlayerCompare(i) {
-        this.state.compData.splice(i, 1);
-        this.setState({
-            compData: this.state.compData
-        });
+      this.state.compData.splice(i, 1);
+      this.setState({
+        compData: this.state.compData
+      });
     }
 
     getWr() {
-        return customRound(this.props.accStats['avg_win'] * 100, 2);
+      return customRound(this.props.accStats['avg_win'] * 100, 2);
     }
     getKDA() {
-        return customRound((this.props.accStats['avg_kills'] + this.props.accStats['avg_assists'])/this.props.accStats['avg_deaths'], 2);
+      let d = 1;
+      if (this.props.accStats['avg_deaths']) {
+        d = this.props.accStats['avg_deaths'];
+      }
+      return customRound((this.props.accStats['avg_kills'] + this.props.accStats['avg_assists'])/d, 2);
     }
     getCspm() {
-        return customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.props.accStats['avg_gameDuration']);
+      return customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.props.accStats['avg_gameDuration']);
     }
     getKDAP() {
         // return
@@ -243,7 +247,7 @@ export default class BasicStats extends Component {
                           {
                             Object.values(this.filteredData).map(datum => {
                               return (
-                                <tr>
+                                <tr key={datum._id}>
                                   <td>{champMap[datum["championId"]]}</td>
                                   <td>{datum["kills"]}/{datum["deaths"]}/{datum["assists"]}</td>
                                 </tr>
