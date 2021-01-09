@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 export function customRound(doubleN, precision = 2) {
     return Math.round(doubleN * Math.pow(10, precision)) / Math.pow(10, precision);
 }
@@ -34,7 +36,30 @@ export function setCookie(name,value,days) {
 
 export function deleteCookie( name ) {
     document.cookie = name+'=; Max-Age=-99999999;'; 
-  }
+}
+
+export function urlOnChange(e) {
+    let query = qs.parse(this.props.location.search.replace("?", ""), { ignoreQueryPrefix: false });
+    let newUrl = window.location.pathname;
+    if (e.target.value === "ANY" && query[e.target.id]) {
+        delete query[e.target.id];
+    }
+    else {
+        query[e.target.id] = e.target.value;
+    }
+    newUrl += "?" + qs.stringify(query);
+
+    this.props.history.push(newUrl);
+}
+
+export function setDropDowns(dataFnc=(()=>{})) {
+    let query = qs.parse(this.props.location.search.replace("?", ""), { ignoreQueryPrefix: false });
+    for (let id of Object.keys(query)) {
+        console.log(id);
+        document.getElementById(id).value = query[id];
+    }
+    dataFnc();
+}
 
 // Get color code by strength level, 5 is highest, 1 is lowest
 export function getTextColorByLevel(level) {
