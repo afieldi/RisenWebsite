@@ -1,7 +1,6 @@
 const User = require('./models/user.model');
 
 function blockAll(req, res, next, level) {
-  console.log(req.cookies);
   if (req.cookies.auth) {
     User.findOne({
       auth: req.cookies.auth,

@@ -323,7 +323,7 @@ router.route('/brief').get((req, res) => {
     const playerName = req.query.player ? req.query.player : null;
     const lane = req.query.lane ? req.query.lane : null;
     const sort = req.query.sort ? req.query.sort : "_id.sortablePlayer+";
-    const season = req.body.season ? Array(req.body.season) : [];
+    const season = req.query.season;
     const sortObject = (() => {
         let dir = sort.substr(sort.length - 1);
         let tmp = {};
@@ -332,6 +332,15 @@ router.route('/brief').get((req, res) => {
     })();
 
     let pipe = [];
+    if (season) {
+        try {
+            pipe.push({
+                $match: {
+                    season: mongoose.Types.ObjectId(season)
+                }
+            });
+        } catch (error) { }
+    }
     pipe.push({
         $lookup: {
             from: 'players',

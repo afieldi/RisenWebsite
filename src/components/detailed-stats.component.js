@@ -5,7 +5,7 @@ import jngLaneIcon from '../images/roles/Position_Gold-Jungle.png';
 import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
-import { customRound } from '../Helpers';
+import { customRound, urlOnChange, setDropDowns } from '../Helpers';
 import { Button, Container, Form } from "react-bootstrap";
 import BasicStats from './personalStats/basicStats.component';
 import CombatStats from './personalStats/combatStats.component';
@@ -33,18 +33,22 @@ export default class DetailedStats extends Component {
 
   componentDidMount() {
     //   Looks for lane dropdown value so needs to be after mount
-    this.loadSeasons();
+    this.loadSeasons(() => {
+      setDropDowns.bind(this)();
+      this.performFilter();
+    });
     this.loadPlayerData(this.props.match.params.player);
     this.loadAvgData();
   }
 
-  loadSeasons() {
+  loadSeasons(callback=(()=>{})) {
     const url = process.env.REACT_APP_BASE_URL + "/seasons";
     fetch(url).then(data => {
       data.json().then(data => {
         this.setState({
           seasons: data
-        })
+        });
+        callback();
       })
     })
   }
@@ -69,7 +73,6 @@ export default class DetailedStats extends Component {
         accStats[key] /= data.length;
     }
     accStats["total_games"] = data.length;
-    console.log(accStats);
     return accStats;
   }
 
@@ -79,7 +82,6 @@ export default class DetailedStats extends Component {
     if (laneFilter !== "ANY") {
         url += "/role/" + laneFilter;
     }
-    console.log(url)
     fetch(url).then((data) => {
     data.json().then(data => {
         this.setState({
@@ -95,7 +97,6 @@ export default class DetailedStats extends Component {
     if (laneFilter !== "ANY") {
         url += "/role/" + laneFilter;
     }
-    console.log(url)
     fetch(url).then((data) => {
     data.json().then(data => {
         callback(data[0]);
@@ -243,7 +244,7 @@ export default class DetailedStats extends Component {
                           <div className="col-md">
                             <Form.Group controlId="roleFilter">
                               <Form.Label>Role</Form.Label>
-                              <Form.Control as="select" defaultValue="ANY">
+                              <Form.Control as="select" defaultValue="ANY" onChange={urlOnChange.bind(this)}>
                                 <option value="ANY">Any</option>
                                 <option value="TOP">Top</option>
                                 <option value="JUNGLE">Jungle</option>
@@ -256,7 +257,7 @@ export default class DetailedStats extends Component {
                           <div className="col-md">
                             <Form.Group controlId="durationFilter">
                               <Form.Label>Duration</Form.Label>
-                              <Form.Control as="select">
+                              <Form.Control as="select" onChange={urlOnChange.bind(this)}>
                                 <option value="ANY">Any</option>
                                 <option value="0-20">20min</option>
                                 <option value="20-30">20-30min</option>
@@ -265,7 +266,7 @@ export default class DetailedStats extends Component {
                             </Form.Group>
                           </div>
                           <div className="col-md">
-                            <Form.Group controlId="seasonFilter">
+                            <Form.Group controlId="seasonFilter" onChange={urlOnChange.bind(this)}>
                               <Form.Label>Season</Form.Label>
                               <Form.Control as="select">
                               <option value="ANY">Any</option>
@@ -280,7 +281,7 @@ export default class DetailedStats extends Component {
                             </Form.Group>
                           </div>
                           <div className="col-md">
-                            <Form.Group controlId="resultFilter">
+                            <Form.Group controlId="resultFilter" onChange={urlOnChange.bind(this)}>
                               <Form.Label>Result</Form.Label>
                               <Form.Control as="select">
                                 <option value="ANY">Any</option>

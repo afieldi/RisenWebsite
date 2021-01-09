@@ -5,7 +5,8 @@ import midLaneIcon from '../images/roles/Position_Gold-Mid.png';
 import botLaneIcon from '../images/roles/Position_Gold-Bot.png';
 import supLaneIcon from '../images/roles/Position_Gold-Support.png';
 import { Link } from 'react-router-dom'
-import { customRound } from '../Helpers';
+import { Form, Button} from 'react-bootstrap';
+import { customRound, urlOnChange, setDropDowns } from '../Helpers';
 
 
 export default class Overview extends Component {
@@ -20,9 +21,12 @@ export default class Overview extends Component {
         this.loadingData = false;
         this.state = {
             statData: [],
-            filteredData: []
+            filteredData: [],
+            seasons: []
         }
     }
+
+
 
     getData(page = 1, load=true, append=false) {
         if (this.loadingData) {
@@ -40,6 +44,10 @@ export default class Overview extends Component {
         }
         if (this.filters.name) {
             url += "&player=" + this.filters.name;
+        }
+
+        if (document.getElementById("seasonFilter").value !== "ANY") {
+            url += "&season=" + document.getElementById("seasonFilter").value;
         }
         url += "&sort=" + this.sort;
         // url += "&sort=_id.sortablePlayer-"
@@ -61,6 +69,7 @@ export default class Overview extends Component {
             });
         })
     }
+
 
     submitSearch(event) {
         event.preventDefault();
@@ -108,26 +117,17 @@ export default class Overview extends Component {
         this.getData();
     }
 
-    // sortData(data, attr, direction) {
-    //     return data.sort((a, b) => {
-    //         let res = 0;
-    //         // Handle special cases where either the stats are a string or
-    //         //   can't be accessed by a simple attr accessor
-    //         if (attr === "wr") {
-    //             res = a.wins/a.total_games - b.wins/b.total_games;
-    //         }
-    //         else if (attr === "lane" ) {
-    //             res = a._id.lane.localeCompare(b._id.lane);
-    //         }
-    //         else if (attr === "name" ) {
-    //             res = a._id.player.localeCompare(b._id.player);
-    //         }
-    //         else {
-    //             res = a[attr] - b[attr];
-    //         }
-    //         return direction === "ASC" ? res : res * -1;
-    //     })
-    // }
+    loadSeasons(callback=(()=>{})) {
+        const url = process.env.REACT_APP_BASE_URL + "/seasons";
+        fetch(url).then(data => {
+          data.json().then(data => {
+            this.setState({
+              seasons: data
+            });
+            callback();
+          })
+        })
+    }
 
     getPositionalIcon(position) {
         switch (position) {
@@ -148,7 +148,10 @@ export default class Overview extends Component {
     }
 
     componentDidMount() {
-        this.getData();
+        this.loadSeasons(() => {
+            setDropDowns.bind(this)();
+            this.getData();
+        });
         document.addEventListener("scroll", this.scrollFunction.bind(this));
     }
 
@@ -168,8 +171,43 @@ export default class Overview extends Component {
     render() {
         return (
             <section>
-                <div className="dark-section">
+                <div className="dark-section text-light">
                     <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                <div className="risen-stats-block">
+                                <div className="risen-stats-header">
+                                    <h3>
+                                        <a data-toggle="collapse" href="#filterCollapse" role="button" aria-expanded="false" aria-controls="filterCollapse" style={{color: 'white'}}>
+                                            Filters (click to expand)
+                                        </a>
+                                    </h3>
+                                </div>
+                                <div className="risen-stats-body collapse" id="filterCollapse">
+                                    <div className="row">
+                                        <div className="col-md">
+                                            <Form.Group controlId="seasonFilter" onChange={urlOnChange.bind(this)}>
+                                            <Form.Label>Season</Form.Label>
+                                            <Form.Control as="select">
+                                            <option value="ANY">Any</option>
+                                            {
+                                                this.state.seasons.map(s => {
+                                                return (
+                                                    <option value={s._id}>{s.seasonName}</option>
+                                                )
+                                                })
+                                            }
+                                            </Form.Control>
+                                            </Form.Group>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <Button className="btn filter-button" onClick={this.getData.bind(this)}>Filter</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="btn-group risen-radio" style={{width: '90%'}} data-toggle="buttons">

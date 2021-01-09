@@ -157,7 +157,7 @@ export default class IncomeStats extends Component {
   }
 
   getCspm() {
-    return customRound((this.accStats['avg_totalMinionsKilled']*60)/this.accStats['avg_gameDuration'], 1);
+    return customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.props.accStats['avg_gameDuration']);
   }
   getGPM() {
     return customRound((this.accStats['avg_goldEarned']*60)/this.accStats['avg_gameDuration'], 1);

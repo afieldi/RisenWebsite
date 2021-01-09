@@ -91,8 +91,6 @@ router.route("/testLogin").get((req, res) => {
 
 router.route("/verify").get((req, res) => {
   let code = req.cookies.auth;
-  console.log(req.cookies);
-  console.log("********************")
   User.findOne({
     auth: code,
     expiry: { $gt: new Date().toUTCString() }

@@ -255,7 +255,6 @@ export default class Display extends Component {
       })
       let tierArr = matchFormat[tier];
       if (Number(tier) !== 0) {
-        console.log(tier);
         tierOffset += (matchFormat[tier-1].length - matchFormat[tier].length) / 2
         if (tierOffset < 0) {
           tierOffset = 0;
@@ -274,7 +273,6 @@ export default class Display extends Component {
       if (wN == 0) {
         continue;
       }
-      console.log(mT.tier)
       if (mT.tier > maxTier) {
         maxTier = mT.tier;
       }
@@ -282,9 +280,6 @@ export default class Display extends Component {
         matchTiers[wN].height += mT.height - matchTiers[wN].height;
       }
     }
-
-    console.log(matchTiers);
-    console.log(maxTier);
     this.setState({
       tierStruct: matchTiers,
       maxTier: maxTier + 2

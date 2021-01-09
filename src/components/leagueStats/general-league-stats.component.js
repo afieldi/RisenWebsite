@@ -15,7 +15,6 @@ export default class GeneralLeagueStats extends Component {
     this.genData = nextProps.genData;
     // this.leagueData = nextProps.leagueData;
     for(let p of nextProps.leagueData) {
-      console.log(p);
       if (p._id === "blue") {
         this.blueData = p;
       }

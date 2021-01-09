@@ -13,7 +13,6 @@ export default class CombatLeagueStats extends Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     this.genData = nextProps.genData;
-      console.log(this.generateDPMVsGold());  
     // this.leagueData = nextProps.leagueData;
     for(let p of nextProps.leagueData) {
       if (p._id === "blue") {
@@ -53,7 +52,7 @@ export default class CombatLeagueStats extends Component {
       return {
         name: p._id.player[0],
         nameVal: 1, // This will be the z axis so that we can render the name in the tooltip
-        dpm: customRound(p.avg_totalDamageDealtToChampions/p.avg_gameDuration, 2),
+        dpm: customRound((p.avg_totalDamageDealtToChampions/p.avg_gameDuration)*60, 2),
         gold: customRound(p.avg_goldEarned, 2)
       }
     })

@@ -26,7 +26,6 @@ export default class CreateTeam extends Component {
       teamname: this.state.teamname
     }
 
-    console.log(team);
 
     axios.post('http://localhost:5000/teams/add', team)
       .then(res => console.log(res.data));

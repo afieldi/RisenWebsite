@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Button, Form } from 'react-bootstrap';
+import { setDropDowns, urlOnChange } from './../Helpers';
 import CombatLeagueStats from './leagueStats/combat-league-stats.component';
 import GeneralLeagueStats from './leagueStats/general-league-stats.component';
 
@@ -14,8 +15,11 @@ export default class LeagueStats extends Component {
   }
 
   componentDidMount() {
-    this.getGeneralData();
-    this.loadSeasons();
+    // this.getGeneralData();
+    this.loadSeasons(() => {
+      setDropDowns.bind(this)();
+      this.performFilter();
+    });
   }
 
   performFilter() {
@@ -23,13 +27,14 @@ export default class LeagueStats extends Component {
     this.getGeneralData(s)
   }
 
-  loadSeasons() {
+  loadSeasons(callback=(()=>{})) {
     const url = process.env.REACT_APP_BASE_URL + "/seasons";
     fetch(url).then(data => {
       data.json().then(data => {
         this.setState({
           seasons: data
-        })
+        });
+        callback();
       })
     })
   }
@@ -45,7 +50,6 @@ export default class LeagueStats extends Component {
         const leagueUrl = process.env.REACT_APP_BASE_URL + "/stats/general/league" + q;
         fetch(leagueUrl).then(lData => {
           lData.json().then(lData => {
-            console.log(data.length);
             this.setState({
               genData: data,
               leagueData: lData
@@ -88,7 +92,7 @@ export default class LeagueStats extends Component {
                   <div className="risen-stats-body">
                     <div className="row">
                       <div className="col-md">
-                        <Form.Group controlId="seasonFilter">
+                        <Form.Group controlId="seasonFilter" onChange={urlOnChange.bind(this)}>
                           <Form.Label>Season</Form.Label>
                           <Form.Control as="select" defaultValue="ANY">
                             <option value="ANY">Any</option>
