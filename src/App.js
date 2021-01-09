@@ -84,8 +84,12 @@ export default class App extends Component {
 
   
   logOut() {
-    deleteCookie("auth");
-    window.location.reload();
+    fetch(process.env.REACT_APP_BASE_URL + "/auth/logout", {
+      method: "POST",
+      credentials: "include"
+    }).then(res => {
+      window.location.reload();
+    })
     // fetch(process.env.REACT_APP_BASE_URL + "/auth/verify?code=" + getCookie("auth"), {
     //   method: "DELETE"
     // }).then(data => {

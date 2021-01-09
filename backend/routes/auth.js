@@ -23,7 +23,7 @@ router.route("/callback").get((req, res) => {
         if (req.get('origin')) {
           let d = new Date();
           d.setDate(new Date().getDate() + 7);
-          res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000});
+          res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000, secure: true, sameSite: 'none'});
           res.redirect(302, `${req.get('origin')}`);
           // res.redirect(`${req.get('origin')}/auth?code=${userDoc.auth}`)
         }
@@ -31,7 +31,7 @@ router.route("/callback").get((req, res) => {
           let d = new Date();
           d.setDate(new Date().getDate() + 7);
           console.log("setting new auth")
-          res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000});
+          res.cookie('auth', userDoc.auth, { maxAge: 7* 24 * 60 * 60 * 1000, secure: true, sameSite: 'none'});
           res.redirect(302, `${process.env.WEBSITE_BASE.split(',')[0]}`);
           // res.redirect(`${process.env.WEBSITE_BASE.split(',')[0]}/auth?code=${userDoc.auth}`);
         }
@@ -108,6 +108,10 @@ router.route("/verify").get((req, res) => {
     res.json({});
   });
 });
+
+router.route('/logout').post((req, res) => {
+  res.clearCookie('auth').json("logged out");
+})
 
 // router.route("/verify").delete((req, res) => {
 //   res.cookie('auth', {expires: new Date(0)}).send();
