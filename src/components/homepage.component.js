@@ -208,7 +208,7 @@ export default class HomePage extends Component {
                                     </div>
                                     <div className="row">
                                         <div className="col">
-                                            <Link to="#" className="clickable disabled">
+                                            <Link to="/stats" className="clickable">
                                                 <div style={{...imageStyle, ...{backgroundImage: `url(https://wpforms.com/wp-content/uploads/2019/02/online-business-statistics.jpg)`, filter: 'grayscale(100%)'}}}></div>
                                                 <div style={textOverlayStyle}>
                                                     <h3 style={textStyle}>Stats</h3>
