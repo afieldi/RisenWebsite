@@ -108,7 +108,11 @@ router.route("/verify").get((req, res) => {
 });
 
 router.route('/logout').post((req, res) => {
-  res.clearCookie('auth').json("logged out");
+  let options = {};
+  if (process.env.NODE_ENV === "production") {
+    options = { secure: true, sameSite: 'none'};
+  }
+  res.clearCookie('auth', options).json("logged out");
 })
 
 // router.route("/verify").delete((req, res) => {
