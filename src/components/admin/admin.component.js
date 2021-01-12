@@ -13,9 +13,9 @@ export default class Admin extends Component {
                             <div className="col">
                                 <GenerateCodes></GenerateCodes>
                             </div>
-                            <div className="col">
+                            {/* <div className="col">
                                 <ManageDraft></ManageDraft>
-                            </div>
+                            </div> */}
                         </div>
                     </Container>
                 </div>

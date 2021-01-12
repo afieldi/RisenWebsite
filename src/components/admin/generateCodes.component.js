@@ -7,7 +7,10 @@ export default class GenerateCodes extends Component {
     super(props);
     this.state = {
       codes: "",
-      seasons: []
+      seasons: [],
+      newSeasonLoading: false,
+      updateSeasonLoading: false,
+      newCodesLoading: false
     }
     this.loadSeasons();
   }
@@ -31,6 +34,9 @@ export default class GenerateCodes extends Component {
       alert("Make Season Name Longer (>5)");
       return;
     }
+    this.setState({
+      newSeasonLoading: true
+    });
     const url = process.env.REACT_APP_BASE_URL + "/seasons/new";
     fetch(url, {
       method: 'POST',
@@ -42,6 +48,9 @@ export default class GenerateCodes extends Component {
         "Content-Type": "application/json"
       }
     }).then(res => {
+      this.setState({
+        newSeasonLoading: false
+      });
       if (res.status !== 200) {
         alert(res.statusText);
         return;
@@ -52,12 +61,18 @@ export default class GenerateCodes extends Component {
   }
   
   updateSeason() {
+    this.setState({
+      updateSeasonLoading: true
+    });
     let season = document.getElementById("season-select").value;
     const url = process.env.REACT_APP_BASE_URL + `/games/update/tournament/${season}`;
     fetch(url, {
       method: "PUT",
       credentials: 'include'
     }).then(res => {
+      this.setState({
+        updateSeasonLoading: false
+      });
       if (res.status !== 200) {
         alert(res.statusText);
       }
@@ -65,7 +80,10 @@ export default class GenerateCodes extends Component {
         alert("Season updated");
       }
     }, (err) => {
-      alert("Failed requesting codes: \n" + err);
+      this.setState({
+        updateSeasonLoading: false
+      });
+      alert("Failed updating season: \n" + err);
     })
   }
 
@@ -76,6 +94,9 @@ export default class GenerateCodes extends Component {
       alert("Please fill out the number of codes requested");
       return;
     }
+    this.setState({
+      newCodesLoading: true
+    });
     const url = process.env.REACT_APP_BASE_URL + "/codes/create";
     fetch(url, {
       method: 'POST',
@@ -88,6 +109,9 @@ export default class GenerateCodes extends Component {
         "Content-Type": "application/json"
       }
     }).then(res => {
+      this.setState({
+        newCodesLoading: false
+      });
       if (res.status !== 200) {
         alert(res.statusText);
         return;
@@ -98,6 +122,9 @@ export default class GenerateCodes extends Component {
         });
       });
     }, (err) => {
+      this.setState({
+        newCodesLoading: false
+      });
       alert("Failed requesting codes: \n" + err);
     });
   }
@@ -106,21 +133,21 @@ export default class GenerateCodes extends Component {
     return (
       <section>
         <div className="row">
-          <div className="col">
+          <div className="col-md-6">
             <h2>Generate Codes</h2>
           </div>
         </div>
         <div className="row">
-          <div className="col">
+          <div className="col-md-3">
               <input id="new-season-name" placeholder="New Season Name"></input>
           </div>
-          <div className="col">
-              <Button onClick={this.createNewSeason.bind(this)}>Create New Season</Button>
+          <div className="col-md-3">
+              <Button onClick={this.createNewSeason.bind(this)} disabled={this.state.newSeasonLoading}>Create New Season</Button>
           </div>
         </div>
         <br></br>
         <div className="row">
-          <div className="col">
+          <div className="col-md-6">
             Season: 
             <select id="season-select">
               {
@@ -135,22 +162,31 @@ export default class GenerateCodes extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <Button onClick={this.updateSeason.bind(this)}>Update Season's Games</Button>
+            <Button onClick={this.updateSeason.bind(this)} disabled={this.state.updateSeasonLoading}>
+              {
+                this.state.updateSeasonLoading ? 
+                <i
+                  className="fa fa-refresh fa-spin"
+                  style={{ marginRight: "5px" }}
+                /> :
+                <span>Update Season</span>
+              }
+            </Button>
           </div>
         </div>
         <div className="row">
-          <div className="col" style={verticalCenter}>
+          <div className="col-md-4" style={verticalCenter}>
             <div>
               <label htmlFor="tournament-teams">Number of Matches: </label>
               <input id="tournament-teams" name="tournament-teams" type="number" placeholder="10"></input>
             </div>
           </div>
-          <div className="col">
-            <button className="risen-button" onClick={this.getCodes.bind(this)}>Generate Codes</button>
+          <div className="col-md-2">
+            <Button onClick={this.getCodes.bind(this)} disabled={this.state.newCodesLoading}>Generate Codes</Button>
           </div>
         </div>
         <div className="row">
-          <div className="col">
+          <div className="col-md-6">
             <div>Codes</div>
             <textarea id="tourney-codes" value={this.state.codes} style={{width: '100%'}} readOnly={true}></textarea>
           </div>
