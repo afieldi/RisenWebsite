@@ -54,7 +54,7 @@ export default class App extends Component {
     }).then((res) => {
       if(res.status === 200 || res.status === 304) {
         res.json().then(user => {
-          if(user.level) {
+          if(user.level !== undefined) {
             this.setState({
               level: user.level
             });

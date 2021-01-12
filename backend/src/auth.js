@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const process = require('process');
 const {argv} = require('yargs');
 
-function getGuildRoles(roleMap, callback) {
+function getGuildRoles(roleMap, callback, reject=()=>{}) {
   fetch(`https://discord.com/api/guilds/${process.env.DISCORD_SERVER_ID}/roles`, {
     method: "GET",
     headers: {
@@ -22,11 +22,11 @@ function getGuildRoles(roleMap, callback) {
         }
       }
       callback(approvedIds);
-    })
-  });
+    }, () => {reject();})
+  }, () => {reject();});
 }
 
-function getGuildUser(userId, callback) {
+function getGuildUser(userId, callback, reject=()=>{}) {
   fetch(`https://discord.com/api/guilds/${process.env.DISCORD_SERVER_ID}/members/${userId}`, {
     method: "GET",
     headers: {
@@ -35,11 +35,11 @@ function getGuildUser(userId, callback) {
   }).then(data => {
     data.json().then(user => {
       callback(user);
-    });
-  });
+    }, () => {reject();});
+  }, () => {reject();});
 }
 
-function exchangeCode(req, code, callback) {
+function exchangeCode(req, code, callback, reject=()=>{}) {
   let redirect = req.headers.host + "/auth/callback";
   
   redirect ="https://api-dot-risenwebsite.ue.r.appspot.com/auth/callback";
@@ -79,15 +79,15 @@ function exchangeCode(req, code, callback) {
       callback(res.access_token);
     }, res => {
       console.error(res);
-      throw new Error();
+      reject();
     });
   }).catch(err => {
     console.log(err);
-    throw new Error(err);
+    reject();
   });
 }
 
-function getSelf(token, callback) {
+function getSelf(token, callback, reject=()=>{}) {
   fetch('https://discord.com/api/users/@me', {
     method: "GET",
     headers: {
@@ -96,8 +96,8 @@ function getSelf(token, callback) {
   }).then(data => {
     data.json().then(user => {
       callback(user);
-    });
-  });
+    }, () => {reject();});
+  }, () => {reject();});
 }
 
 function getUser(request, code, onSuccess, onReject) {
@@ -117,19 +117,24 @@ function getUser(request, code, onSuccess, onReject) {
           console.log(guildUser);
           getGuildRoles(roleMap, (definedRoles) => {
             console.log(definedRoles);
-            for (let defRoleIndex in definedRoles) {
-              for (let role of guildUser.roles) {
-                if (definedRoles[defRoleIndex].includes(role)) {
-                  onSuccess(user, defRoleIndex);
-                  return;
+            try {
+              for (let defRoleIndex in definedRoles) {
+                for (let role of guildUser.roles) {
+                  if (definedRoles[defRoleIndex].includes(role)) {
+                    onSuccess(user, defRoleIndex);
+                    return;
+                  }
                 }
               }
+              onSuccess(user, 0); // Just a regular user
             }
-            onSuccess(user, 0); // Just a regular user
-          });
-        });
-      });
-    });
+            catch (e) {
+              onSuccess(user, 0);
+            }
+          }, () => {onReject();});
+        }, () => {onReject();});
+      }, () => {onReject();});
+    }, () => {onReject();});
   } catch (error) {
     console.log(error);
     onReject();
