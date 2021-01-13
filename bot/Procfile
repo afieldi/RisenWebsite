@@ -1,1 +1,1 @@
-web: python app.py --prod
+bot: python app.py --prod
