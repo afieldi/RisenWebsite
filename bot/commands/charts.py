@@ -78,6 +78,6 @@ class Charts (commands.Cog):
     await ctx.send(file=f)
 
 
-  @commands.command()
-  def heat(self, ctx, *args):
-    name = " ".join(args)
+  # @commands.command()
+  # async def heat(self, ctx, *args):
+  #   name = " ".join(args)
