@@ -108,6 +108,7 @@ function getUser(request, code, onSuccess, onReject) {
   // AHHHH CALLBACKS
   let roleMap = {
     1: ["Admin", "admin", "Developer"],
+    5: ["Caster"],
     10: ["Verified"]
   }
   try {
@@ -126,10 +127,10 @@ function getUser(request, code, onSuccess, onReject) {
                   }
                 }
               }
-              onSuccess(user, 0); // Just a regular user
+              onSuccess(user, 100); // Just a regular user
             }
             catch (e) {
-              onSuccess(user, 0);
+              onSuccess(user, 100);
             }
           }, () => {onReject();});
         }, () => {onReject();});

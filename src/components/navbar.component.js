@@ -73,15 +73,18 @@ export default class Navbar extends Component {
                 <Link to="/contact" className="nav-link">Contact Us</Link>
               </li>
               {
-                this.props.admin === 1 ? 
+                this.props.admin > 0 ? 
                 <li className="navbar-item ml-auto dropdown">
                   <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Admin
                   </a>
                   <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <Link to="/admin/basic" className="dropdown-item">Manage Misc</Link>
-                    <Link to="/admin/teams" className="dropdown-item">Manage Teams</Link>
-                    <Link to="#" className="dropdown-item">Manage Players</Link>
+                    {this.props.admin <= 2 ? <Link to="/admin/basic" className="dropdown-item">Manage Misc</Link> : null }
+                    {this.props.admin <= 2 ? <Link to="/admin/teams" className="dropdown-item">Manage Teams</Link> : null }
+                    {/* {this.props.admin <= 2 ? <Link to="#" className="dropdown-item">Manage Players</Link> : null } */}
+                    {this.props.admin <= 8 ? <Link to="/casters" className="dropdown-item">Caster Portal</Link> : null }
+                    {/* <Link to="/admin/teams" className="dropdown-item">Manage Teams</Link>
+                    <Link to="#" className="dropdown-item">Manage Players</Link> */}
                   </div>
                 </li>: null
               }

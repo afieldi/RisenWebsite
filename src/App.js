@@ -24,6 +24,7 @@ import UserContext from './context/UserContext';
 import Rules from './components/rules/rules.component';
 import Display from './components/brackets/display.component';
 import Watch from "./components/watch.component";
+import Casters from './components/admin/casters.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -128,6 +129,7 @@ export default class App extends Component {
                 <Route path="/auth" render={this.authRender.bind(this)} ></Route>
                 <Route path="/rules" component={Rules}></Route>
                 <Route path="/bracket" component={Display}></Route>
+                <Route path="/casters" component={Casters}></Route>
                 {
                   // Only create route if it is an admin
                   this.state.level === 1 ? <div>

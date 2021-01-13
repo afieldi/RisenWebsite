@@ -585,4 +585,114 @@ router.route('/team/:team').get((req, res) => {
     });
 });
 
+router.route('/champs').get((req, res) => {
+    let season = req.query.season;
+    let role = req.query.role;
+
+    let pipeline = [];
+
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            })
+        } catch (error) { }
+    }
+
+    if (role) {
+        try {
+            pipeline.push({
+                $match: {lane: role}
+            });
+        } catch (error) { }
+    }
+
+    pipeline.push({
+        $group: {
+            _id: "$championId",
+            ...avgPipe
+        }
+    });
+
+    GameModel.aggregate(pipeline).then(data => {
+        let tg = 0;
+        for (let d of data) {
+            tg += d["total_games"];
+        }
+        tg /= 10;
+        for (let i in data) {
+            data[i]["presence"] = data[i]["total_games"] / tg;
+            data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
+        }
+        res.json(data);
+    })
+})
+
+router.route('/champs/withbans').get((req, res) => {
+    let season = req.query.season;
+    let role = req.query.role;
+
+    let pipeline = [];
+    let seasonQuery = {};
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            });
+            seasonQuery = {season: mongoose.Types.ObjectId(season)}
+        } catch (error) { }
+    }
+
+    if (role) {
+        try {
+            pipeline.push({
+                $match: {lane: role}
+            });
+        } catch (error) { }
+    }
+
+    pipeline.push({
+        $group: {
+            _id: "$championId",
+            ...avgPipe
+        }
+    });
+
+    GameModel.aggregate(pipeline).then(data => {
+        
+        TeamGameModel.find(seasonQuery).then(d2 => {
+          let tg = d2.length / 2;
+          console.log(tg);
+          let ban_data = {}
+          for (let i in d2) {
+            for (let b of d2[i]["bans"]) {
+              if (!ban_data[b]) {
+                ban_data[b] = 0
+              }
+              ban_data[b] += 1;
+            }
+          }
+          if (tg === 0) {
+              tg = 1;
+          }
+          try {
+            for (let i in data) {
+              if (!ban_data[data[i]["_id"]]) {
+                ban_data[data[i]["_id"]] = 0
+              }
+              data[i]["bans"] = ban_data[data[i]["_id"]]
+              data[i]["presence"] = (data[i]["total_games"] + data[i]["bans"]) / tg;
+              data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
+            }
+            res.json(data);
+            
+          } catch (error) {
+            console.log(error);
+          }
+        })
+      }, (err) => {
+        console.log(err);
+      })
+})
+
 module.exports = router;
