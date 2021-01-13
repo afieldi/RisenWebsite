@@ -5,8 +5,6 @@ import argparse
 from discord.ext import commands
 from pathlib import Path
 
-import http
-
 bot = None
 class DiscordClient ( commands.Bot ):
   async def on_message ( self, message ):
@@ -37,10 +35,6 @@ def main ( ):
     # bot_token = bot_token_prod if args.prod else bot_token_test
     print("here")
     bot.run ( os.environ["BOT_TOKEN"] )
-    if args.prod:
-      # Just so we can run on heroku's web
-      server = http.server.HTTPServer(('', os.environ["PORT"]), http.server.BaseHTTPRequestHandler)
-      server.serve_forever()
 
 if __name__ == "__main__":
     sys.exit ( main ( ) )
