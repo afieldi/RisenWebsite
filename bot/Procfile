@@ -1,1 +1,1 @@
-bot: python app.py --prod
+worker: python app.py --prod
