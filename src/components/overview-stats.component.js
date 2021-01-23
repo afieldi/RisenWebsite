@@ -24,6 +24,7 @@ export default class Overview extends Component {
             filteredData: [],
             seasons: []
         }
+        this.bindedScrollFnc = this.scrollFunction.bind(this);
     }
 
 
@@ -132,15 +133,15 @@ export default class Overview extends Component {
     getPositionalIcon(position) {
         switch (position) {
             case "TOP":
-                return (<img src={topLaneIcon} alt="Top Lane"></img>)
+                return (<img className="risen-icon" src={topLaneIcon} alt="Top Lane"></img>)
             case "JUNGLE":
-                return (<img src={jngLaneIcon} alt="Jungle"></img>)
+                return (<img className="risen-icon" src={jngLaneIcon} alt="Jungle"></img>)
             case "MIDDLE":
-                return (<img src={midLaneIcon} alt="Mid Lane"></img>)
+                return (<img className="risen-icon" src={midLaneIcon} alt="Mid Lane"></img>)
             case "BOTTOM":
-                return (<img src={botLaneIcon} alt="Bot Lane"></img>)
+                return (<img className="risen-icon" src={botLaneIcon} alt="Bot Lane"></img>)
             case "SUPPORT":
-                return (<img src={supLaneIcon} alt="Utility"></img>)
+                return (<img className="risen-icon" src={supLaneIcon} alt="Utility"></img>)
             default:
                 return (<img src={midLaneIcon} alt="Role"></img>)
                 break;
@@ -152,11 +153,12 @@ export default class Overview extends Component {
             setDropDowns.bind(this)();
             this.getData();
         });
-        document.addEventListener("scroll", this.scrollFunction.bind(this));
+        document.addEventListener("scroll", this.bindedScrollFnc);
     }
 
     componentWillUnmount() {
-        document.removeEventListener("scroll", this.scrollFunction.bind(this));
+        console.log("unmouinting")
+        document.removeEventListener("scroll", this.bindedScrollFnc);
     }
 
     scrollFunction() {
