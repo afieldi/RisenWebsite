@@ -31,7 +31,8 @@ async function genMyStuff() {
         const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
         const player = await PlayerModel.create({
             accountId: accountId,
-            name: summoner.name
+            name: summoner.name,
+            searchName: summoner.name.toLowerCase().replace(/\s/g, '')
         });
         player.teams.push(team._id);
         await player.save();
