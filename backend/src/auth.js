@@ -108,7 +108,7 @@ function getUser(request, code, onSuccess, onReject) {
   // AHHHH CALLBACKS
   let roleMap = {
     1: ["Admin", "admin", "Developer"],
-    5: ["Caster"],
+    5: ["Casters"],
     10: ["Verified"]
   }
   try {
