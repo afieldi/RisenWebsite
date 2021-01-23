@@ -25,6 +25,9 @@ import Rules from './components/rules/rules.component';
 import Display from './components/brackets/display.component';
 import Watch from "./components/watch.component";
 import Casters from './components/admin/casters.component';
+import AllChampions from './components/all-champ-stats.component';
+import SingleChampionStats from './components/single-champion-stats.component';
+import MultiPlayer from './components/multi-player.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -116,6 +119,8 @@ export default class App extends Component {
                 <Route path="/" exact component={HomePage} />
                 <Route path="/stats" component={Overview} />
                 <Route path="/leaguestats" component={LeagueStats}></Route>
+                <Route path="/champstats" component={AllChampions}></Route>
+                <Route path="/championstats/:champId" component={SingleChampionStats}></Route>
                 <Route path="/detailed/:player" component={DetailedStats}></Route>
                 <Route path="/leagues" component={AboutLeagues}></Route>
                 <Route path="/league/:league" component={DetailedLeague}></Route>
@@ -129,12 +134,18 @@ export default class App extends Component {
                 <Route path="/auth" render={this.authRender.bind(this)} ></Route>
                 <Route path="/rules" component={Rules}></Route>
                 <Route path="/bracket" component={Display}></Route>
-                <Route path="/casters" component={Casters}></Route>
+                <Route path="/multi" component={MultiPlayer}></Route>
                 {
                   // Only create route if it is an admin
                   this.state.level === 1 ? <div>
                     <Route path="/admin/basic" component={Admin}></Route>
                     <Route path="/admin/teams" component={ManageTeams}></Route>
+                  </div> : null
+                }
+                {
+                  // Only create route if it is an admin or caster
+                  this.state.level <= 8 ? <div>
+                    <Route path="/casters" component={Casters}></Route>
                   </div> : null
                 }
               </div>
