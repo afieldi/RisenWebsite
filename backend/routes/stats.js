@@ -94,8 +94,11 @@ router.route('/player/id/:id').get((req, res) => {
 });
 
 router.route('/player/name/:id').get((req, res) => {
-    console.log(req.cookies);
-    PlayerModel.findOne({name: req.params.id}).then((player) => {
+    PlayerModel.findOne({searchName: req.params.id.toLowerCase().replace(/\s/g, '')}).then((player) => {
+        if (player === null) {
+            res.status(404).json("Player not found");
+            return;
+        }
         GameModel.find({player: player._id}).then(games => {
             res.json(games);
         }, (err) => {
@@ -107,7 +110,7 @@ router.route('/player/name/:id').get((req, res) => {
 });
 
 router.route('/player/name/:id/agg').get((req, res) => {
-    PlayerModel.findOne({name: req.params.id}).then((player) => {
+    PlayerModel.findOne({searchName: req.params.id.toLowerCase().replace(/\s/g, '')}).then((player) => {
         if (player == null) {
             res.status(404).json("Could not find player: " + player);
             return;
@@ -172,7 +175,7 @@ router.route('/player/name/:id/agg').get((req, res) => {
 });
 
 router.route('/player/name/:id/lane/:lane/agg').get((req, res) => {
-    PlayerModel.findOne({name: req.params.id}).then((player) => {
+    PlayerModel.findOne({searchName: req.params.id.toLowerCase().replace(/\s/g, '')}).then((player) => {
         if (player == null) {
             res.status(404).json("Could not find player: " + player);
             return;
@@ -249,31 +252,76 @@ router.route('/player/id/:id/team/:team').get((req, res) => {
 });
 
 router.route('/multi/name').get((req, res) => {
-    let names = req.body.names;
-    // for (let i in names) {
-    //     names[i] = mongoose.Types.ObjectId(req.params.id);
-    // }
+    let names = req.query.names;
+    names = names.split(",");
     if (names.length > 10) {
         res.status(400).json("Too many names passed");
         return;
     }
+    for (let i in names) {
+        names[i] = names[i].toLowerCase().replace(/\s/g, '');
+    }
 
     let pipeline = [];
     
-    // pipeline.push({
-    //     $group: {
-    //         _id: "$_player"
-    //     }
-    // });
-    PlayerModel.find({name: {$in: names}}).then((players) => {
+    PlayerModel.find({searchName: {$in: names}}).then((players) => {
         let ids = players.map(p => p._id);
+        console.log(ids)
+        pipeline = []
         pipeline.push({
             $match: {
                 player: {$in: ids}
             }
         });
-        GameModel.aggregate(pipeline).then(games => {
-            res.json(games);
+        pipeline.push({
+            $lookup: {
+                from: 'players',
+                localField: 'player',
+                foreignField: '_id',
+                as: 'playername'
+            }
+        });
+        pipeline.push({
+            $group: {
+                _id: {
+                  player: "$playername",
+                  champion: "$championId"
+                },
+                ...avgPipe
+            }
+        })
+        let a = Object.assign({}, avgPipe);
+        for (let k in a) {
+            a[k] = "$" + k;
+        }
+
+        let b = Object.assign({}, avgPipe);
+        for (let k in b) {
+            if (k.startsWith("total")) {
+                b[k] = {
+                    $sum: "$" + k
+                }
+            }
+            else {
+                b[k] = {
+                    $avg: "$" + k
+                }
+            }
+        }
+        pipeline.push({
+            $group: {
+                _id: "$_id.player",
+                champions: {
+                    $push: {
+                        championId: "$_id.champion",
+                        ...a
+                    }
+                },
+                ...b
+            }
+        })
+        GameModel.aggregate(pipeline).then(champstats => {
+            res.json(champstats);
         }, (err) => {
             res.status(404).json("Error: " + err);
         });
@@ -610,6 +658,52 @@ router.route('/champs').get((req, res) => {
     pipeline.push({
         $group: {
             _id: "$championId",
+            ...avgPipe
+        }
+    });
+
+    GameModel.aggregate(pipeline).then(data => {
+        let tg = 0;
+        for (let d of data) {
+            tg += d["total_games"];
+        }
+        tg /= 10;
+        for (let i in data) {
+            data[i]["presence"] = data[i]["total_games"] / tg;
+            data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
+        }
+        res.json(data);
+    })
+})
+
+router.route('/champs/byrole').get((req, res) => {
+    let season = req.query.season;
+    let role = req.query.role;
+
+    let pipeline = [];
+
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            })
+        } catch (error) { }
+    }
+
+    if (role) {
+        try {
+            pipeline.push({
+                $match: {lane: role}
+            });
+        } catch (error) { }
+    }
+
+    pipeline.push({
+        $group: {
+            _id: {
+                championId: "$championId",
+                role: "$lane"
+            },
             ...avgPipe
         }
     });

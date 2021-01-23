@@ -13,6 +13,9 @@ const playerSchema = new Schema({
     name: {
         type: String
     },
+    searchName: {
+        type: String
+    },
     notes: { type: String },
     teams: [{type: Schema.Types.ObjectId, ref: 'Team'}]
 }, {

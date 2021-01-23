@@ -14,6 +14,7 @@ async function verifyPlayer(accountId) {
         player = await PlayerModel.create({
             accountId: accountId,
             name: summoner.name,
+            searchName: summoner.name.toLowerCase().replace(/\s/g, ''),
             teams: [],
             notes: ''
         });
@@ -29,6 +30,7 @@ async function createPlayer(summonerData) {
         player = await PlayerModel.create({
             accountId: summonerData.player.accountId,
             name: summonerData.player.summonerName,
+            searchName: summonerData.player.summonerName.toLowerCase().replace(/\s/g, ''),
             teams: [],
             notes: ''
         });
@@ -48,6 +50,7 @@ async function addPlayerByName(name) {
         player = await PlayerModel.create({
             accountId: summoner.accountId,
             name: summoner.name,
+            searchName: summoner.name.toLowerCase().replace(/\s/g, ''),
             teams: [],
             notes: ''
         });
