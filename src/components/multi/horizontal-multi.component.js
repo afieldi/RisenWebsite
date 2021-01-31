@@ -113,7 +113,7 @@ export default class HorizontalMulti extends Component {
   }
 
   getKDA(champ) {
-    return `${customRound(champ.avg_kills, 2)}/${customRound(champ.avg_deaths, 2)}/${customRound(champ.avg_assists, 2)}`
+    return `${customRound(champ.avg_kills, 1)}/${customRound(champ.avg_deaths, 1)}/${customRound(champ.avg_assists,1)}`
   }
 
   render() {
@@ -137,7 +137,7 @@ export default class HorizontalMulti extends Component {
                   </div>
                   <div className="col" style={{display: 'grid'}}>
                     <div className="center risen-sub-label">KDA</div>
-                    <div className="center" style={{fontSize: '24px'}}>10/2/4</div>
+    <div className="center" style={{fontSize: '24px'}}>{this.getKDA(this.props.player)}</div>
                   </div>
                   <div className="col-4 d-none d-md-block">
                     <div className="center risen-sub-label">Performance</div>

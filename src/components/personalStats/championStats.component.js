@@ -43,6 +43,7 @@ export default class ChampionStats extends Component {
 
     for (let d of this.filteredData) {
         let champ = champions[champMap[d.championId]];
+        console.log(this.filteredData);
         let role = champ.tags;
         role = role[0] === "Support" && role[1] ? role[1] : role[0];
         if (!map.role[role]) {
