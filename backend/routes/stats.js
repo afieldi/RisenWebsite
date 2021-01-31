@@ -727,13 +727,191 @@ router.route('/champs/withbans').get((req, res) => {
     let role = req.query.role;
 
     let pipeline = [];
-    let seasonQuery = {};
+    let teamPipeline = [];
     if (season) {
         try {
             pipeline.push({
                 $match: {season: mongoose.Types.ObjectId(season)}
             });
-            seasonQuery = {season: mongoose.Types.ObjectId(season)}
+            teamPipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            });
+        } catch (error) { }
+    }
+
+    if (role) {
+        try {
+            pipeline.push({
+                $match: {lane: role}
+            });
+        } catch (error) { }
+    }
+
+    pipeline.push({
+        $group: {
+            _id: "$championId",
+            ...avgPipe
+        }
+    });
+
+    teamPipeline.push({
+        $unwind: {
+            path: "$bans",
+            includeArrayIndex: 'string',
+            preserveNullAndEmptyArrays: true
+        }
+    });
+    teamPipeline.push({
+        $group: {
+            _id: "$bans",
+            count: {
+              $sum: 1
+            }
+        }
+    })
+
+    GameModel.aggregate(pipeline).then(data => {
+        
+        TeamGameModel.aggregate(teamPipeline).then(d2 => {
+            let tg = 0;
+            let ban_data = {}
+            for (let d of d2) {
+                ban_data[d._id] = d;
+                tg += d["count"];
+            }
+            tg /= 5;
+            tg = Math.round(tg);
+            console.log(tg);
+            for (let i in data) {
+                if (!ban_data[data[i]["_id"]]) {
+                    ban_data[data[i]["_id"]] = {
+                        "count": 0,
+                        "ban_rate": 0
+                    };
+                }
+                data[i]["bans"] = ban_data[data[i]["_id"]]["count"];
+                data[i]["br"] = ban_data[data[i]["_id"]]["count"] / tg;
+                data[i]["pr"] = data[i]["total_games"] / tg;
+                data[i]["presence"] = (data[i]["total_games"] + data[i]["bans"]) / tg;
+                data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
+            }
+            res.json(data);
+        }, (err) => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+    }, (err) => {
+        console.log(err);
+        res.status(500).json(err);
+    })
+})
+
+router.route('/champs/all').get((req, res) => {
+    let season = req.query.season;
+    let role = req.query.role;
+
+    let pipeline = [];
+    let teamPipeline = [];
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            });
+            teamPipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            });
+        } catch (error) { }
+    }
+
+    if (role) {
+        try {
+            pipeline.push({
+                $match: {lane: role}
+            });
+        } catch (error) { }
+    }
+
+    pipeline.push({
+        $group: {
+            _id: {
+                championId: "$championId",
+                role: "$lane"
+            },
+            ...avgPipe
+        }
+    });
+
+    teamPipeline.push({
+        $unwind: {
+            path: "$bans",
+            includeArrayIndex: 'string',
+            preserveNullAndEmptyArrays: true
+        }
+    });
+    teamPipeline.push({
+        $group: {
+            _id: "$bans",
+            count: {
+              $sum: 1
+            }
+        }
+    })
+
+    GameModel.aggregate(pipeline).then(data => {
+        
+        TeamGameModel.aggregate(teamPipeline).then(d2 => {
+            let tg = 0;
+            let ban_data = {}
+            for (let d of d2) {
+                ban_data[d._id] = d;
+                tg += d["count"];
+            }
+            tg /= 5;
+            tg = Math.round(tg);
+            console.log(tg);
+            for (let i in data) {
+                let champId = data[i]["_id"]["championId"];
+                if (!ban_data[champId]) {
+                    ban_data[champId] = {
+                        "count": 0,
+                        "ban_rate": 0
+                    };
+                }
+                data[i]["bans"] = ban_data[champId]["count"];
+                data[i]["br"] = ban_data[champId]["count"] / tg;
+                data[i]["pr"] = data[i]["total_games"] / tg;
+                data[i]["presence"] = (data[i]["total_games"] + data[i]["bans"]) / tg;
+                data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
+            }
+            res.json(data);
+        }, (err) => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+    }, (err) => {
+        console.log(err);
+        res.status(500).json(err);
+    })
+})
+
+router.route('/champ/:id').get((req, res) => {
+    let season = req.query.season;
+    let role = req.query.role;
+    let champ = req.params.id;
+
+    let pipeline = [];
+
+    pipeline.push({
+        $match: {
+            championId: Number(champ)
+        }
+    })
+
+    if (season) {
+        try {
+            pipeline.push({
+                $match: {season: mongoose.Types.ObjectId(season)}
+            })
         } catch (error) { }
     }
 
@@ -753,40 +931,16 @@ router.route('/champs/withbans').get((req, res) => {
     });
 
     GameModel.aggregate(pipeline).then(data => {
-        
-        TeamGameModel.find(seasonQuery).then(d2 => {
-          let tg = d2.length / 2;
-          console.log(tg);
-          let ban_data = {}
-          for (let i in d2) {
-            for (let b of d2[i]["bans"]) {
-              if (!ban_data[b]) {
-                ban_data[b] = 0
-              }
-              ban_data[b] += 1;
-            }
-          }
-          if (tg === 0) {
-              tg = 1;
-          }
-          try {
-            for (let i in data) {
-              if (!ban_data[data[i]["_id"]]) {
-                ban_data[data[i]["_id"]] = 0
-              }
-              data[i]["bans"] = ban_data[data[i]["_id"]]
-              data[i]["presence"] = (data[i]["total_games"] + data[i]["bans"]) / tg;
-              data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
-            }
-            res.json(data);
-            
-          } catch (error) {
-            console.log(error);
-          }
-        })
-      }, (err) => {
-        console.log(err);
-      })
+        let tg = 0;
+        for (let d of data) {
+            tg += d["total_games"];
+        }
+        tg /= 10;
+        for (let i in data) {
+            data[i]["presence"] = data[i]["total_games"] / tg;
+            data[i]["wr"] = data[i]["total_wins"]/data[i]["total_games"]
+        }
+        res.json(data);
+    })
 })
-
 module.exports = router;
