@@ -103,6 +103,15 @@ const gameSchema = new Schema({
     // gold20: { type: Number },
     // gold30: { type: Number },
 
+    // Items
+    item0: { type: String },
+    item1: { type: String },
+    item2: { type: String },
+    item3: { type: String },
+    item4: { type: String },
+    item5: { type: String },
+    item6: { type: String },
+
     lane: { type: String },
 
     // Computed

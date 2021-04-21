@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
+import { urlSetValue } from '../Helpers';
 import qs from 'qs';
 import HorizontalMulti from './multi/horizontal-multi.component';
 
@@ -20,13 +21,13 @@ export default class MultiPlayer extends Component {
     document.getElementById("searchText").value = this.players.toLowerCase().replace(/\s/g, '');
   }
 
-  searchPlayers() {
+  searchPlayers() {  
     let searchNames = document.getElementById("searchText").value;
     searchNames = searchNames.replace(/\n/g, ',');
     searchNames = searchNames.toLowerCase().replace(/\s/g, '');
     searchNames = encodeURI(searchNames);
-    this.props.history.push("/multi?names=" + searchNames);
-
+    // this.props.history.push("/multi?names=" + searchNames);
+    urlSetValue.bind(this)("names", searchNames);
     this.players = searchNames;
     this.getPlayerData();
   }

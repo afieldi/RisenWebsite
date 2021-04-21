@@ -28,6 +28,7 @@ import Casters from './components/admin/casters.component';
 import AllChampions from './components/all-champ-stats.component';
 import SingleChampionStats from './components/single-champion-stats.component';
 import MultiPlayer from './components/multi-player.component';
+import MatchHistory from './components/match-history.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -135,12 +136,13 @@ export default class App extends Component {
                 <Route path="/rules" component={Rules}></Route>
                 <Route path="/bracket" component={Display}></Route>
                 <Route path="/multi" component={MultiPlayer}></Route>
+                <Route path="/history/:gameId" component={MatchHistory}></Route>
                 {
                   // Only create route if it is an admin
                   this.state.level === 1 ? <div>
                     <Route path="/admin/basic" component={Admin}></Route>
                     <Route path="/admin/teams" component={ManageTeams}></Route>
-                  </div> : null
+                  </div> : null 
                 }
                 {
                   // Only create route if it is an admin or caster

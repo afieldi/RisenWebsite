@@ -1,5 +1,9 @@
 import qs from 'qs';
 
+let champions = require('./data/champions.json')["data"];
+let champMap = require('./data/champions_map.json');
+
+
 export function customRound(doubleN, precision = 2) {
     return Math.round(doubleN * Math.pow(10, precision)) / Math.pow(10, precision);
 }
@@ -52,6 +56,14 @@ export function urlOnChange(e) {
     this.props.history.push(newUrl);
 }
 
+export function urlSetValue(key, value) {
+    let query = qs.parse(this.props.location.search.replace("?", ""), { ignoreQueryPrefix: false });
+    query[key] = value;
+    let newUrl = window.location.pathname;
+    newUrl += "?" + qs.stringify(query);
+    this.props.history.push(newUrl);
+}
+
 export function setDropDowns(dataFnc=(()=>{})) {
     let query = qs.parse(this.props.location.search.replace("?", ""), { ignoreQueryPrefix: false });
     for (let id of Object.keys(query)) {
@@ -59,6 +71,10 @@ export function setDropDowns(dataFnc=(()=>{})) {
         document.getElementById(id).value = query[id];
     }
     dataFnc();
+}
+
+export function getChampName(champId) {
+    return champions[champMap[champId]].name;
 }
 
 // Get color code by strength level, 5 is highest, 1 is lowest

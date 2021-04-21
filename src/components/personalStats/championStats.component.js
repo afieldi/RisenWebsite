@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
-import { customRound, matchDict } from '../../Helpers';
+import { customRound, matchDict, getChampName } from '../../Helpers';
 import { Sankey, Tooltip, Rectangle, ResponsiveContainer } from 'recharts';
 
 let champMap = require('../../data/champions_map.json');
@@ -83,7 +83,7 @@ export default class ChampionStats extends Component {
   generateTableData() {
     let data = {};
     for (let game of this.filteredData) {
-      let champ = champions[champMap[game.championId]].name;
+      let champ = getChampName(game.championId)
       if (!data[champ]) {
         data[champ] = {
           games: 0,

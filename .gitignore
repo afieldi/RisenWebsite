@@ -13,6 +13,7 @@
 
 # misc
 src/images/champions
+src/images/items
 .DS_Store
 backend/.env
 .env.local

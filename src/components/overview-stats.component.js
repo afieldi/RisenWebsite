@@ -126,7 +126,7 @@ export default class Overview extends Component {
               seasons: data
             });
             callback();
-          })
+          })    
         })
     }
 

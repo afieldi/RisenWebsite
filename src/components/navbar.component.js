@@ -68,7 +68,7 @@ export default class Navbar extends Component {
                 <Link to="/pbdraft" className="nav-link">Drafting</Link>
               </li>
               <li className="navbar-item ml-auto">
-                <Link to="#" className="nav-link">Watch (Soon)</Link>
+                <Link to="/watch" className="nav-link">Watch</Link>
               </li>
               <li className="navbar-item ml-auto">
                 <Link to="/contact" className="nav-link">Contact Us</Link>

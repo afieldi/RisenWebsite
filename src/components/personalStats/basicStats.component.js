@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import { customRound } from '../../Helpers';
+import { customRound, getChampName } from '../../Helpers';
+import { withRouter } from 'react-router-dom';
 import { Button, Dropdown, Container, ProgressBar } from "react-bootstrap";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer } from 'recharts';
 import $ from 'jquery';
-import { useRechartToPng, getPngData } from "recharts-to-png";
-import FileSaver from 'file-saver';
 
 let champMap = require('../../data/champions_map.json')
+let champions = require('../../data/champions.json')["data"];
 
-export default class BasicStats extends Component {
+class BasicStats extends Component {
 
   constructor(props) {
       super(props);
@@ -172,11 +172,8 @@ export default class BasicStats extends Component {
       // return
   }
 
-  saveRadar() {
-    let e = document.getElementById("radarChart");
-    getPngData(e).then(pngData => {
-      FileSaver.saveAs(pngData, 'test.png');
-    })
+  goToMatch(gameId) {
+    this.props.history.push("/history/"+gameId)
   }
 
   render() {
@@ -257,8 +254,8 @@ export default class BasicStats extends Component {
                           {
                             Object.values(this.filteredData).map(datum => {
                               return (
-                                <tr key={datum._id}>
-                                  <td>{champMap[datum["championId"]]}</td>
+                                <tr key={datum._id} className="clickable" onClick={this.goToMatch.bind(this, datum["gameId"])}>
+                                  <td>{getChampName(datum["championId"])}</td>
                                   <td>{datum["kills"]}/{datum["deaths"]}/{datum["assists"]}</td>
                                 </tr>
                               )
@@ -298,3 +295,5 @@ const centerPBar = {
   position: 'relative',
   top: '20%'
 }
+
+export default withRouter(BasicStats);

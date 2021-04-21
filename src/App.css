@@ -104,6 +104,10 @@ a.nav-link {
   text-align: center;
 }
 
+.ralign {
+  text-align: right;
+}
+
 .risen-radio input {
   display: none;
 }

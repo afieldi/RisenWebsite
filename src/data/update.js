@@ -35,6 +35,22 @@ fetch("https://ddragon.leagueoflegends.com/api/versions.json").then(response => 
                 }
                 fs.writeFileSync("src/data/champions_map.json", JSON.stringify(newData, undefined, 2));
             });
+        });
+
+        const item_url = `http://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/item.json`;
+        fetch(item_url).then(response3 => {
+            response3.json().then(itemData => {
+                fs.writeFileSync("src/data/items.json", JSON.stringify(itemData, undefined, 2));
+
+                for (let key in itemData["data"]) {
+                    if(!fs.existsSync(`src/images/items/${key}.png`)) {
+                        fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/img/item/${key}.png`).then(res => {
+                            const dest = fs.createWriteStream(`src/images/items/${key}.png`);
+                            res.body.pipe(dest);
+                        });
+                    }
+                }
+            })
         })
     });
 })

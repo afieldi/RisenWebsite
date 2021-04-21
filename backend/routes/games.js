@@ -1,6 +1,7 @@
 const router = require('express').Router();	
 let Game = require('../models/game.model');
 let CodeModel = require('../models/code.model');
+let TeamGame = require('../models/teamgame.model');
 const mongoose = require('mongoose');
 const matcher = require('../src/matches');
 const { updateCodes } = require('../src/codes');
@@ -52,16 +53,35 @@ router.route('/add/:gameid').post((req, res) => {
 });
 
 router.route('/:id').get((req, res) => {	
-  Game.findById(req.params.id)	
+  Game.find({gameId: Number(req.params.id)}).populate('player')	
     .then(game => res.json(game))	
     .catch(err => res.status(400).json('Error: ' + err));	
 });	
 
 router.route('/:id').delete((req, res) => {	
-  Game.findByIdAndDelete(req.params.id)	
-    .then(() => res.json('Game deleted.'))	
-    .catch(err => res.status(400).json('Error: ' + err));	
-});	
+  // res.json('Game deleted.')
+  let c = 0;
+  Game.deleteMany({gameId: Number(req.params.id)}).then(deleted => {
+    // console.log(deleted);
+    c += deleted.deletedCount;
+    TeamGame.deleteMany({gameId: Number(req.params.id)}).then(deleted => {
+      c += deleted.deletedCount;
+      // console.log(deleted);
+      res.json(`Deleted ${c} entries`);
+    }).catch(err => {
+      res.status(500).json(err);
+    });
+  }).catch(err => {
+    res.status(500).json(err);
+  });
+  // Game.find({gameId: Number(req.params.id)})	
+  //   .then(games => {
+  //     for (let g of games) {
+  //       Game.deleteMany()
+  //     }
+  //   })	
+  //   .catch(err => res.status(400).json('Error: ' + err));	
+});
 
 router.route('/update/:id').post((req, res) => {	
   Game.findById(req.params.id)	

@@ -321,6 +321,14 @@ router.route('/multi/name').get((req, res) => {
             }
         })
         GameModel.aggregate(pipeline).then(champstats => {
+            for (let i in champstats) {
+                champstats[i].champions.sort((a, b) => {
+                    if (b.total_games > a.total_games) {
+                        return -1;
+                    }
+                    return 1;
+                })
+            }
             res.json(champstats);
         }, (err) => {
             res.status(404).json("Error: " + err);

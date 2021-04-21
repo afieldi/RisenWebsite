@@ -166,7 +166,7 @@ export default class HorizontalMulti extends Component {
                               <th style={noTopStyle} className="risen-sub-label center">Games</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody style={{overflow: "scroll"}}>
                             {
                               this.champs.map((champ, i) => {
                                 if (i >= 5)
