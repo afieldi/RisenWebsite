@@ -19,8 +19,8 @@ class Avg (commands.Cog):
       m += l
     return m
 
-  def generateStatsEmbed(self, data):
-    embed = discord.Embed(title=f"Average Risen Stats", description=f"\u200B", color=discord.Color.dark_orange())
+  def generateStatsEmbed(self, data, role):
+    embed = discord.Embed(title=f"Average Risen Stats for {role}", description=f"\u200B", color=discord.Color.dark_orange())
 
     embed.add_field(name="Games Played", value=f"{data['total_games']}")
     # embed.add_field(name="Win Rate", value=f"{round(data['wr'], 2) * 100}%", inline=True)
@@ -49,17 +49,22 @@ class Avg (commands.Cog):
   async def avg(self, ctx, *args):
     role = "".join(args)
     url = os.environ["BACKEND_URL"] + "/stats/avg"
-
+    lane = "All Lanes"
     if role.lower() in ["middle", "mid"]:
       url += "/role/MIDDLE"
+      lane = "Mid Lane"
     elif role.lower() in ["top"]:
       url += "/role/TOP"
+      lane = "Top Lane"
     elif role.lower() in ["jng", "jungle"]:
       url += "/role/JUNGLE"
+      lane = "Jungle"
     elif role.lower() in ["bot", "bottom", "adc"]:
       url += "/role/BOTTOM"
+      lane = "Bot Lane"
     elif role.lower() in ["sup", "support", "utility"]:
       url += "/role/SUPPORT"
+      lane = "Support"
 
     r = requests.get(url)
     data = None
@@ -71,4 +76,4 @@ class Avg (commands.Cog):
     else:
       await ctx.send("Something went wrong")
       return
-    await ctx.send(embed=self.generateStatsEmbed(data))
+    await ctx.send(embed=self.generateStatsEmbed(data, lane))
