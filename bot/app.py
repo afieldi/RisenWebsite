@@ -18,10 +18,12 @@ def main ( ):
     from commands.charts import Charts
     from commands.leaderboard import Leaderboards
     from commands.stats import Stats
+    from commands.avg import Avg
 
     bot.add_cog ( Charts ( bot ) )
     bot.add_cog ( Leaderboards ( bot ) )
     bot.add_cog ( Stats ( bot ) )
+    bot.add_cog ( Avg ( bot ) )
 
     parser = argparse.ArgumentParser ( description="Discord bot" )
     parser.add_argument ( "-p", "--prod", default=False, action='store_true' )
