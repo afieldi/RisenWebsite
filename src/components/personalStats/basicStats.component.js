@@ -173,7 +173,8 @@ class BasicStats extends Component {
   }
 
   goToMatch(gameId) {
-    this.props.history.push("/history/"+gameId)
+    // return;
+    this.props.history.push("/history/"+gameId);
   }
 
   render() {

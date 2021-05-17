@@ -48,7 +48,8 @@
     "update": "node src/data/update.js",
     "dev": "react-scripts start",
     "gcloud": "gcloud app deploy",
-    "deploy": "npm run build && npm run gcloud"
+    "deploy": "npm run build && npm run gcloud",
+    "botdeploy": "git subtree push --prefix bot heroku master"
   },
   "eslintConfig": {
     "extends": "react-app"

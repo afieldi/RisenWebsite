@@ -14,6 +14,9 @@
 # misc
 src/images/champions
 src/images/items
+src/images/runes
+src/images/summoner
+
 .DS_Store
 backend/.env
 .env.local

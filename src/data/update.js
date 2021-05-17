@@ -51,6 +51,42 @@ fetch("https://ddragon.leagueoflegends.com/api/versions.json").then(response => 
                     }
                 }
             })
+        });
+
+        const summoner_url = `http://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/summoner.json`;
+        fetch(summoner_url).then(response4 => {
+            response4.json().then(summonerData => {
+                fs.writeFileSync("src/data/summoner.json", JSON.stringify(summonerData, undefined, 2));
+
+                for (let key in summonerData["data"]) {
+                    if(!fs.existsSync(`src/images/summoner/${key}.png`)) {
+                        fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/img/spell/${key}.png`).then(res => {
+                            const dest = fs.createWriteStream(`src/images/summoner/${summonerData["data"][key].key}.png`);
+                            res.body.pipe(dest);
+                        });
+                    }
+                }
+            })
+        })
+
+        const runes_url = `http://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`;
+        fetch(runes_url).then(response5 => {
+            response5.json().then(runeData => {
+                fs.writeFileSync("src/data/runes.json", JSON.stringify(runeData, undefined, 2));
+
+                for (let style of runeData) {
+                    for (let slot of style.slots) {
+                        for (let rune of slot.runes) {
+                            if(!fs.existsSync(`src/images/runes/${rune.id}.png`)) {
+                                fetch(` https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`).then(res => {
+                                    const dest = fs.createWriteStream(`src/images/runes/${rune.id}.png`);
+                                    res.body.pipe(dest);
+                                });
+                            }
+                        }
+                    }
+                }
+            })
         })
     });
 })

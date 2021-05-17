@@ -318,6 +318,21 @@ hr.risen-dark {
   visibility: visible;
 }
 
+.itemboard-blue {
+  width: 100px;
+  display: grid;
+  grid-template-areas: "item0 item1 item2 trinket"
+  "item3 item4 item5 ."
+}
+
+.itemboard-red {
+  margin-left: auto;
+  width: 100px;
+  display: grid;
+  grid-template-areas: "trinket item2 item1 item0"
+  ". item5 item4 item3"
+}
+
 .lds-dual-ring {
   display: inline-block;
   width: 80px;
