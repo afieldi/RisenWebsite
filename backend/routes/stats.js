@@ -430,10 +430,27 @@ router.route('/brief').get((req, res) => {
             avg_goldEarned: { $avg: "$goldEarned" },
             avg_totalMinionsKilled: { $avg: "$totalMinionsKilled" },
             avg_totalDamageDealtToChampions: { $avg: "$totalDamageDealtToChampions" },
+            avg_duration: { $avg: "$gameDuration" },
             wins: {$sum: { $cond : [ "$win", 1, 0 ] } },
             total_games: { $sum: 1 }
         }
     });
+
+    pipe.push({
+        $project: {
+            avg_kills: 1,
+            avg_deaths: 1,
+            avg_assists: 1,
+            avg_goldEarned: 1,
+            avg_totalMinionsKilled: 1,
+            avg_totalDamageDealtToChampions: 1,
+            avg_duration: 1,
+            wins: 1,
+            total_games: 1,
+            dpm: { $divide: [ "$avg_totalDamageDealtToChampions", { $divide: ["$avg_duration", 60]}] },
+            gpm: { $divide: [ "$avg_goldEarned", { $divide: ["$avg_duration", 60]}] },
+        }
+    })
 
     GameModel.aggregate(pipe).sort(sortObject).skip(page*size).limit(size).then(games => {
         res.json(games)
@@ -517,6 +534,12 @@ router.route('/avg/champ/:champid?').get((req, res) => {
         }
     })
     GameModel.aggregate(pipeline).then(data => {
+        for (let game of data) {
+            game["wr"] = game["total_games"] > 0 ? game["total_wins"] / game["total_games"] : 0;
+            game["avg_dpm"] = game["avg_totalDamageDealtToChampions"] / (game["avg_gameDuration"]/60);
+            game["avg_vspm"] = game["avg_visionScore"] / game["avg_gameDuration"];
+            game["avg_cspm"] = (game["avg_totalMinionsKilled"] + game["avg_neutralMinionsKilled"]) / (game["avg_gameDuration"]/60);
+        }
         res.json(data);
     }, (err) => {
         res.status(400).json("Error: " + err);

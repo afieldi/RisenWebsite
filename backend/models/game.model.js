@@ -93,26 +93,22 @@ const gameSchema = new Schema({
     goldDiff20: { type: Number },
     goldDiff30: { type: Number },
 
-    // cs10: { type: Number },
-    // cs20: { type: Number },
-    // cs30: { type: Number },
-    // xp10: { type: Number },
-    // xp20: { type: Number },
-    // xp30: { type: Number },
-    // gold10: { type: Number },
-    // gold20: { type: Number },
-    // gold30: { type: Number },
+    goldMap: { type: [Number] },
+    csMap: { type: [Number] },
+    xpMap: { type: [Number] },
 
     // Items
-    item0: { type: String },
-    item1: { type: String },
-    item2: { type: String },
-    item3: { type: String },
-    item4: { type: String },
-    item5: { type: String },
-    item6: { type: String },
+    items: { type: [Number]},
+    trinket: { type: Number },
 
     lane: { type: String },
+
+    primaryRunes: { type: [Number] },
+    secondaryRunes: { type: [Number] },
+    primaryStyle: { type: Number },
+    secondaryStyle: { type: Number },
+    shards: { type: [Number] },
+    summoners: { type: [Number] },
 
     // Computed
     damagePerGold: { type: Number },

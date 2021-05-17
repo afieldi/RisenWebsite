@@ -256,14 +256,46 @@ async function saveGame(matchId, tCode) {
                     goldDiff20: timelineStats[+i+1].GDD20,
                     goldDiff30: timelineStats[+i+1].GDD30,
                     lane: laneAssignments[+i+1],
+
+                    goldMap: timelineStats[+i+1].goldMap,
+                    csMap: timelineStats[+i+1].csMap,
+                    xpMap: timelineStats[+i+1].xpMap,
                     
-                    item0: stats.item0,
-                    item1: stats.item1,
-                    item2: stats.item2,
-                    item3: stats.item3,
-                    item4: stats.item4,
-                    item5: stats.item5,
-                    item6: stats.item6,
+                    items: [
+                        stats.item0,
+                        stats.item1,
+                        stats.item2,
+                        stats.item3,
+                        stats.item4,
+                        stats.item5
+                    ],
+                    trinket: stats.item6,
+
+                    primaryRunes: [
+                      stats.perk0,
+                      stats.perk1,
+                      stats.perk2,
+                      stats.perk3  
+                    ],
+
+                    secondaryRunes: [
+                        stats.perk4,
+                        stats.perk5
+                    ],
+
+                    shards: [
+                        stats.statPerk0,
+                        stats.statPerk1,
+                        stats.statPerk2,
+                    ],
+
+                    summoners: [
+                        player.spell1Id,
+                        player.spell2Id
+                    ],
+
+                    primaryStyle: stats.perkPrimaryStyle,
+                    secondaryStyle: stats.perkSubStyle,
 
                     // Computed
                     damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,

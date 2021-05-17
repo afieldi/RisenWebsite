@@ -45,6 +45,9 @@ function getStats(timeline, playerRoles) {
             "firstItemTime": 0,
             "assists15": 0,
             "assistMap": [ ],
+            "goldMap": [],
+            "xpMap": [],
+            "csMap": [],
             "CS10": 0,
             "CS20": 0,
             "CS30": 0,
@@ -84,6 +87,10 @@ function getStats(timeline, playerRoles) {
                 stats[participant.participantId].XP30 = participant.xp;
                 stats[participant.participantId].GD30 = participant.totalGold;
             }
+
+            stats[participant.participantId].goldMap.push(participant.totalGold);
+            stats[participant.participantId].xpMap.push(participant.xp);
+            stats[participant.participantId].csMap.push(participant.minionsKilled+participant.jungleMinionsKilled);
         }
 
         // Get rest of stats -_-
@@ -152,6 +159,7 @@ function getStats(timeline, playerRoles) {
                     break;
             }
         }
+
 
     }
     for (let role of ["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "SUPPORT"]) {

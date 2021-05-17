@@ -35,7 +35,12 @@ function blockNotGet(req, res, next, level) {
   }
 }
 
+function blockNone(req, res, next, level) {
+  next();
+}
+
 module.exports = {
   blockAll: blockAll,
-  blockNotGet: blockNotGet
+  blockNotGet: blockNotGet,
+  blockNone: blockNone
 }

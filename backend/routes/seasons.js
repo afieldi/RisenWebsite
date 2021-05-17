@@ -1,14 +1,16 @@
 const router = require('express').Router();
 let Team = require('../models/team.model');
 const Season = require("../models/season.model");
+let Game = require('../models/game.model');
+let TeamGame = require('../models/teamgame.model');
 const { createTournament } = require('../src/codes');
 const { findCreateSeason } = require('../src/season');
-const { blockAll, blockNotGet } = require('../helper');
+const { blockAll, blockNotGet, blockNone } = require('../helper');
 const mongoose = require('mongoose');
 
-router.use('/', (req, res, next) => {
-  blockNotGet(req, res, next, 1);
-});
+// router.use('/', (req, res, next) => {
+//   blockNotGet(req, res, next, 1);
+// });
 router.use('/new', (req, res, next) => {
   blockAll(req, res, next, 1);
 });
@@ -78,6 +80,31 @@ router.route('/:season').get((req, res) => {
           }))
           .catch(err => res.status(400).json('Error: ' + err));
   }).catch(err => res.status(404).json("Couldn't find season: " + err));
+})
+
+router.route('/games/:season').delete((req, res) => {
+  const season = req.params.season;
+  let id;
+  try {
+    id = mongoose.Types.ObjectId(season);
+  } catch (error) {
+    res.status(400).json("Invalid season ID");
+    return;
+  }
+  let c = 0;
+  Game.deleteMany({season: id}).then(deleted => {
+    // console.log(deleted);
+    c += deleted.deletedCount;
+    TeamGame.deleteMany({season: id}).then(deleted => {
+      c += deleted.deletedCount;
+      // console.log(deleted);
+      res.json(`Deleted ${c} entries`);
+    }).catch(err => {
+      res.status(500).json(err);
+    });
+  }).catch(err => {
+    res.status(500).json(err);
+  });
 })
 
 module.exports = router;
