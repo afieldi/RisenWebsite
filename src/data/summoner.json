@@ -1,6 +1,6 @@
 {
   "type": "summoner",
-  "version": "11.8.1",
+  "version": "11.12.1",
   "data": {
     "SummonerBarrier": {
       "id": "SummonerBarrier",
@@ -1033,7 +1033,7 @@
     "SummonerSmite": {
       "id": "SummonerSmite",
       "name": "Smite",
-      "description": "Deals 390-1000 true damage (depending on champion level) to target epic, large, or medium monster or enemy minion. Restores Health based on your maximum life when used against monsters.",
+      "description": "Deals 450 damage to target epic, large, or medium monster or enemy minion. Restores Health based on your maximum life when used against monsters.",
       "tooltip": "Deals <span class=\"colorFEFCFF\">{{ f1 }}</span> true damage to target epic, large, or medium monster or enemy minion.  Against monsters, additionally restores <span class=\"colorFFFFFF\">{{ f6 }}</span> <span class=\"colorFF6666\">(+{{ f7 }})</span> Health.<br /><br />Smite regains a charge every {{ ammorechargetime }} seconds, up to a maximum of 2 charges.",
       "maxrank": 1,
       "cooldown": [
