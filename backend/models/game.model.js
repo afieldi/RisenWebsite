@@ -7,6 +7,8 @@ const gameSchema = new Schema({
     team: {type: Schema.Types.ObjectId, ref: 'Team', required: true },
     season: {type: Schema.Types.ObjectId, ref: 'Season', required: true },
     gameId: { type: Number },
+    gameStart: { type: Number },
+    patch: { type: String },
     gameDuration: { type: Number },
     championId: { type: Number },
     teamId: { type: Number }, // 100 for blue, 200 for red

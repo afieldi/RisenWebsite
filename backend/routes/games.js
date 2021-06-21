@@ -97,4 +97,12 @@ router.route('/update/:id').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));	
 });	
 
+router.route("/pray/:game/:code").put((req, res) => {
+  matcher.saveGame(req.params.game, req.params.code).then(data => {
+    res.json("Success");
+  }, err => {
+    res.status(500).send(err);
+  });
+});
+
 module.exports = router; 

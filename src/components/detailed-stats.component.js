@@ -35,10 +35,12 @@ export default class DetailedStats extends Component {
     //   Looks for lane dropdown value so needs to be after mount
     this.loadSeasons(() => {
       setDropDowns.bind(this)();
+      // this.performFilter();
+    });
+    this.loadPlayerData(this.props.match.params.player, () => {
       this.performFilter();
     });
-    this.loadPlayerData(this.props.match.params.player);
-    this.loadAvgData();
+    // this.loadAvgData();
   }
 
   loadSeasons(callback=(()=>{})) {
@@ -76,30 +78,22 @@ export default class DetailedStats extends Component {
     return accStats;
   }
 
-  loadAvgData() {
+  loadAvgData(callback) {
     let url = process.env.REACT_APP_BASE_URL + "/stats/avg";
     let laneFilter = document.getElementById("roleFilter").value;
     if (laneFilter !== "ANY") {
         url += "/role/" + laneFilter;
     }
     fetch(url).then((data) => {
-    data.json().then(data => {
-        this.setState({
-            avgData: data[0]
-        })
-      })
-    });
-  }
-
-  loadAvgDataCallback(callback) {
-    let url = process.env.REACT_APP_BASE_URL + "/stats/avg";
-    let laneFilter = document.getElementById("roleFilter").value;
-    if (laneFilter !== "ANY") {
-        url += "/role/" + laneFilter;
-    }
-    fetch(url).then((data) => {
-    data.json().then(data => {
-        callback(data[0]);
+      data.json().then(data => {
+        if (callback) {
+          callback(data[0]);
+        }
+        else {
+          this.setState({
+              avgData: data[0]
+          });
+        }
       })
     });
   }
@@ -119,7 +113,7 @@ export default class DetailedStats extends Component {
     });
   }
 
-  loadPlayerData(playerName) {
+  loadPlayerData(playerName, callback) {
     let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
@@ -129,16 +123,9 @@ export default class DetailedStats extends Component {
             accumulatedStats: this.computeAccStats(data),
             filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
         });
-        // let aggUrl = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName + "/agg";
-        // fetch(aggUrl).then(aggData => {
-        //     aggData.json().then(aggData => {    
-        //         this.setState({
-        //           statData: data,
-        //           accumulatedStats: aggData[0],
-        //           filteredData: JSON.parse(JSON.stringify(data)) // make a copy, this will be filtered
-        //         });
-        //     })
-        // })
+        if (callback) {
+          callback();
+        }
       });
     })
   }
@@ -162,7 +149,7 @@ export default class DetailedStats extends Component {
   }
 
   performFilter() {
-    this.loadAvgDataCallback((data) => {
+    this.loadAvgData((data) => {
       // this.loadPlayerAggData();
       let filteredData = this.state.statData.filter(game => {
         let championFilter = document.getElementById("championFilter").value;

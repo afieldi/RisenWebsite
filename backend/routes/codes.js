@@ -1,5 +1,6 @@
 const router = require('express').Router();	
 const Season = require('../models/season.model');
+const process = require('process');
 const { generateCodes } = require('../src/codes');
 const { blockAll, blockNotGet } = require('../helper');
 
@@ -12,6 +13,15 @@ router.use('/create', (req, res, next) => {
 router.route("/create").post((req, res) => {
   const count = req.body.count;
   const seasonId = req.body.season;
+
+  if (process.env.NODE_ENV !== "production") {
+    let codes = [];
+    for (let i=0;i<count;i++) {
+      codes.push("NA-CODE-"+i);
+    }
+    res.json(codes);
+    return;
+  }
 
   if (count === undefined || seasonId === undefined) {
     res.status(400).json("Must include season and count body parameters");

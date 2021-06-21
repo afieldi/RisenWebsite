@@ -170,6 +170,8 @@ async function saveGame(matchId, tCode) {
                     team: playerTeam[1]._id,
                     season: code.season,
                     gameId: matchId,
+                    gameStart: gameData.gameCreation,
+                    patch: gameData.gameVersion,
                     gameDuration: gameData.gameDuration,
                     championId: player.championId,
                     teamId: player.teamId, // 100 for blue, 200 for red

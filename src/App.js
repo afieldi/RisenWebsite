@@ -29,6 +29,9 @@ import AllChampions from './components/all-champ-stats.component';
 import SingleChampionStats from './components/single-champion-stats.component';
 import MultiPlayer from './components/multi-player.component';
 import MatchHistory from './components/match-history.component';
+import EditArticle from './components/edit-article.component';
+import DisplayArticle from './components/articles/display-article.component';
+import ListArticles from './components/articles/list-articles.component';
 
 export default class App extends Component {
   constructor(props) {
@@ -137,6 +140,10 @@ export default class App extends Component {
                 <Route path="/bracket" component={Display}></Route>
                 <Route path="/multi" component={MultiPlayer}></Route>
                 <Route path="/history/:gameId" component={MatchHistory}></Route>
+                {/* Articles */}
+                <Route path="/articles/edit/:article" component={EditArticle}></Route>
+                <Route path="/articles/view/:article" component={DisplayArticle}></Route>
+                <Route path="/articles/list" component={ListArticles}></Route>
                 {
                   // Only create route if it is an admin
                   this.state.level === 1 ? <div>

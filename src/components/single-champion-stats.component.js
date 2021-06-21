@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import qs from 'qs';
-import { customRound, urlOnChange } from '../Helpers';
+import { customRound, urlOnChange, setDropDowns } from '../Helpers';
+import GeneralChampionStats from './championStats/general-champion-stats.component';
 
 let champMap = require('../data/champions_map.json')
 
@@ -11,13 +12,16 @@ export default class SingleChampionStats extends Component {
     this.champ = this.props.match.params.champId;
     this.state = {
       seasons: [],
-      champStats: {}
+      allChampData: [],
+      champStats: {},
+      champData: []
     }
   }
 
   componentDidMount() {
     this.loadSeasons(() => {
-      this.getData();
+      setDropDowns.bind(this)();
+      this.getData((data) => {this.performFilter(data)});
     });
   }
 
@@ -33,19 +37,75 @@ export default class SingleChampionStats extends Component {
     })
   }
 
-  performFilter() {
+  performFilter(data) {
+    let wins = 0;
+    let kills = 0;
+    let deaths = 0;
+    let assists = 0;
+    let cspm = 0;
+    let dpm = 0;
 
+    let filteredData = this.state.allChampData.filter(game => {
+      let laneFilter = document.getElementById("roleFilter").value;
+      if (laneFilter !== "ANY") {
+        if (game.lane !== laneFilter) {
+          return false;
+        }
+      }
+
+      // let timeFilter = document.getElementById("durationFilter").value;
+      // if (timeFilter !== "ANY") {
+      //   let t1 = timeFilter.split("-")[0];
+      //   let t2 = timeFilter.split("-")[1];
+      //   if (game.gameDuration < t1 * 60 || game.gameDuration > t2 * 60) {
+      //     return false;
+      //   }
+      // }
+
+      let seasonFilter = document.getElementById("seasonFilter").value;
+      if (seasonFilter !== "ANY") {
+        if (game.season !== seasonFilter) {
+          return false;
+        }
+      }
+
+      // Accumulate stats here so we can get averages without needing another loop
+      wins += +game.win;
+      kills += game.kills;
+      deaths += game.deaths;
+      assists += game.assists;
+      cspm += (game.totalMinionsKilled + game.neutralMinionsKilled) / (game.gameDuration/60);
+      dpm += game.totalDamageDealtToChampions / (game.gameDuration/60);
+      return true;
+    });
+
+    this.setState({
+      champStats: {
+        "total_wins": wins,
+        "total_games": filteredData.length,
+        "avg_kills": kills/filteredData.length,
+        "avg_deaths": deaths/filteredData.length,
+        "avg_assists": assists/filteredData.length,
+        "avg_cspm": cspm/filteredData.length,
+        "avg_dpm": dpm/filteredData.length
+      },
+      champData: filteredData
+    });
   }
 
-  getData() {
+  getData(callback) {
     const url = process.env.REACT_APP_BASE_URL + "/stats/champ/" + this.champ;
     fetch(url).then(data => {
       data.json().then(data => {
-        console.log(data)
-        if (data[0]) {
-          this.setState({
-            champStats: data[0]
-          });
+        // console.log(data)
+        this.setState({
+          allChampData: data
+        });
+
+        if (callback) {
+          callback(data);
+        }
+        else {
         }
       })
     })
@@ -147,12 +207,57 @@ export default class SingleChampionStats extends Component {
                       </div>
                     </div>
                   </div>
-
               </div>
+            </div>
+            <nav>
+              <ul className="nav nav-tabs" id="nav-tab" role="tablist" style={navStyle}>
+                {/* <a className="nav-item nav-link active" id="nav-basic-tab" data-toggle="tab" href="#nav-basic" role="tab" aria-controls="nav-basic" aria-selected="true">Basic Stats</a> */}
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link active" id="nav-general-tab" data-toggle="tab" href="#nav-general" role="tab" aria-controls="nav-general" aria-selected="true">General</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link" id="nav-income-tab" data-toggle="tab" href="#nav-income" role="tab" aria-controls="nav-income" aria-selected="false">Matchup</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="false">Items</a>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <a className="nav-link" id="nav-champ-tab" data-toggle="tab" href="#nav-champ" role="tab" aria-controls="nav-champ" aria-selected="false">Runes</a>
+                </li>
+              </ul>
+            </nav>
+            <div className="tab-content" id="nav-tabContent" style={tabStyle}>
+              <div className="tab-pane fade show active" id="nav-general" role="tabpanel" aria-labelledby="nav-general-tab">
+                <GeneralChampionStats champData={this.state.champData} champStats={this.state.champStats}></GeneralChampionStats>
+              </div>
+              {/* <div className="tab-pane fade" id="nav-income" role="tabpanel" aria-labelledby="nav-income-tab">
+                <IncomeStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></IncomeStats>
+              </div>
+              <div className="tab-pane fade" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
+                <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></VisionStats>
+              </div>
+              <div className="tab-pane fade" id="nav-champ" role="tabpanel" aria-labelledby="nav-champ-tab">
+                <ChampionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></ChampionStats>
+              </div> */}
             </div>
           </Container>
         </div>
       </section>
     )
   }
+}
+
+const navStyle = {
+//   alignItems: "flex-end",
+//   justifyContent: "flex-end"
+  border: 0,
+}
+  
+const tabStyle = {
+  // border: '1px solid white',
+  // backgroundColor: "#ffffff0f"
+  backgroundColor: "rgb(255 255 255 / 0.01)",
+  border: '2px solid #565656',
+  borderRadius: '15px',
+  borderTopLeftRadius: '0'
 }

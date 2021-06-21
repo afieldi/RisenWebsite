@@ -925,7 +925,7 @@ router.route('/champs/all').get((req, res) => {
     })
 })
 
-router.route('/champ/:id').get((req, res) => {
+router.route('/champ/:id/agg').get((req, res) => {
     let season = req.query.season;
     let role = req.query.role;
     let champ = req.params.id;
@@ -973,5 +973,24 @@ router.route('/champ/:id').get((req, res) => {
         }
         res.json(data);
     })
-})
+});
+
+router.route('/champ/:id').get((req, res) => {
+    let season = req.query.season;
+    let role = req.query.role;
+    let champ = req.params.id;
+
+    let filter = {
+        championId: Number(champ)
+    }
+    if (season) {
+        filter["season"] = mongoose.Types.ObjectId(season);
+    }
+    if (role) {
+        filter["lane"] = role;
+    }
+    GameModel.find(filter).then(data => {
+        res.json(data);
+    })
+});
 module.exports = router;

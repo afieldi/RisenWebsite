@@ -19,7 +19,6 @@ class BasicStats extends Component {
           playerName: this.props.player,
           statData: this.props.playerData,
           accStats: this.props.accStats,
-          filteredData: [],
           compData: []
       }
   }
@@ -27,7 +26,12 @@ class BasicStats extends Component {
 
   // Used to be shouldComponentUpdate. Change back if shit breaks
   shouldComponentUpdate(newProps, newState) {
-      this.filteredData = newProps.playerData;
+      this.filteredData = newProps.playerData.sort((a, b) => {
+        if (a.gameStart < b.gameStart) {
+          return 1;
+        }
+        return -1;
+      });
       this.avgData = newProps.avgData;
       this.accStats = newProps.accStats;
       // this.computeAccStats();

@@ -1,5 +1,6 @@
 // Apparently functional components are the future, so here I am
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { customRound } from '../../Helpers';
 import Itemboard from './itemboard.component';
 const champMap = require('../../data/champions_map.json')
@@ -97,7 +98,7 @@ export default function Scoreboard(props) {
                     style={imgStyle}></img>
                 </div>
                 <div className="col" style={nameStyle}>
-                  {bp.player.name}
+                  <Link style={{color: 'white'}} to={`/detailed/${bp.player.name}`}>{bp.player.name}</Link>
                   <div>
                     <img src={require(`../../images/summoner/` + bp.summoners[0] + `.png`)}
                       style={{height: '24px'}}></img>
@@ -123,7 +124,7 @@ export default function Scoreboard(props) {
                   <div style={subTextStyle} dangerouslySetInnerHTML={{__html: getSubText(rp)}}></div>
                 </div>
                 <div className="col ralign" style={nameStyle}>
-                  {rp.player.name}
+                  <Link style={{color: 'white'}} to={`/detailed/${rp.player.name}`}>{rp.player.name}</Link>
                   <div>
                     <img src={require(`../../images/runes/` + rp.primaryRunes[0] + `.png`)}
                       style={{height: '24px'}}></img>

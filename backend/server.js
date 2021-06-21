@@ -75,6 +75,7 @@ const authRouter = require('./routes/auth');
 const seasonRouter = require('./routes/seasons');
 const textualRouter = require('./routes/text');
 const streamRouter = require('./routes/stream');
+const articleRouter = require('./routes/articles');
 
 app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
@@ -85,6 +86,7 @@ app.use('/auth', authRouter);
 app.use('/seasons', seasonRouter);
 app.use('/textual', textualRouter);
 app.use('/stream', streamRouter);
+app.use('/articles', articleRouter);
 
 app.route("/").get((req, res) => {
     res.status(200).send("Hello World").end();

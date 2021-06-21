@@ -56,6 +56,11 @@ export function urlOnChange(e) {
     this.props.history.push(newUrl);
 }
 
+export function getQueryValues(props) {
+    return qs.parse(props.location.search.replace("?", ""), { ignoreQueryPrefix: false });
+
+}
+
 export function urlSetValue(key, value) {
     let query = qs.parse(this.props.location.search.replace("?", ""), { ignoreQueryPrefix: false });
     query[key] = value;

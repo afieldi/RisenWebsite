@@ -64,21 +64,21 @@ router.route('/:season').get((req, res) => {
     return;
   }
   Season.findById().then(season => {
-      Team.aggregate(
-          [
-              {$match: {season: season._id}},
-              {$lookup: {
-                  from: 'players',
-                  localField: 'players',
-                  foreignField: '_id',
-                  as: 'playerObject'
-              }}
-          ])
-          .then(teams => res.json({
-              season: season,
-              teams: teams
-          }))
-          .catch(err => res.status(400).json('Error: ' + err));
+    Team.aggregate(
+      [
+          {$match: {season: season._id}},
+          {$lookup: {
+              from: 'players',
+              localField: 'players',
+              foreignField: '_id',
+              as: 'playerObject'
+          }}
+      ])
+      .then(teams => res.json({
+          season: season,
+          teams: teams
+      }))
+      .catch(err => res.status(400).json('Error: ' + err));
   }).catch(err => res.status(404).json("Couldn't find season: " + err));
 })
 

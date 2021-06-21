@@ -205,7 +205,7 @@ export default class AllChampions extends Component {
                   <div className="risen-stats-header">
                     <h3>
                         <a data-toggle="collapse" href="#filterCollapse" role="button" aria-expanded="false" aria-controls="filterCollapse" style={{color: 'white'}}>
-                            Filters (click to expand)
+                            Filters
                         </a>
                     </h3>
                   </div>
@@ -213,18 +213,26 @@ export default class AllChampions extends Component {
                     <div className="row">
                       <div className="col-md">
                           <Form.Group controlId="seasonFilter" onChange={urlOnChange.bind(this)}>
-                          <Form.Label>Season</Form.Label>
-                          <Form.Control as="select">
-                          <option value="ANY">Any</option>
-                          {
-                              this.state.seasons.map(s => {
-                              return (
-                                  <option value={s._id}>{s.seasonName}</option>
-                              )
-                              })
-                          }
-                          </Form.Control>
+                            <Form.Label>Season</Form.Label>
+                            <Form.Control as="select">
+                            <option value="ANY">Any</option>
+                            {
+                                this.state.seasons.map(s => {
+                                return (
+                                    <option value={s._id}>{s.seasonName}</option>
+                                )
+                                })
+                            }
+                            </Form.Control>
                           </Form.Group>
+                      </div>
+                      <div className="col-md">
+                        <Form.Group controlId="roleFilter" onChange={urlOnChange.bind(this)}>
+                          <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="roleFilter" />
+                            <label class="custom-control-label" for="customSwitch1">Use Lane</label>
+                          </div>
+                        </Form.Group>
                       </div>
                       <div className="col-md-4">
                           <Button className="btn filter-button" onClick={this.getData.bind(this)}>Filter</Button>
@@ -299,7 +307,7 @@ export default class AllChampions extends Component {
                         <div style={{width: '28px', height: '28px', margin: 'auto'}}>{this.getPositionalIcon(item._id.role)}</div>
                       </td>
                       <td className="clickable" name="nameCol">
-                        <Link to={`/championstats/${item._id.championId}?role=${item._id.role}`} style={whiteText}>
+                        <Link to={`/championstats/${item._id.championId}?roleFilter=${item._id.role}`} style={whiteText}>
                           <img key={"img" + index} id={"img-" + index}
                             src={require(`../images/champions/icons/` + champMap[item._id.championId] + `_0.png`)}
                             style={{height: 'auto', width: '40px', paddingRight: '10px'}}></img>

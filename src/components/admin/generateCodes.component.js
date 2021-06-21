@@ -6,7 +6,7 @@ export default class GenerateCodes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      codes: "",
+      codes: [],
       seasons: [],
       newSeasonLoading: false,
       updateSeasonLoading: false,
@@ -88,9 +88,17 @@ export default class GenerateCodes extends Component {
   }
 
   getCodes() {
-    let count = document.getElementById("tournament-teams").value;
+    let matches = document.getElementById("tournament-teams").value;
+    let bestOf = document.getElementById("best-of").value;
     let season = document.getElementById("season-select").value;
-    if ( !count ) {
+    if ( !matches || !bestOf ) {
+      alert("Please fill out the number of codes requested");
+      return;
+    }
+    let count = 3;
+    try {
+      count = matches * bestOf;
+    } catch (error) {
       alert("Please fill out the number of codes requested");
       return;
     }
@@ -102,8 +110,8 @@ export default class GenerateCodes extends Component {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify({
-        count: count,
-        season: season
+        "count": count,
+        "season": season
       }),
       headers: {
         "Content-Type": "application/json"
@@ -118,7 +126,7 @@ export default class GenerateCodes extends Component {
       }
       res.json().then(data => {
         this.setState({
-          codes: data.join("\n")
+          codes: data
         });
       });
     }, (err) => {
@@ -129,6 +137,33 @@ export default class GenerateCodes extends Component {
     });
   }
 
+  getCodeArray() {
+    try {
+      document.getElementById("best-of");
+    } catch (error) {
+      return [];
+    }
+    if (document.getElementById("best-of") == null) {
+      return [];
+    }
+    let cols = document.getElementById("best-of").value ? document.getElementById("best-of").value : 1;
+    let rows = this.state.codes.length / cols;
+    rows = Math.ceil(rows);
+    let arr = [];
+    console.log(rows);
+    for (let i=0; i < rows; i++) {
+      arr.push([]);
+      console.log(arr);
+      for (let j=0; j < cols; j++) {
+        let ind = (i*cols) + j
+        arr[i].push(
+          this.state.codes.length >= ind ? this.state.codes[ind] : "aa"
+          )
+        }
+      }
+      return arr;
+    }
+    
   render() {
     return (
       <section>
@@ -180,17 +215,44 @@ export default class GenerateCodes extends Component {
               <label htmlFor="tournament-teams">Number of Matches: </label>
               <input id="tournament-teams" name="tournament-teams" type="number" placeholder="10"></input>
             </div>
+            
           </div>
           <div className="col-md-2">
             <Button onClick={this.getCodes.bind(this)} disabled={this.state.newCodesLoading}>Generate Codes</Button>
           </div>
         </div>
+        <div>
+          <label htmlFor="best-of">Best of: </label>
+          <input id="best-of" name="best-of" type="number" placeholder="3"></input>
+        </div>
         <div className="row">
           <div className="col-md-6">
             <div>Codes</div>
-            <textarea id="tourney-codes" value={this.state.codes} style={{width: '100%'}} readOnly={true}></textarea>
+            <textarea id="tourney-codes" value={this.state.codes.join("\n")} style={{width: '100%'}} readOnly={true}></textarea>
           </div>
         </div>
+        <table className="table">
+          <thead>
+
+          </thead>
+          <tbody>
+            {
+              this.getCodeArray().map(v => {
+                return (
+                  <tr>
+                    {
+                      v.map(v2 => {
+                        return (
+                          <td>{v2 + "\t"}</td>
+                        )
+                      })
+                    }
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
       </section>
     )
   }

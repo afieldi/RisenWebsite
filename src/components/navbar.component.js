@@ -39,10 +39,11 @@ export default class Navbar extends Component {
               </li> */}
               <li className="navbar-item ml-auto dropdown">
                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Leagues
+                  Info
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <Link to="/leagues" className="dropdown-item">Info</Link>
+                  <Link to="/leagues" className="dropdown-item">League Info</Link>
+                  <Link to="/contact" className="nav-link">Contact Us</Link>
                   {/* <Link to="/rosters" className="dropdown-item">Rosters</Link> */}
                 </div>
               </li>
@@ -68,10 +69,10 @@ export default class Navbar extends Component {
                 <Link to="/pbdraft" className="nav-link">Drafting</Link>
               </li>
               <li className="navbar-item ml-auto">
-                <Link to="/watch" className="nav-link">Watch</Link>
+                <Link to="/articles/list" className="nav-link">Articles</Link>
               </li>
               <li className="navbar-item ml-auto">
-                <Link to="/contact" className="nav-link">Contact Us</Link>
+                <Link to="/watch" className="nav-link">Watch</Link>
               </li>
               {
                 this.props.admin > 0 ? 

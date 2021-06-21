@@ -27,18 +27,18 @@ export default function TeamDamage (props) {
 
   function createData() {
     let d = [];
-    for (let rp of redPlayers) {
-      d.push({
-        "name": rp.championId,
-        "damage": rp.totalDamageDealtToChampions,
-        "damage2": 0
-      })
-    }
     for (let bp of bluePlayers) {
       d.push({
         "name": bp.championId,
+        "damage": bp.totalDamageDealtToChampions,
+        "damage2": 0
+      })
+    }
+    for (let rp of redPlayers) {
+      d.push({
+        "name": rp.championId,
         "damage": 0,
-        "damage2": bp.totalDamageDealtToChampions
+        "damage2": rp.totalDamageDealtToChampions
       })
     }
     return d;
