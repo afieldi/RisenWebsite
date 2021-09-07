@@ -1,6 +1,6 @@
 {
   "type": "item",
-  "version": "11.16.1",
+  "version": "11.17.1",
   "basic": {
     "name": "",
     "rune": {
@@ -683,7 +683,6 @@
         "3031",
         "3053",
         "3139",
-        "3142",
         "3153",
         "6029",
         "3181",
@@ -4677,6 +4676,7 @@
         "3071",
         "3004",
         "3074",
+        "3142",
         "3156",
         "3508",
         "6333",
@@ -4903,12 +4903,12 @@
     },
     "3142": {
       "name": "Youmuu's Ghostblade",
-      "description": "<mainText><stats><attention>60</attention> Attack Damage<br><attention>18</attention> Lethality</stats><br><br><active>Active -</active> <active>Wraith Step:</active> Gain <speed>20% Move Speed</speed> and <status>Ghosting</status> for 6 seconds (45s cooldown).<br><li><passive>Haunt:</passive> Gain <speed>40 Move Speed</speed> out of combat.<br><br><rules><status>Ghosted</status> units ignore collision with other units.</rules></mainText><br>",
+      "description": "<mainText><stats><attention>55</attention> Attack Damage<br><attention>18</attention> Lethality<br><attention>15</attention> Ability Haste</stats><br><br><active>Active -</active> <active>Wraith Step:</active> Gain <speed>20% Move Speed</speed> and <status>Ghosting</status> for 6 seconds (45s cooldown).<br><li><passive>Haunt:</passive> Gain <speed>40 Move Speed</speed> out of combat.<br><br><rules><status>Ghosted</status> units ignore collision with other units.</rules></mainText><br>",
       "colloq": ";lethality",
       "plaintext": "Activate to greatly increase Movement Speed",
       "from": [
         "3134",
-        "1037"
+        "3133"
       ],
       "image": {
         "full": "3142.png",
@@ -4920,10 +4920,10 @@
         "h": 48
       },
       "gold": {
-        "base": 1025,
+        "base": 700,
         "purchasable": true,
-        "total": 3000,
-        "sell": 2100
+        "total": 2900,
+        "sell": 2030
       },
       "tags": [
         "Damage",
@@ -4938,7 +4938,7 @@
         "22": false
       },
       "stats": {
-        "FlatPhysicalDamageMod": 60
+        "FlatPhysicalDamageMod": 55
       },
       "effect": {
         "Effect1Amount": "45",
@@ -5447,7 +5447,7 @@
     },
     "3181": {
       "name": "Hullbreaker",
-      "description": "<mainText><stats><attention>50</attention> Attack Damage<br><attention>300</attention> Health<br><attention>150%</attention> Base Health Regen</stats><br><li><passive>Boarding Party:</passive> While no allied champions are nearby you gain 20-45 <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> and 20% increased damage to towers. Nearby large minions gain 60-135 <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> and 200% increased damage to towers. <br><br><rules>Boarding Party's resistances decay over 3 seconds when an ally gets too close.</rules><br></mainText><br>",
+      "description": "<mainText><stats><attention>50</attention> Attack Damage<br><attention>400</attention> Health<br><attention>150%</attention> Base Health Regen</stats><br><li><passive>Boarding Party:</passive> While no allied champions are nearby you gain 20-45 <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> and 20% increased damage to towers. Nearby large minions gain 60-135 <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> and 200% increased damage to towers. <br><br><rules>Boarding Party's resistances decay over 3 seconds when an ally gets too close.</rules><br></mainText><br>",
       "colloq": ";lethality",
       "plaintext": "When hunting lone enemy champions gain Attack Speed and Lethality",
       "from": [
@@ -5483,7 +5483,7 @@
       },
       "stats": {
         "FlatPhysicalDamageMod": 50,
-        "FlatHPPoolMod": 300
+        "FlatHPPoolMod": 400
       },
       "depth": 3
     },
@@ -7972,7 +7972,7 @@
     },
     "6632": {
       "name": "Divine Sunderer",
-      "description": "<mainText><stats><attention>40</attention> Attack Damage<br><attention>400</attention> Health<br><attention>20</attention> Ability Haste</stats><li><passive>Spellblade:</passive> After using an Ability, your next Attack is enhanced with an additional <physicalDamage>12% (9% for Ranged owners) target max Health physical damage</physicalDamage> <OnHit>On-Hit</OnHit> (1.5s cooldown). If the target is a champion, restore 50% of the enhanced damage (30% for Ranged owners).<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>5%</attention> Armor Penetration and <attention>5%</attention> Magic Penetration.<br><br><rules><passive>Spellblade</passive> will deal a minimum of (150% base Attack Damage) damage to units, but no more than (250% base Attack Damage) damage to Monsters.</rules></mainText><br>",
+      "description": "<mainText><stats><attention>35</attention> Attack Damage<br><attention>400</attention> Health<br><attention>20</attention> Ability Haste</stats><li><passive>Spellblade:</passive> After using an Ability, your next Attack is enhanced with an additional <physicalDamage>12% (9% for Ranged owners) target max Health physical damage</physicalDamage> <OnHit>On-Hit</OnHit> (1.5s cooldown). If the target is a champion, restore 50% of the enhanced damage (30% for Ranged owners).<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>5%</attention> Armor Penetration and <attention>5%</attention> Magic Penetration.<br><br><rules><passive>Spellblade</passive> will deal a minimum of (150% base Attack Damage) damage to units, but no more than (250% base Attack Damage) damage to Monsters.</rules></mainText><br>",
       "colloq": "",
       "plaintext": "",
       "from": [
@@ -8012,7 +8012,7 @@
         "22": false
       },
       "stats": {
-        "FlatPhysicalDamageMod": 40,
+        "FlatPhysicalDamageMod": 35,
         "FlatHPPoolMod": 400
       },
       "depth": 3
@@ -8774,7 +8774,7 @@
     },
     "6695": {
       "name": "Serpent's Fang",
-      "description": "<mainText><stats><attention>55</attention> Attack Damage<br><attention>18</attention> Lethality</stats><br><li><passive>Shield Reaver:</passive> Dealing damage to an enemy champion reduces any shields they gain by (50% | 35% for Ranged Champions) for 3 seconds. When you damage an enemy who is unaffected by Shield Reaver, reduce all shields on them by (50% | 35% for Ranged Champions).<br><br><rules>Additional damage not applied to targets with shields that only block magic damage.<br>Item performance differs for melee and ranged users.</rules></mainText><br>",
+      "description": "<mainText><stats><attention>55</attention> Attack Damage<br><attention>12</attention> Lethality</stats><br><li><passive>Shield Reaver:</passive> Dealing damage to an enemy champion reduces any shields they gain by (50% | 35% for Ranged Champions) for 3 seconds. When you damage an enemy who is unaffected by Shield Reaver, reduce all shields on them by (50% | 35% for Ranged Champions).<br><br><rules>Additional damage not applied to targets with shields that only block magic damage.<br>Item performance differs for melee and ranged users.</rules></mainText><br>",
       "colloq": "",
       "plaintext": "",
       "from": [
