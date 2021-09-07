@@ -76,6 +76,7 @@ const seasonRouter = require('./routes/seasons');
 const textualRouter = require('./routes/text');
 const streamRouter = require('./routes/stream');
 const articleRouter = require('./routes/articles');
+const leaderboardRouter = require('./routes/leaderboards');
 
 app.use('/games', gamesRouter);
 app.use('/teams', teamsRouter);
@@ -87,6 +88,7 @@ app.use('/seasons', seasonRouter);
 app.use('/textual', textualRouter);
 app.use('/stream', streamRouter);
 app.use('/articles', articleRouter);
+app.use('/leaderboards', leaderboardRouter);
 
 app.route("/").get((req, res) => {
     res.status(200).send("Hello World").end();

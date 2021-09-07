@@ -247,7 +247,7 @@ router.route('/player/id/:id/team/:team').get((req, res) => {
     }).then(games => {
         res.json(games);
     }, (err) => {
-        res.status(404).json("Error: " + err);
+        res.status(500).json("Error: " + err);
     });
 });
 

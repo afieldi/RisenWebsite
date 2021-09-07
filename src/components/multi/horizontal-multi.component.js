@@ -132,7 +132,7 @@ export default class HorizontalMulti extends Component {
                     <div style={progressStyle}>
                       <CircularProgressbar
                         styles={buildStyles({pathColor: '#e4a013', textColor: '#e4a013'})}
-                        value={this.getWR()*100} text={`${this.getWR()*100}%`} />
+                        value={this.getWR()*100} text={`${customRound(this.getWR()*100)}%`} />
                     </div>
                   </div>
                   <div className="col" style={{display: 'grid'}}>
@@ -175,7 +175,7 @@ export default class HorizontalMulti extends Component {
                                   <tr key={champ.championId}>
                                     <td style={thinRowStyle}>{champMap[champ.championId]}</td>
                                     <td style={thinRowStyle} className="center">{this.getKDA(champ)}</td>
-                                    <td style={thinRowStyle} className="center">{customRound(champ.total_wins / champ.total_games, 2) * 100}%</td>
+                                    <td style={thinRowStyle} className="center">{customRound((champ.total_wins / champ.total_games) * 100, 2) }%</td>
                                     <td style={thinRowStyle} className="center">{champ.total_games}</td>
                                   </tr>
                                 )

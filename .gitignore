@@ -16,6 +16,7 @@ src/images/champions
 src/images/items
 src/images/runes
 src/images/summoner
+backend/oneoffs
 
 .DS_Store
 backend/.env

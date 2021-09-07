@@ -25,6 +25,10 @@ def main ( ):
     bot.add_cog ( Stats ( bot ) )
     bot.add_cog ( Avg ( bot ) )
 
+    from commands.record import Record
+
+    bot.add_cog ( Record ( bot ) )
+
     parser = argparse.ArgumentParser ( description="Discord bot" )
     parser.add_argument ( "-p", "--prod", default=False, action='store_true' )
     args = parser.parse_args ( )

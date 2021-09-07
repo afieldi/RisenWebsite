@@ -1,11 +1,14 @@
 runtime: nodejs12
-# service: default
-service: website
+service: default
+# service: website
 
 handlers:
   - url: /riot\.txt
     static_files: build/riot.txt
     upload: build/riot\.txt
+  - url: /risenicon\.ico
+    static_files: build/risenicon.ico
+    upload: build/risenicon\.ico
   - url: /static
     static_dir: build/static
   - url: /

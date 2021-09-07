@@ -79,6 +79,14 @@ export default function EditArticle(props) {
     });
   }
 
+  function clearFormatting() {
+    let l = quillObj.getLength();
+    console.log(quillObj.getContents());
+    // quillObj.removeFormat(0, l);
+    quillObj.formatText(0, l, 'color', '');
+    quillObj.formatText(0, l, 'background', '');
+  }
+
   return (
     <section>
       <br></br>
@@ -110,6 +118,9 @@ export default function EditArticle(props) {
           :
           <button type="button" className="btn btn-outline-warning" onClick={saveArticle.bind(this, true)}>Publish</button>
         }
+        <div>
+          <button type="button" className="btn btn-outline-warning" onClick={clearFormatting}>Clear Format</button>
+        </div>
       </div>
     </section>
   )
