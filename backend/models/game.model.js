@@ -9,16 +9,16 @@ const gameSchema = new Schema({
     gameId: { type: Number },
     gameStart: { type: Number },
     patch: { type: String },
-    gameDuration: { type: Number },
+    gameDuration: { type: Number, sparse: true },
     championId: { type: Number },
     teamId: { type: Number }, // 100 for blue, 200 for red
     spell1Id: { type: Number },
     spell2Id: { type: Number },
 
     // Base Stats
-    kills: { type: Number },
-    deaths: { type: Number },
-    assists: { type: Number },
+    kills: { type: Number, sparse: true },
+    deaths: { type: Number, sparse: true },
+    assists: { type: Number, sparse: true },
     champLevel: { type: Number },
     win: { type: Boolean },
 
@@ -35,8 +35,8 @@ const gameSchema = new Schema({
     assistMap: [[]],
 
     // Income
-    goldEarned: { type: Number },
-    totalMinionsKilled: { type: Number },
+    goldEarned: { type: Number, sparse: true },
+    totalMinionsKilled: { type: Number, sparse: true },
     neutralMinionsKilled: { type: Number },
     neutralMinionsKilledTeamJungle: { type: Number },
     neutralMinionsKilledEnemyJungle: { type: Number },
@@ -55,7 +55,7 @@ const gameSchema = new Schema({
     physicalDamageDealtToChampions: { type: Number },
     magicDamageDealtToChampions: { type: Number },
     trueDamageDealtToChampions: { type: Number },
-    totalDamageDealtToChampions: { type: Number },
+    totalDamageDealtToChampions: { type: Number, sparse: true },
     physicalDamageTaken: { type: Number },
     magicalDamageTaken: { type: Number },
     trueDamageTaken: { type: Number },
@@ -66,7 +66,7 @@ const gameSchema = new Schema({
     totalHeal: { type: Number },
 
     // Vision
-    visionScore: { type: Number },
+    visionScore: { type: Number, sparse: true },
     wardsPlaced15: { type: Number },
     wardsPlaced: { type: Number },
     wardsKilled15: { type: Number },

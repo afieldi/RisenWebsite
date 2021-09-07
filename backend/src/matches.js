@@ -1,6 +1,6 @@
 // require('dotenv').config();
 const { leagueApi, constants, makeRequest } = require('./api')
-const { verifyPlayer, createPlayer } = require('./player')
+const { verifyPlayer, createPlayer, updatePlayerName } = require('./player')
 const {spawn} = require('child_process');
 const mongoose = require('mongoose');
 const fetch = require("node-fetch");
@@ -142,7 +142,6 @@ async function saveGame(matchId, tCode) {
                 return;
             }
             
-            // const games = await GameModel.find({gameId: matchId});
             if (games.length > 0) {
                 // We already have this game in our db. Move on.
                 return;
@@ -158,6 +157,9 @@ async function saveGame(matchId, tCode) {
                     gameData.participantIdentities[i].player.accountId,
                     i < 5 ? teams[0] : teams[1]
                 );
+
+                updatePlayerName(gameData.participantIdentities[i].player);
+                
                 const stats = player.stats; // Just so I have to type less
                 if (!player.timeline.csDiffPerMinDeltas) {
                     // Do this so it is set to 0 later and doesn't error out

@@ -29,66 +29,35 @@ export default class AboutLeagues extends Component {
                                 <Link to={"/league/champions"}><Button className="risen-button">Learn More</Button></Link>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-md" style={blockStyle}>
-                                <h2>{staticText.leagues.rampage.prettyName}</h2>
-                                <img src={require('../images/' + staticText.leagues.rampage.img)} style={iconStyle}></img>
-                                <p>{staticText.leagues.rampage.blurb}</p>
-                                <div>
-                                    <div><b>Ranks</b></div>
-                                    <p> {staticText.leagues.rampage.ranks}</p>
-                                </div>
-                                <div>
-                                    <div><b>Max Rank</b></div>
-                                    <p> {staticText.leagues.rampage.peak}</p>
-                                </div>
-                                <Link to={"/league/rampage"}><Button className="risen-button">Learn More</Button></Link>
-                            </div>
-                            <div className="col-md" style={blockStyle}>
-                                <h2>{staticText.leagues.unstoppable.prettyName}</h2>
-                                <img src={require('../images/' + staticText.leagues.unstoppable.img)} style={iconStyle}></img>
-                                <p>{staticText.leagues.unstoppable.blurb}</p>
-                                <div>
-                                    <div><b>Ranks</b></div>
-                                    <p> {staticText.leagues.unstoppable.ranks}</p>
-                                </div>
-                                <div>
-                                    <div><b>Max Rank</b></div>
-                                    <p> {staticText.leagues.unstoppable.peak}</p>
-                                </div>
-                                <Link to={"/league/unstoppable"}><Button className="risen-button">Learn More</Button></Link>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md" style={blockStyle}>
-                                <h2>{staticText.leagues.dominate.prettyName}</h2>
-                                <img src={require('../images/' + staticText.leagues.dominate.img)} style={iconStyle}></img>
-                                <p>{staticText.leagues.dominate.blurb}</p>
-                                <div>
-                                    <div><b>Ranks</b></div>
-                                    <p> {staticText.leagues.dominate.ranks}</p>
-                                </div>
-                                <div>
-                                    <div><b>Max Rank</b></div>
-                                    <p> {staticText.leagues.dominate.peak}</p>
-                                </div>
-                                <Link to={"/league/dominate"}><Button className="risen-button">Learn More</Button></Link>
-                            </div>
-                            <div className="col-md" style={blockStyle}>
-                                <h2>{staticText.leagues.divine.prettyName}</h2>
-                                <img src={require('../images/' + staticText.leagues.divine.img)} style={iconStyle}></img>
-                                <p>{staticText.leagues.divine.blurb}</p>
-                                <div>
-                                    <div><b>Ranks</b></div>
-                                    <p> {staticText.leagues.divine.ranks}</p>
-                                </div>
-                                <div>
-                                    <div><b>Max Rank</b></div>
-                                    <p> {staticText.leagues.divine.peak}</p>
-                                </div>
-                                <Link to={"/league/divine"}><Button className="risen-button">Learn More</Button></Link>
-                            </div>
-                        </div>
+                        {/* <hr style={{backgroundColor: 'white'}}></hr> */}
+                        <br></br>
+                        {
+                            Object.keys(staticText.leagues).map(leagueName => {
+                                let t = staticText.leagues[leagueName];
+                                if (leagueName === "champions") {
+                                    // This is front and center
+                                    return null;
+                                }
+                                return (
+                                    <div>
+                                        <Link to={`/league/${leagueName}`}>
+                                            <div className="row clickable text-light" style={rowStyle}>
+                                                <div className="col-2">
+                                                    <img src={require('../images/' + t.img)} style={iconStyle}></img>
+                                                </div>
+                                                <div classname="col">
+                                                    <div><h2>{t.prettyName}</h2></div>
+                                                    <div><p>{t.blurb}</p></div>
+                                                    <div>Ranks: {staticText.leagues.champions.ranks}</div>
+                                                    <div>Max: {staticText.leagues.champions.peak} </div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                        <br></br>
+                                    </div>
+                                )
+                            })
+                        }
                     </Container>
                 </div>
             </section>
@@ -116,5 +85,11 @@ const blockStyle = {
     border: '1px solid #dfe3e7',
     borderRadius: '.3rem',
     boxShadow: '-8px 12px 18px 0 rgba(25,42,70,.13)',
-    backgroundColor: 'rgba(25,42,70,.13)'
+    backgroundColor: 'rgba(25,42,70,.47)'
+}
+
+const rowStyle = {
+    background: 'rgb(25,42,70)',
+    background: 'linear-gradient(90deg, rgba(25,42,70,.53) 69%, rgba(0,0,0,0) 100%)',
+    padding: '10px'
 }

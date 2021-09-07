@@ -22,9 +22,15 @@ export default function DisplayArticle(props) {
     <div className="dark-section text-light">
       <div className="container">
         <h2>{articleData.title}</h2>
-        <Link to="/">
-          <h5 className="clickable">{articleData.authorDetails.map(v => <i>{v.name}</i>)}</h5>
-        </Link>
+        {
+          articleData.authorDetails.map(author => {
+            return (
+              <Link to={`/articles/list?author=${author._id}`}>
+                <h5 className="clickable">{articleData.authorDetails.map(v => <i>{v.name}</i>)}</h5>
+              </Link>
+            )
+          })
+        }
         <hr style={{backgroundColor: 'white'}}></hr>
         <div className="ql-editor" dangerouslySetInnerHTML={{__html: articleData.content}}></div>
         <hr style={{backgroundColor: 'white'}}></hr>

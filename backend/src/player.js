@@ -65,9 +65,20 @@ async function searchPlayer(name) {
     })).response;
 }
 
+async function updatePlayerName(summoner) {
+    let player = await PlayerModel.findOne({ accountId: summoner.accountId });
+
+    if (player.name !== summoner.summonerName) {
+        player.name = summoner.summonerName;
+        await player.save();
+    }
+    return player;
+}
+
 module.exports = {
     'verifyPlayer': verifyPlayer,
     'addPlayerByName': addPlayerByName,
     'searchPlayer': searchPlayer,
-    'createPlayer': createPlayer
+    'createPlayer': createPlayer,
+    'updatePlayerName': updatePlayerName
 }

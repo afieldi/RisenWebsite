@@ -6,13 +6,11 @@ import { customRound } from '../../Helpers';
 export default class GeneralLeagueStats extends Component {
   constructor(props) {
     super(props);
-    this.genData = [];
     // this.leagueData = {};
     this.blueData = {};
     this.redData = {};
   }
   shouldComponentUpdate(nextProps, nextState) {
-    this.genData = nextProps.genData;
     // this.leagueData = nextProps.leagueData;
     for(let p of nextProps.leagueData) {
       if (p._id === "blue") {
@@ -23,28 +21,6 @@ export default class GeneralLeagueStats extends Component {
       }
     }
     return true;
-  }
-
-  generateKillsAssistsVsDeaths() {
-    return this.genData.map(p => {
-      return {
-        name: p._id.player[0],
-        nameVal: 1, // This will be the z axis so that we can render the name in the tooltip
-        kp: customRound(p.avg_kills + p.avg_assists, 2),
-        deaths: customRound(p.avg_deaths, 2)
-      }
-    })
-  }
-
-  generateWardsPlacedVsKilled() {
-    return this.genData.map(p => {
-      return {
-        name: p._id.player[0],
-        nameVal: 1, // This will be the z axis so that we can render the name in the tooltip
-        wp: customRound(p.avg_wardsPlaced, 2),
-        wk: customRound(p.avg_wardsKilled, 2)
-      }
-    })
   }
 
   generateSidePieData() {

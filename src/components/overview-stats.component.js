@@ -269,7 +269,7 @@ export default class Overview extends Component {
                                         return (
                                             <tr key={"overviewStats-" + index}>
                                                 {/* <td scope="row" className="risen-datum center">{index + 1}</td> */}
-                                                <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player}`} style={whiteText}>{item._id.player}</Link></td>
+                                                <td className="clickable" name="nameCol"><Link to={`/detailed/${item._id.player}?roleFilter=${item._id.lane}`} style={whiteText}>{item._id.player}</Link></td>
                                                 <td className="center" name="laneCol">{item._id.lane}</td>
                                                 <td className="center" name="winCol">{customRound((item.wins * 100)/item.total_games)}%</td>
                                                 <td className="center" name="killsCol">{customRound(item.avg_kills)}</td>

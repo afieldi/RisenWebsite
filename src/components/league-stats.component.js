@@ -3,6 +3,7 @@ import { Container, Button, Form } from 'react-bootstrap';
 import { setDropDowns, urlOnChange } from './../Helpers';
 import CombatLeagueStats from './leagueStats/combat-league-stats.component';
 import GeneralLeagueStats from './leagueStats/general-league-stats.component';
+import Leaderboards from './leagueStats/leaderboards.component';
 
 export default class LeagueStats extends Component {
   constructor(props) {
@@ -10,7 +11,8 @@ export default class LeagueStats extends Component {
     this.state = {
       genData: [],
       leagueData: [],
-      seasons: []
+      seasons: [],
+      season: ""
     }
   }
 
@@ -24,6 +26,9 @@ export default class LeagueStats extends Component {
 
   performFilter() {
     let s = document.getElementById("seasonFilter").value;
+    this.setState({
+      season: s
+    })
     this.getGeneralData(s)
   }
 
@@ -44,20 +49,14 @@ export default class LeagueStats extends Component {
     if (season && season !== "ANY") {
       q = "?season=" + season
     }
-    const url = process.env.REACT_APP_BASE_URL + "/stats/avg/byplayer" + q;
-    fetch(url).then(data => {
-      data.json().then(data => {
-        const leagueUrl = process.env.REACT_APP_BASE_URL + "/stats/general/league" + q;
-        fetch(leagueUrl).then(lData => {
-          lData.json().then(lData => {
-            this.setState({
-              genData: data,
-              leagueData: lData
-            });
-          })
-        })
-      });
-    });
+    const leagueUrl = process.env.REACT_APP_BASE_URL + "/stats/general/league" + q;
+    fetch(leagueUrl).then(lData => {
+      lData.json().then(lData => {
+        this.setState({
+          leagueData: lData
+        });
+      })
+    })
   }
 
   getTotalGames() {
@@ -149,10 +148,10 @@ export default class LeagueStats extends Component {
                         <div className="center">{this.getTotalGames()}</div>
                         <div className="center risen-sub-label">Games</div>
                       </div>
-                      <div className="col-sm">
+                      {/* <div className="col-sm">
                         <div className="center">{this.getTotalPlayers()}</div>
                         <div className="center risen-sub-label">Players</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -164,12 +163,12 @@ export default class LeagueStats extends Component {
                 <li className="nav-item" role="presentation">
                     <a className="nav-link active" id="nav-gen-tab" data-toggle="tab" href="#nav-gen" role="tab" aria-controls="nav-gen" aria-selected="true">Side</a>
                 </li>
-                <li className="nav-item" role="presentation">
-                  <a className="nav-link" id="nav-income-tab" data-toggle="tab" href="#nav-income" role="tab" aria-controls="nav-income" aria-selected="false">Combat</a>
-                </li>
                 {/* <li className="nav-item" role="presentation">
-                  <a className="nav-link" id="nav-vision-tab" data-toggle="tab" href="#nav-vision" role="tab" aria-controls="nav-vision" aria-selected="false">Vision</a>
+                  <a className="nav-link" id="nav-income-tab" data-toggle="tab" href="#nav-income" role="tab" aria-controls="nav-income" aria-selected="false">Combat</a>
                 </li> */}
+                <li className="nav-item" role="presentation">
+                  <a className="nav-link" id="nav-leaderboards-tab" data-toggle="tab" href="#nav-leaderboards" role="tab" aria-controls="nav-leaderboards" aria-selected="false">Leaderboards</a>
+                </li>
                 {/* <li className="nav-item" role="presentation">
                   <a className="nav-link" id="nav-champ-tab" data-toggle="tab" href="#nav-champ" role="tab" aria-controls="nav-champ" aria-selected="false">Champions</a>
                 </li> */}
@@ -179,12 +178,12 @@ export default class LeagueStats extends Component {
               <div className="tab-pane fade show active" id="nav-gen" role="tabpanel" aria-labelledby="nav-gen-tab">
                 <GeneralLeagueStats genData={this.state.genData} leagueData={this.state.leagueData}></GeneralLeagueStats>
               </div>
-              <div className="tab-pane fade" id="nav-income" role="tabpanel" aria-labelledby="nav-income-tab">
+              {/* <div className="tab-pane fade" id="nav-income" role="tabpanel" aria-labelledby="nav-income-tab">
                 <CombatLeagueStats genData={this.state.genData} leagueData={this.state.leagueData}></CombatLeagueStats>
-              </div>
-                {/* <div className="tab-pane fade" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
-                <VisionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></VisionStats>
-                </div> */}
+              </div> */}
+                <div className="tab-pane fade" id="nav-leaderboards" role="tabpanel" aria-labelledby="nav-leaderboards-tab">
+                <Leaderboards player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData} season={this.state.season}></Leaderboards>
+                </div>
                 {/* <div className="tab-pane fade" id="nav-champ" role="tabpanel" aria-labelledby="nav-champ-tab">
                 <ChampionStats player={this.state.playerName} playerData={this.state.filteredData} accStats={this.state.accumulatedStats} avgData={this.state.avgData}></ChampionStats>
               </div> */}
