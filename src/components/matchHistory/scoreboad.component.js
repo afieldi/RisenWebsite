@@ -1,7 +1,7 @@
 // Apparently functional components are the future, so here I am
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { customRound } from '../../Helpers';
+import { customRound, msToMin } from '../../Helpers';
 import Itemboard from './itemboard.component';
 const champMap = require('../../data/champions_map.json')
 
@@ -46,7 +46,7 @@ export default function Scoreboard(props) {
   }
 
   function getPm(value, time) {
-    return customRound(value/(time/60), 1);
+    return customRound(value/msToMin(time), 1);
   }
 
   function getTime(duration) {
@@ -57,7 +57,6 @@ export default function Scoreboard(props) {
   
 
   function getSubText(player) {
-    console.log(player.player.name + ":" +  getPm(player.totalDamageDealtToChampions, player.gameDuration));
     return getPm(player.totalMinionsKilled + player.neutralMinionsKilled, player.gameDuration) + " cspm <br />" + 
     getPm(player.totalDamageDealtToChampions, player.gameDuration) + " dpm";
   }
@@ -100,9 +99,9 @@ export default function Scoreboard(props) {
                 <div className="col" style={nameStyle}>
                   <Link style={{color: 'white'}} to={`/detailed/${bp.player.name}`}>{bp.player.name}</Link>
                   <div>
-                    <img src={require(`../../images/summoner/` + bp.summoners[0] + `.png`)}
+                    <img src={require(`../../images/summoner/` + bp.summoner1Id + `.png`)}
                       style={{height: '24px'}}></img>
-                    <img src={require(`../../images/summoner/` + bp.summoners[1] + `.png`)}
+                    <img src={require(`../../images/summoner/` + bp.summoner2Id + `.png`)}
                       style={{height: '24px'}}></img>
                     <img src={require(`../../images/runes/` + bp.primaryRunes[0] + `.png`)}
                       style={{height: '24px'}}></img>
@@ -128,9 +127,9 @@ export default function Scoreboard(props) {
                   <div>
                     <img src={require(`../../images/runes/` + rp.primaryRunes[0] + `.png`)}
                       style={{height: '24px'}}></img>
-                    <img src={require(`../../images/summoner/` + rp.summoners[0] + `.png`)}
+                    <img src={require(`../../images/summoner/` + rp.summoner1Id + `.png`)}
                       style={{height: '24px'}}></img>
-                    <img src={require(`../../images/summoner/` + rp.summoners[1] + `.png`)}
+                    <img src={require(`../../images/summoner/` + rp.summoner2Id + `.png`)}
                       style={{height: '24px'}}></img>
                   </div>
                 </div>

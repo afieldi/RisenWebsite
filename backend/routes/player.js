@@ -9,4 +9,4 @@ router.route("/search/:playername").get((req, res) => {
   } catch (error) {
     res.status(404).json("No player found");
   }
-})
+});

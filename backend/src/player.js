@@ -1,57 +1,56 @@
-const { leagueApi, constants } = require('./api');
+const { leagueApi, constants, makeRequest } = require('./api');
 const PlayerModel = require('../models/player.model');
-
-
-async function playerExists() {
-    const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
-}
+const { urlencoded } = require('body-parser');
 
 // Ensure player exists and create if it doesn't
-async function verifyPlayer(accountId) {
-    let player = await PlayerModel.findOne({ accountId: accountId });
+async function verifyPlayer(summoner) {
+    let player = await PlayerModel.findOne({ summonerId: summoner.summonerId });
     if (player === null) {
-        const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
+        // const summoner = (await leagueApi.Summoner.getByAccountID(accountId, constants.Regions.AMERICA_NORTH)).response;
         player = await PlayerModel.create({
-            accountId: accountId,
-            name: summoner.name,
-            searchName: summoner.name.toLowerCase().replace(/\s/g, ''),
-            teams: [],
+            summonerId: summoner.summonerId,
+            puuid: summoner.puuid,
+            name: summoner.summonerName,
+            searchName: summoner.summonerName.toLowerCase().replace(/\s/g, ''),
+            notes: ''
+        });
+    }
+    updatePlayerName(summoner, player);
+    return player;
+}
+
+async function createPlayer(playerName) {
+    let player = await PlayerModel.findOne({ searchName: playerName.toLowerCase().replace(/\s/g, '')});
+    if (player === null) {
+        // Does not exist. Lets make
+        let url = `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(playerName)}`;
+        let playerData = await (await makeRequest(url, "GET", process.env.RIOT_API)).json();
+        player = await PlayerModel.create({
+            summonerId: playerData.id,
+            name: playerData.name,
+            puuid: playerData.puuid,
+            searchName: playerData.name.toLowerCase().replace(/\s/g, ''),
             notes: ''
         });
     }
     return player;
 }
 
-async function createPlayer(summonerData) {
-    let player = await PlayerModel.findOne({ accountId: summonerData.player.accountId });
-
-    if (player === null) {
-        console.log(summonerData);
-        player = await PlayerModel.create({
-            accountId: summonerData.player.accountId,
-            name: summonerData.player.summonerName,
-            searchName: summonerData.player.summonerName.toLowerCase().replace(/\s/g, ''),
-            teams: [],
-            notes: ''
-        });
-    }
-    return player;
-}
-
+// HARD DEPRECATED
 async function addPlayerByName(name) {
     const summoner = (await leagueApi.Summoner.getByName(name, constants.Regions.AMERICA_NORTH).catch((err) => {
         console.log(err);
         throw Error("Summoner not found!");
     })).response;
 
-    let player = await PlayerModel.findOne({ accountId: summoner.accountId });
+    let player = await PlayerModel.findOne({ summonerId: summoner.summonerId });
 
     if (player === null) {
         player = await PlayerModel.create({
-            accountId: summoner.accountId,
+            summonerId: summoner.summonerId,
             name: summoner.name,
+            puuid: summoner.puuid,
             searchName: summoner.name.toLowerCase().replace(/\s/g, ''),
-            teams: [],
             notes: ''
         });
     }
@@ -65,14 +64,13 @@ async function searchPlayer(name) {
     })).response;
 }
 
-async function updatePlayerName(summoner) {
-    let player = await PlayerModel.findOne({ accountId: summoner.accountId });
-
-    if (player.name !== summoner.summonerName) {
-        player.name = summoner.summonerName;
-        await player.save();
+async function updatePlayerName(summoner, playerObject) {
+    if (playerObject.name !== summoner.summonerName) {
+        playerObject.name = summoner.summonerName;
+        playerObject.searchName = summonerData.player.summonerName.toLowerCase().replace(/\s/g, '');
+        await playerObject.save();
     }
-    return player;
+    return playerObject;
 }
 
 module.exports = {
@@ -80,5 +78,4 @@ module.exports = {
     'addPlayerByName': addPlayerByName,
     'searchPlayer': searchPlayer,
     'createPlayer': createPlayer,
-    'updatePlayerName': updatePlayerName
 }

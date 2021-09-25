@@ -1,6 +1,6 @@
 {
   "type": "item",
-  "version": "11.17.1",
+  "version": "11.19.1",
   "basic": {
     "name": "",
     "rune": {
@@ -3172,7 +3172,7 @@
     },
     "3068": {
       "name": "Sunfire Aegis",
-      "description": "<mainText><stats><attention>350</attention> Health<br><attention>30</attention> Armor<br><attention>30</attention> Magic Resist<br><attention>20</attention> Ability Haste</stats><br><li><passive>Immolate:</passive> Taking or dealing damage causes you to begin dealing <magicDamage>(20 - 40 (based on level) + 1% bonus Health) magic damage</magicDamage> per second to nearby enemies (increased by 25% against minions and 150% against monsters) for 3 seconds. Damaging Champions or Epic Monsters with this effect adds a stack, increasing subsequent <passive>Immolate</passive> damage by 12% for 5 seconds (max stacks 6).<li><passive>Flametouch:</passive> At maximum <passive>Immolate</passive> stacks, your Attacks burn nearby enemies for your <passive>Immolate</passive> damage per second for 3 seconds.<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>5%</attention> Tenacity and Slow Resist.</mainText><br>",
+      "description": "<mainText><stats><attention>350</attention> Health<br><attention>30</attention> Armor<br><attention>30</attention> Magic Resist<br><attention>20</attention> Ability Haste</stats><br><li><passive>Immolate:</passive> Taking or dealing damage causes you to begin dealing <magicDamage>(12 - 30 (based on level) + 1% bonus Health) magic damage</magicDamage> per second to nearby enemies (increased by 25% against minions and 150% against monsters) for 3 seconds. Damaging Champions or Epic Monsters with this effect adds a stack, increasing subsequent <passive>Immolate</passive> damage by 12% for 5 seconds (max stacks 6).<li><passive>Flametouch:</passive> At maximum <passive>Immolate</passive> stacks, your Attacks burn nearby enemies for your <passive>Immolate</passive> damage per second for 3 seconds.<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>5%</attention> Tenacity and Slow Resist.</mainText><br>",
       "colloq": ";",
       "plaintext": "High armor. Constantly deals damage to nearby enemies. Immobilize enemies to release a wave of damaging flame",
       "from": [
@@ -3356,7 +3356,7 @@
     },
     "3074": {
       "name": "Ravenous Hydra",
-      "description": "<mainText><stats><attention>65</attention> Attack Damage<br><attention>20</attention> Ability Haste<br><attention>10%</attention> Omnivamp</stats><br><li><passive>Cleave:</passive> Attacks and Abilities deal up to <physicalDamage>(60% Attack Damage) physical damage</physicalDamage> to other enemies near target hit.<br><br><rules>Deals a minimum of (12% Attack Damage) damage to units at the end of its range, can only hit each target once per Attack or Ability, and doesn't trigger off of periodic damage.</rules><br></mainText><br>",
+      "description": "<mainText><stats><attention>65</attention> Attack Damage<br><attention>20</attention> Ability Haste<br><attention>10%</attention> Omnivamp</stats><br><li><passive>Cleave:</passive> Attacks and Abilities deal up to <physicalDamage>(60% Attack Damage) physical damage</physicalDamage> to other enemies near target hit.<br><br><rules>Deals a minimum of (12% Attack Damage) damage to units at the end of its range, can only hit each target once per Attack or Ability, and doesn't trigger off of periodic damage.<br>Cleave does not trigger on structures. </rules><br></mainText><br>",
       "colloq": ";",
       "plaintext": "Melee attacks hit nearby enemies, dealing damage and restoring Health",
       "from": [
@@ -3480,7 +3480,7 @@
     },
     "3077": {
       "name": "Tiamat",
-      "description": "<mainText><stats><attention>25</attention> Attack Damage</stats><br><li><passive>Cleave:</passive> Attacks deal up to <physicalDamage>(60% Attack Damage) physical damage</physicalDamage> to other nearby enemies. <br><br><rules>Minimum of (12% Attack Damage) damage to enemies furthest away.</rules></mainText><br>",
+      "description": "<mainText><stats><attention>25</attention> Attack Damage</stats><br><li><passive>Cleave:</passive> Attacks deal up to <physicalDamage>(60% Attack Damage) physical damage</physicalDamage> to other nearby enemies. <br><br><rules>Minimum of (12% Attack Damage) damage to enemies furthest away.<br>Cleave does not trigger on structures. </rules></mainText><br>",
       "colloq": ";",
       "plaintext": "Melee attacks hit nearby enemies",
       "from": [
@@ -4607,8 +4607,8 @@
     "3124": {
       "name": "Guinsoo's Rageblade",
       "description": "<mainText><stats><attention>45%</attention> Attack Speed<br><attention>20%</attention> Critical Strike Chance</stats><br><li><passive>Wrath:</passive> Your Critical Strike Chance is converted into <OnHit>On-Hit</OnHit> damage. Gain <physicalDamage>40</physicalDamage> <OnHit>On-Hit</OnHit> for each 20% Critical Strike Chance converted.<li><passive>Seething Strike:</passive> Every third Attack applies your On-Hit effects twice.<br><br><rules><passive>Wrath</passive> cannot benefit from more than 100% Critical Strike Chance. <passive>Wrath's</passive> On-Hit damage conversion is affected by Critical Strike damage modifiers. </rules></mainText><br>",
-      "colloq": ";",
-      "plaintext": "Increases Attack Speed, Armor Penetration, and Magic Penetration",
+      "colloq": "",
+      "plaintext": "",
       "from": [
         "6677",
         "1018",
@@ -5399,7 +5399,7 @@
     },
     "3179": {
       "name": "Umbral Glaive",
-      "description": "<mainText><stats><attention>50</attention> Attack Damage<br><attention>12</attention> Lethality<br><attention>15</attention> Ability Haste</stats><br><li><passive>Blackout:</passive> When spotted by an enemy Ward, reveal traps and disable Wards around you for 8 seconds (45s cooldown). Your Attacks instantly kill revealed traps and do triple damage to Wards.</mainText><br>",
+      "description": "<mainText><stats><attention>50</attention> Attack Damage<br><attention>10</attention> Lethality<br><attention>15</attention> Ability Haste</stats><br><li><passive>Blackout:</passive> When spotted by an enemy Ward, reveal traps and disable Wards around you for 8 seconds (45s cooldown). Your Attacks instantly kill revealed traps and do triple damage to Wards.</mainText><br>",
       "colloq": ";lethality",
       "plaintext": "Provides trap and ward detection periodically",
       "from": [
@@ -5417,10 +5417,10 @@
         "h": 48
       },
       "gold": {
-        "base": 800,
+        "base": 600,
         "purchasable": true,
-        "total": 2600,
-        "sell": 1820
+        "total": 2400,
+        "sell": 1680
       },
       "tags": [
         "Damage",
@@ -5439,7 +5439,7 @@
         "FlatPhysicalDamageMod": 50
       },
       "effect": {
-        "Effect1Amount": "12",
+        "Effect1Amount": "10",
         "Effect2Amount": "8",
         "Effect3Amount": "45"
       },
@@ -5448,8 +5448,8 @@
     "3181": {
       "name": "Hullbreaker",
       "description": "<mainText><stats><attention>50</attention> Attack Damage<br><attention>400</attention> Health<br><attention>150%</attention> Base Health Regen</stats><br><li><passive>Boarding Party:</passive> While no allied champions are nearby you gain 20-45 <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> and 20% increased damage to towers. Nearby large minions gain 60-135 <scaleArmor>Armor</scaleArmor> and <scaleMR>Magic Resist</scaleMR> and 200% increased damage to towers. <br><br><rules>Boarding Party's resistances decay over 3 seconds when an ally gets too close.</rules><br></mainText><br>",
-      "colloq": ";lethality",
-      "plaintext": "When hunting lone enemy champions gain Attack Speed and Lethality",
+      "colloq": "",
+      "plaintext": "",
       "from": [
         "1037",
         "3044"
@@ -6206,7 +6206,7 @@
     },
     "3748": {
       "name": "Titanic Hydra",
-      "description": "<mainText><stats><attention>30</attention> Attack Damage<br><attention>500</attention> Health</stats><br><li><passive>Colossus:</passive> Gain bonus <scaleAD>Attack Damage equal to 2% bonus Health</scaleAD>.<li><passive>Cleave:</passive> Attacks apply an additional <physicalDamage>(5 + 1.5% max Health) physical damage</physicalDamage> <OnHit>On-Hit</OnHit>, creating a shockwave that deals <physicalDamage>(40 + 3% max Health)  physical damage</physicalDamage> to enemies behind the target.<br><br><rules>Deals 75% for Ranged users. <OnHit>On-Hit</OnHit> damage is also applied to Structures.</rules></mainText><br>",
+      "description": "<mainText><stats><attention>30</attention> Attack Damage<br><attention>500</attention> Health</stats><br><li><passive>Colossus:</passive> Gain bonus <scaleAD>Attack Damage equal to 2% bonus Health</scaleAD>.<li><passive>Cleave:</passive> Attacks apply an additional <physicalDamage>(5 + 1.5% max Health) physical damage</physicalDamage> <OnHit>On-Hit</OnHit>, creating a shockwave that deals <physicalDamage>(40 + 3% max Health)  physical damage</physicalDamage> to enemies behind the target.<br><br><rules>Deals 75% for Ranged users. <OnHit>On-Hit</OnHit> damage is also applied to Structures.<br>Cleave's shockwave does not trigger on structures.</rules></mainText><br>",
       "colloq": ";juggernaut",
       "plaintext": "Deals area of effect damage based on owner's health",
       "from": [
@@ -8087,6 +8087,7 @@
         "SpellDamage",
         "Mana",
         "CooldownReduction",
+        "NonbootsMovement",
         "MagicPenetration",
         "AbilityHaste"
       ],
@@ -8194,7 +8195,7 @@
     },
     "6662": {
       "name": "Frostfire Gauntlet",
-      "description": "<mainText><stats><attention>350</attention> Health<br><attention>25</attention> Armor<br><attention>25</attention> Magic Resist<br><attention>20</attention> Ability Haste</stats><br><li><passive>Immolate :</passive> Taking or dealing damage causes you to begin dealing <magicDamage>(20 - 40 (based on level) + 1% bonus Health) magic damage</magicDamage> per second to nearby enemies (increased by 25% against minions and 150% against monsters) for 3 seconds.<li><passive>Snowbind:</passive> Attacks create a frost field for 1.5 seconds (4s cooldown, 6s cooldown for ranged champions). Enemies that move across the field are <status>Slowed</status> by 25% for melee champions and 12.5% for ranged champions (increased by your <scaleHealth>max Health</scaleHealth>).<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>100</attention> Health and <attention>6%</attention> Size.</mainText><br>",
+      "description": "<mainText><stats><attention>350</attention> Health<br><attention>25</attention> Armor<br><attention>25</attention> Magic Resist<br><attention>20</attention> Ability Haste</stats><br><li><passive>Immolate :</passive> Taking or dealing damage causes you to begin dealing <magicDamage>(12 - 30 (based on level) + 1% bonus Health) magic damage</magicDamage> per second to nearby enemies (increased by 25% against minions and 150% against monsters) for 3 seconds.<li><passive>Snowbind:</passive> Attacks create a frost field for 1.5 seconds (4s cooldown, 6s cooldown for ranged champions). Enemies that move across the field are <status>Slowed</status> by 25% for melee champions and 12.5% for ranged champions (increased by your <scaleHealth>max Health</scaleHealth>).<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>100</attention> Health and <attention>6%</attention> Size.</mainText><br>",
       "colloq": "",
       "plaintext": "High Magic Resist.Passively slow nearby enemies. When spells are cast near you, release a wave of energy that damages and slows.",
       "from": [
@@ -8241,7 +8242,7 @@
     },
     "6664": {
       "name": "Turbo Chemtank",
-      "description": "<mainText><stats><attention>350</attention> Health<br><attention>25</attention> Armor<br><attention>25</attention> Magic Resist<br><attention>20</attention> Ability Haste</stats><br><br><active>Active -</active> <active>Supercharged:</active> Grants <speed>40% Move Speed</speed> towards enemies or enemy turrets for 4 seconds. Once near an enemy (or after 4 seconds) a shockwave is emitted that <status>Slows</status> nearby champions by 50% for 1.5 seconds (90s cooldown).<br><li><passive>Immolate:</passive> Taking or dealing damage causes you to begin dealing <magicDamage>(20 - 40 (based on level) + 1% bonus Health) magic damage</magicDamage> per second to nearby enemies (increased by 25% against minions and 150% against monsters) for 3 seconds.<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>5</attention> Ability Haste</mainText><br>",
+      "description": "<mainText><stats><attention>350</attention> Health<br><attention>25</attention> Armor<br><attention>25</attention> Magic Resist<br><attention>20</attention> Ability Haste</stats><br><br><active>Active -</active> <active>Supercharged:</active> Grants <speed>40% Move Speed</speed> towards enemies or enemy turrets for 4 seconds. Once near an enemy (or after 4 seconds) a shockwave is emitted that <status>Slows</status> nearby champions by 50% for 1.5 seconds (90s cooldown).<br><li><passive>Immolate:</passive> Taking or dealing damage causes you to begin dealing <magicDamage>(12 - 30 (based on level) + 1% bonus Health) magic damage</magicDamage> per second to nearby enemies (increased by 25% against minions and 150% against monsters) for 3 seconds.<br><br><rarityMythic>Mythic Passive:</rarityMythic> Grants all other <rarityLegendary>Legendary</rarityLegendary> items <attention>5</attention> Ability Haste</mainText><br>",
       "colloq": "",
       "plaintext": "Immobilize enemies to gain a shield. Activate to run faster at opponents.",
       "from": [
@@ -8969,10 +8970,6 @@
     {
       "id": "LegendaryClearingItems",
       "MaxGroupOwnable": "1"
-    },
-    {
-      "id": "LethalityItems",
-      "MaxGroupOwnable": "-1"
     },
     {
       "id": "LifelineItems",

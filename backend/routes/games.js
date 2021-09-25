@@ -14,6 +14,7 @@ router.route('/').get((req, res) => {
 
 router.route('/callback').post((req, res) => {
   // Game submission endpoint
+  console.log("hit");
   let seasonNumber = 0;
   try {
     seasonNumber = Number(req.body.metaData);
@@ -53,7 +54,7 @@ router.route('/add/:gameid').post((req, res) => {
 });
 
 router.route('/:id').get((req, res) => {	
-  Game.find({gameId: Number(req.params.id)}).populate('player')	
+  Game.find({gameId: req.params.id}).populate('player')	
     .then(game => res.json(game))	
     .catch(err => res.status(400).json('Error: ' + err));	
 });	
@@ -96,6 +97,15 @@ router.route('/update/:id').post((req, res) => {
     })	
     .catch(err => res.status(400).json('Error: ' + err));	
 });	
+
+router.route('/update/player/:name').post((req, res) => {
+  matcher.updateGames(req.params.name).then((data) => {
+    console.log(data);
+    res.json(data);
+  }, (err) => {
+    res.json(err);
+  });
+})
 
 router.route("/pray/:game/:code").put((req, res) => {
   matcher.saveGame(req.params.game, req.params.code).then(data => {

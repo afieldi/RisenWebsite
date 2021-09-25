@@ -22,6 +22,7 @@ export default class DetailedStats extends Component {
     super(props);
     this.state = {
       playerName: this.props.match.params.player,
+      playerUpdating: false,
       seasons: [],
       statData: [],
       accumulatedStats: {},
@@ -117,7 +118,6 @@ export default class DetailedStats extends Component {
     let url = process.env.REACT_APP_BASE_URL + "/stats/player/name/" + playerName;
     fetch(url).then((data) => {
       data.json().then(data => {
-        // console.log();
         this.setState({
             statData: data,
             accumulatedStats: this.computeAccStats(data),
@@ -146,6 +146,30 @@ export default class DetailedStats extends Component {
         return (<img src={midLaneIcon}></img>)
         break;
     }
+  }
+
+  updatePlayer() {
+    this.setState({
+      playerUpdating: true
+    });
+    let url = process.env.REACT_APP_BASE_URL + "/games/update/player/" + this.state.playerName;
+    fetch(url, {
+      method: "POST"
+    }).then(res => {
+      if (res.status === 200) {
+        alert("Updated summoner");
+        window.location.reload();
+      }
+      else if(res.status === 404) {
+        alert("Couldn't find summoner name to update");
+      }
+      else {
+        alert("Something went wrong");
+      }
+      this.setState({
+        playerUpdating: false
+      });
+    });
   }
 
   performFilter() {
@@ -193,7 +217,7 @@ export default class DetailedStats extends Component {
         }
         return true;
       });
-  
+      console.log(filteredData);
       this.setState({
         avgData: data,
         filteredData: filteredData,
@@ -209,7 +233,21 @@ export default class DetailedStats extends Component {
         <div className="dark-section text-light">
           <div className="container">
             <div>
-                <h1>{this.state.playerName}</h1>
+                <h1>
+                  {this.state.playerName}
+                  <Button onClick={this.updatePlayer.bind(this)} disabled={this.state.playerUpdating}
+                    className="btn btn-warning" style={{display: 'inline', margin: '0 15px'}}>
+                    {
+                      this.state.playerUpdating ? 
+                      <i
+                        className="fa fa-refresh fa-spin"
+                        style={{ marginRight: "5px" }}
+                      /> :
+                      <span>Update</span>
+                    }
+                  </Button>
+                  {/* <button type="button" className="btn btn-warning" style={{display: 'inline', margin: '0 15px'}}>Update</button> */}
+                </h1>
                 <hr style={{backgroundColor: 'white'}}></hr>
             </div>
               <Container>

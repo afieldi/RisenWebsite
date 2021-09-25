@@ -2,8 +2,8 @@ const router = require('express').Router();
 const PlayerModel = require('../models/player.model');
 const GameModel = require('../models/game.model');
 const TeamGameModel = require('../models/teamgame.model');
-const TeamModel = require("../models/team.model");
 const mongoose = require('mongoose');
+const { createPlayer } = require('../src/player');
 
 const avgPipe = {
     avg_gameDuration: { $avg: "$gameDuration" },
@@ -27,15 +27,6 @@ const avgPipe = {
     avg_neutralMinionsKilledTeamJungle: { $avg: "$neutralMinionsKilledTeamJungle" },
     avg_neutralMinionsKilledEnemyJungle: { $avg: "$neutralMinionsKilledEnemyJungle" },
     avg_firstItemTime: { $avg: "$firstItemTime" },
-    avg_goldGen10: { $avg: "$goldGen10" },
-    avg_goldGen20: { $avg: "$goldGen20" },
-    avg_goldGen30: { $avg: "$goldGen30" },
-    avg_xpGen10: { $avg: "$xpGen10" },
-    avg_xpGen20: { $avg: "$xpGen20" },
-    avg_xpGen30: { $avg: "$xpGen30" },
-    avg_csGen10: { $avg: "$csGen10" },
-    avg_csGen20: { $avg: "$csGen20" },
-    avg_csGen30: { $avg: "$csGen30" },
 
     // Damage
     avg_physicalDamageDealtToChampions: { $avg: "$physicalDamageDealtToChampions" },
@@ -83,8 +74,7 @@ const avgPipe = {
     total_games: { $sum: 1 }
 }
 
-// What the fuck am I doing here. Check if this route is used and fix it
-// Why am I getting a gamemodel. This makes no sense
+// Get player info by id
 router.route('/player/id/:id').get((req, res) => {
     GameModel.find({player: mongoose.Types.ObjectId(req.params.id)}).then(games => {
         res.json(games);
@@ -93,10 +83,19 @@ router.route('/player/id/:id').get((req, res) => {
     });
 });
 
+// Get player info by name.
+// To make things easier, if their name doesn't exist, but is valid, create the player object
+// Yes, I am 100% aware this is bad practice. No, I really don't care
 router.route('/player/name/:id').get((req, res) => {
     PlayerModel.findOne({searchName: req.params.id.toLowerCase().replace(/\s/g, '')}).then((player) => {
         if (player === null) {
-            res.status(404).json("Player not found");
+            player = createPlayer(req.params.id);
+            if (player === null) {
+                res.status(404).json("Player not found");
+            }
+            else {
+                res.json([]);
+            }
             return;
         }
         GameModel.find({player: player._id}).then(games => {
@@ -453,9 +452,37 @@ router.route('/brief').get((req, res) => {
     })
 
     GameModel.aggregate(pipe).sort(sortObject).skip(page*size).limit(size).then(games => {
+        if (games.length === 0 && playerName) {
+            // Giga hack
+            // If the player doesn't exist, show them anyway so someone has something to click on
+            // This will bring them to the detailed stats page where they can update themselves
+            res.json([
+                {
+                    "_id": {
+                        "player": playerName,
+                        "lane": "ANY",
+                        "playerId": "",
+                        "sortablePlayer": ""
+                    },
+                    "avg_kills": 0,
+                    "avg_deaths": 0,
+                    "avg_assists": 0,
+                    "avg_goldEarned": 0,
+                    "avg_totalMinionsKilled": 0,
+                    "avg_totalDamageDealtToChampions": 0,
+                    "avg_duration": 0,
+                    "wins": 0,
+                    "total_games": 0,
+                    "dpm": 0,
+                    "gpm": 0
+                }
+            ])
+        }
         res.json(games)
     }, (err) => {
-        res.status(404).json("Error: " + err);
+        // Im a lazy ass bad coder so returning an error here causing a bug in front end. So return empty array
+        res.json([]);
+        // res.status(404).json("Error: " + err);
     });
 });
 

@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
 
 const gameSchema = new Schema({
     player: {type: Schema.Types.ObjectId, ref: 'Player', required: true },
-    team: {type: Schema.Types.ObjectId, ref: 'Team', required: true },
     season: {type: Schema.Types.ObjectId, ref: 'Season', required: true },
-    gameId: { type: Number },
+    gameId: { type: String },
     gameStart: { type: Number },
     patch: { type: String },
     gameDuration: { type: Number, sparse: true },
@@ -21,6 +20,7 @@ const gameSchema = new Schema({
     assists: { type: Number, sparse: true },
     champLevel: { type: Number },
     win: { type: Boolean },
+    championTransform: { type: Number },
 
     // Combat
     kills15: { type: Number },
@@ -36,20 +36,10 @@ const gameSchema = new Schema({
 
     // Income
     goldEarned: { type: Number, sparse: true },
+    goldSpent: { type: Number },
     totalMinionsKilled: { type: Number, sparse: true },
     neutralMinionsKilled: { type: Number },
-    neutralMinionsKilledTeamJungle: { type: Number },
-    neutralMinionsKilledEnemyJungle: { type: Number },
     firstItemTime: { type: Number },
-    goldGen10: { type: Number },
-    goldGen20: { type: Number },
-    goldGen30: { type: Number },
-    xpGen10: { type: Number },
-    xpGen20: { type: Number },
-    xpGen30: { type: Number },
-    csGen10: { type: Number },
-    csGen20: { type: Number },
-    csGen30: { type: Number },
 
     // Damage
     physicalDamageDealtToChampions: { type: Number },
@@ -60,11 +50,12 @@ const gameSchema = new Schema({
     magicalDamageTaken: { type: Number },
     trueDamageTaken: { type: Number },
     totalDamageTaken: { type: Number },
-    damageDealtToObjectives: { type: Number },
     damageSelfMitigated: { type: Number },
-
+    
     totalHeal: { type: Number },
-
+    totalHealsOnTeammates: { type: Number },
+    totalDamageShieldedOnTeammates: { type: Number },
+    
     // Vision
     visionScore: { type: Number, sparse: true },
     wardsPlaced15: { type: Number },
@@ -72,6 +63,12 @@ const gameSchema = new Schema({
     wardsKilled15: { type: Number },
     wardsKilled: { type: Number },
     visionWardsBoughtInGame: { type: Number },
+    
+    // Objectives
+    damageDealtToObjectives: { type: Number },
+    dragonKills: { type: Number },
+    firstTowerTakedown: { type: Boolean },
+    firstBloodTakedown: { type: Boolean },
 
     // Fun
     firstBloodKill: { type: Boolean },
@@ -83,6 +80,7 @@ const gameSchema = new Schema({
     tripleKills: { type: Number },
     quadraKills: { type: Number },
     pentaKills: { type: Number },
+    consumablesPurchased: { type: Number },
 
     // Timeline
     csDiff10: { type: Number },
@@ -110,11 +108,17 @@ const gameSchema = new Schema({
     primaryStyle: { type: Number },
     secondaryStyle: { type: Number },
     shards: { type: [Number] },
-    summoners: { type: [Number] },
+
+    summoner1Id: { type: Number },
+    summoner1Casts: { type: Number },
+    summoner2Id: { type: Number },
+    summoner2Casts: { type: Number },
 
     // Computed
     damagePerGold: { type: Number },
-
+    damageShare: { type: Number },
+    goldShare: { type: Number },
+    visionShare: { type: Number }
 }, {
     timestamps: true,
 });
