@@ -31,47 +31,59 @@ export default function PlayerStats(props) {
 
   const [avgData, setAvgData] = useState({});
 
-  function generateGoldData(player) {
-    let data = [];
-    let risenAvg = 0;
-    for (let i in player.goldMap) {
-      if (i < 10) {
-        risenAvg += avgData[player.lane] ? avgData[player.lane].avg_goldGen10 : 0;
-      }
-      else if (i < 20) {
-        risenAvg += avgData[player.lane] ? avgData[player.lane].avg_goldGen20 : 0;
-      }
-      else {
-        risenAvg += avgData[player.lane] ? avgData[player.lane].avg_goldGen30 : 0;
-      }
+  // function generateGoldData(player) {
+  //   let data = [];
+  //   let risenAvg = 0;
+  //   for (let i in player.goldMap) {
+  //     if (i < 10) {
+  //       risenAvg += avgData[player.lane] ? avgData[player.lane].avg_goldGen10 : 0;
+  //     }
+  //     else if (i < 20) {
+  //       risenAvg += avgData[player.lane] ? avgData[player.lane].avg_goldGen20 : 0;
+  //     }
+  //     else {
+  //       risenAvg += avgData[player.lane] ? avgData[player.lane].avg_goldGen30 : 0;
+  //     }
 
+  //     data.push({
+  //       "time": i,
+  //       player: player.goldMap[i],
+  //       risen: risenAvg
+  //     });
+  //   }
+  //   return data;
+  // }
+
+  function getLaneOpponent(player) {
+    let otherPlayers = player.teamId === 100 ? redPlayers : bluePlayers;
+    for (let p of otherPlayers) {
+      if (p.lane === player.lane) {
+        return p;
+      }
+    }
+  }
+
+  function generateGoldData(player) {
+    let opponent = getLaneOpponent(player);
+    let data = [];
+    for (let i in player.goldMap) {
       data.push({
         "time": i,
         player: player.goldMap[i],
-        risen: risenAvg
+        risen: opponent.goldMap[i]
       });
     }
     return data;
   }
 
   function generateEXPData(player) {
+    let opponent = getLaneOpponent(player);
     let data = [];
-    let risenAvg = 0;
-    for (let i in player.xpMap) {
-      if (i < 10) {
-        risenAvg += avgData[player.lane] ? avgData[player.lane].avg_xpGen10 : 0;
-      }
-      else if (i < 20) {
-        risenAvg += avgData[player.lane] ? avgData[player.lane].avg_xpGen20 : 0;
-      }
-      else {
-        risenAvg += avgData[player.lane] ? avgData[player.lane].avg_xpGen30 : 0;
-      }
-
+    for (let i in player.goldMap) {
       data.push({
         "time": i,
         player: player.xpMap[i],
-        risen: risenAvg
+        risen: opponent.xpMap[i]
       });
     }
     return data;
@@ -215,8 +227,8 @@ export default function PlayerStats(props) {
                               <CartesianGrid stroke="#ccc" />
                               <XAxis tick={{fill: 'white'}} />
                               <YAxis tick={{fill: 'white'}} />
-                              <Area name="Risen Average" dataKey="risen" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6}></Area>
-                              <Area name="You" dataKey="player" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6}></Area>
+                              <Area name={getLaneOpponent(v).player.name} dataKey="risen" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6}></Area>
+                              <Area name={v.player.name} dataKey="player" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6}></Area>
                               <Legend />
                             </AreaChart>
                           </ResponsiveContainer>
@@ -233,8 +245,8 @@ export default function PlayerStats(props) {
                               <CartesianGrid stroke="#ccc" />
                               <XAxis tick={{fill: 'white'}} />
                               <YAxis tick={{fill: 'white'}} />
-                              <Area name="Risen Average" dataKey="risen" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6}></Area>
-                              <Area name="You" dataKey="player" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6}></Area>
+                              <Area name={getLaneOpponent(v).player.name} dataKey="risen" stroke="#e5b575" fill="#e5b575" fillOpacity={0.6}></Area>
+                              <Area name={v.player.name} dataKey="player" stroke="#6d83ff" fill="#6d83ff" fillOpacity={0.6}></Area>
                               <Legend />
                             </AreaChart>
                           </ResponsiveContainer>

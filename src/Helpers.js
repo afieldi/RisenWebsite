@@ -92,3 +92,11 @@ export function getTextColorByLevel(level) {
         "#3eff05"
     ]
 }
+
+export function msToSec(millis) {
+    return (millis / 1000)
+}
+
+export function msToMin(millis) {
+    return msToSec(millis) / 60;
+}

@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 
 import { Container, Form } from "react-bootstrap";
-import { customRound, matchDict } from '../../Helpers';
+import { customRound, matchDict, msToMin } from '../../Helpers';
 import { BarChart, CartesianGrid, XAxis, YAxis, Bar, Tooltip, Legend, ReferenceLine, ResponsiveContainer} from 'recharts';
 
 import DotMap from '../dotmap.component';
@@ -109,8 +109,8 @@ export default class CombatStats extends Component {
     getOffensiveData() {
         let barElements = [
             () => {
-                let v1 = customRound(((this.accStats['avg_kills']+this.accStats['avg_assists'])*60)/this.accStats["avg_gameDuration"], 2);
-                let v2 = customRound(((this.avgData['avg_kills']+this.avgData['avg_assists'])*60)/this.avgData["avg_gameDuration"], 2);
+                let v1 = customRound(((this.accStats['avg_kills']+this.accStats['avg_assists'])*60)/msToMin(this.accStats["avg_gameDuration"]), 2);
+                let v2 = customRound(((this.avgData['avg_kills']+this.avgData['avg_assists'])*60)/msToMin(this.avgData["avg_gameDuration"]), 2);
                 v1 = v1 ? v1 : 0;
                 v2 = v2 ? v2 : 0;
                 let vm = Math.max(v1, v2);
@@ -190,13 +190,13 @@ export default class CombatStats extends Component {
     getDefensiveData() {
         let barElements = [
             () => {
-                let v1 = customRound(((this.accStats['avg_deaths'])*60)/this.accStats["avg_gameDuration"], 2);
-                let v2 = customRound(((this.avgData['avg_deaths'])*60)/this.avgData["avg_gameDuration"], 2);
+                let v1 = customRound(((this.accStats['avg_deaths'])*60)/msToMin(this.accStats["avg_gameDuration"]), 2);
+                let v2 = customRound(((this.avgData['avg_deaths'])*60)/msToMin(this.avgData["avg_gameDuration"]), 2);
                 v1 = v1 ? v1 : 0;
                 v2 = v2 ? v2 : 0;
                 let vm = Math.max(v1, v2);
                 return {
-                  name: `Deaths /min`,
+                  name: `Deaths/Min`,
                   player: (v1*.9/vm),
                   risen: v2*.9/vm,
                   playerAct: v1,

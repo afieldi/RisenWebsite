@@ -3,7 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const playerSchema = new Schema({
-    accountId: {
+    summonerId: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: 3
+    },
+    puuid: {
         type: String,
         required: true,
         unique: true,
@@ -16,8 +23,7 @@ const playerSchema = new Schema({
     searchName: {
         type: String
     },
-    notes: { type: String },
-    teams: [{type: Schema.Types.ObjectId, ref: 'Team'}]
+    notes: { type: String }
 }, {
     timestamps: true,
 });

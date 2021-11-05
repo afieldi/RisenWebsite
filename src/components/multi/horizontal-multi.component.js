@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
-import { customRound } from '../../Helpers';
+import { customRound, msToMin } from '../../Helpers';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer } from 'recharts';
 
@@ -27,6 +27,7 @@ export default class HorizontalMulti extends Component {
   createRadarChartData() {
     console.log(this.props.player)
     // TODO: Your text values don't change when changing the targeted role in filter
+    let gameTime = msToMin(this.props.player['avg_gameDuration']);
     let radarElements = [
       () => {
           let v1 = customRound((this.props.player['avg_kills'] + this.props.player['avg_assists']) / this.props.player['avg_deaths'], 4);
@@ -42,8 +43,8 @@ export default class HorizontalMulti extends Component {
           }
         },
         () => { 
-          let v1 = customRound(((this.props.player['avg_totalMinionsKilled'] + this.props.player['avg_neutralMinionsKilled'])*60)/this.props.player['avg_gameDuration'], 4);
-          let v2 = customRound(((this.props.avgData['avg_totalMinionsKilled'] + this.props.avgData['avg_neutralMinionsKilled'])*60)/this.props.avgData['avg_gameDuration'], 4);
+          let v1 = customRound(((this.props.player['avg_totalMinionsKilled'] + this.props.player['avg_neutralMinionsKilled']))/gameTime, 4);
+          let v2 = customRound(((this.props.avgData['avg_totalMinionsKilled'] + this.props.avgData['avg_neutralMinionsKilled']))/gameTime, 4);
           v1 = v1 ? v1 : 0;
           v2 = v2 ? v2 : 0;
           let vm = v2 * 1.25;
@@ -54,8 +55,8 @@ export default class HorizontalMulti extends Component {
           }
       },
       () => { 
-          let v1 = customRound((this.props.player['avg_totalDamageDealtToChampions']*60)/this.props.player['avg_gameDuration'], 4);
-          let v2 = customRound((this.props.avgData['avg_totalDamageDealtToChampions']*60)/this.props.avgData['avg_gameDuration'], 4);
+          let v1 = customRound((this.props.player['avg_totalDamageDealtToChampions'])/gameTime, 4);
+          let v2 = customRound((this.props.avgData['avg_totalDamageDealtToChampions'])/gameTime, 4);
           v1 = v1 ? v1 : 0;
           v2 = v2 ? v2 : 0;
           let vm = v2 * 1.25;
@@ -67,8 +68,8 @@ export default class HorizontalMulti extends Component {
       },
       () => {
           
-          let v1 = customRound((this.props.player['avg_visionScore']*60)/this.props.player['avg_gameDuration'], 4);
-          let v2 = customRound((this.props.avgData['avg_visionScore']*60)/this.props.avgData['avg_gameDuration'], 4);
+          let v1 = customRound((this.props.player['avg_visionScore'])/gameTime, 4);
+          let v2 = customRound((this.props.avgData['avg_visionScore'])/gameTime, 4);
           v1 = v1 ? v1 : 0;
           v2 = v2 ? v2 : 0;
           let vm = v2 * 1.25;
@@ -80,8 +81,8 @@ export default class HorizontalMulti extends Component {
       },
       () => {
           
-          let v1 = customRound((this.props.player['avg_goldEarned']*60)/this.props.player['avg_gameDuration'], 4);
-          let v2 = customRound((this.props.avgData['avg_goldEarned']*60)/this.props.avgData['avg_gameDuration'], 4);
+          let v1 = customRound((this.props.player['avg_goldEarned'])/gameTime, 4);
+          let v2 = customRound((this.props.avgData['avg_goldEarned'])/gameTime, 4);
           v1 = v1 ? v1 : 0;
           v2 = v2 ? v2 : 0;
           let vm = v2 * 1.25;
@@ -93,8 +94,8 @@ export default class HorizontalMulti extends Component {
       },
       () => {
           
-          let v1 = customRound((this.props.player['avg_wardsKilled']*60)/this.props.player['avg_gameDuration'], 4);
-          let v2 = customRound((this.props.avgData['avg_wardsKilled']*60)/this.props.avgData['avg_gameDuration'], 4);
+          let v1 = customRound((this.props.player['avg_wardsKilled'])/gameTime, 4);
+          let v2 = customRound((this.props.avgData['avg_wardsKilled'])/gameTime, 4);
           v1 = v1 ? v1 : 0;
           v2 = v2 ? v2 : 0;
           let vm = v2 * 1.25;

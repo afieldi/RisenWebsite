@@ -1,10 +1,7 @@
 // require('dotenv').config();
-const { leagueApi, constants, makeRequest } = require('./api')
-const { verifyPlayer, createPlayer, updatePlayerName } = require('./player')
+const { leagueApi, constants, makeRequest } = require('./api');
+const { verifyPlayer, createPlayer, updatePlayerName } = require('./player');
 const {spawn} = require('child_process');
-const mongoose = require('mongoose');
-const fetch = require("node-fetch");
-
 // const uri = "mongodb+srv://admin:letmeinplease@cluster0.bwvsn.mongodb.net/newdb?retryWrites=true&w=majority";
 // mongoose
 //     .connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
@@ -18,18 +15,24 @@ const timelineAnalyizer = require('./timeline')
 
 const GameModel = require('../models/game.model');
 const PlayerModel = require('../models/player.model');
-const TeamModel = require('../models/team.model');
 const TeamGameModel = require('../models/teamgame.model');
 const SeasonModel = require('../models/season.model');
 const CodeModel = require('../models/code.model');
-const { exception } = require('console');
+
+async function updateGames(name) {
+    let summoner = (await leagueApi.Summoner.getByName(name, constants.Regions.AMERICA_NORTH)).response;
+    let matchUrl = `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${summoner.puuid}/ids?type=tourney&start=0&count=20`;
+    let matches = await (await makeRequest(matchUrl, "GET", process.env.RIOT_API)).json();
+    await saveGames(matches);
+    return "Done";
+}
 
 // This will be used later
 async function saveGames(matchIds, tCode) {
     for ( const matchId of matchIds ) {
         try {
             // console.log("adding game: " + matchId);
-            await saveGame(matchId, tCode);
+            await saveGame(matchId);
             // console.log("Saved game: " + matchId);
         } catch (error) {
             console.log(error);
@@ -38,82 +41,81 @@ async function saveGames(matchIds, tCode) {
     }
 }
 
-async function getRoles(gameData, timeline) {
-    return new Promise( (resolve, reject) => {
-    //     const python = spawn('python', ['./src/roles.py']);
-    //     python.stdin.write(JSON.stringify(gameData));
-    //     python.stdin.write("\r\n");
-
-    //     python.stdin.write(JSON.stringify(timeline));
-    //     python.stdin.end();
-        
-    //     python.stdout.on('data', function (data) {
-    //         console.log(data);
-    //         resolve(data);
-    //     });
-
-    //     python.stdout.on('error', (data) => {
-    //         reject();
-    //     })
-    // The above stuff involving running python doesn't work with GCP as you can't have nodejs and python at the same time
-    // So instead just return filler stuff so nothing else has to be changed. Anything involving role will have to be commented out
-    //  on the front end as well.
-    // Update: Risen should be using LCS order, so this will be the order they will appear in the match history. Bless
-        resolve({
-            "1": "TOP",
-            "2": "JUNGLE",
-            "3": "MIDDLE",
-            "4": "BOTTOM",
-            "5": "SUPPORT",
-            "6": "TOP",
-            "7": "JUNGLE",
-            "8": "MIDDLE",
-            "9": "BOTTOM",
-            "10": "SUPPORT"
-        })
-    });
-
+function getRoles(gameData) {
+    let roleMapping = {};
+    for (let p of gameData.info.participants) {
+        if (p.teamPosition === "UTILITY") {
+            roleMapping[String(p.participantId)] = "SUPPORT";
+        }
+        else {
+            roleMapping[String(p.participantId)] = 
+                p.teamPosition;
+        }
+    }
+    return roleMapping;
 }
 
-async function saveTeamGame(gameData, teams, season) {
-    let bD = gameData.teams[0]; // BlueData
-    let rD = gameData.teams[1]; // RedData
+function calculateTeamTotal(participants) {
+    let base = {
+        "gold": 0,
+        "exp": 0,
+        "damageDealt": 0,
+        "damageTaken": 0,
+        "vision": 0
+    }
+
+    let data = {};
+    for (let player of participants) {
+        if (!data[player.teamId]) {
+            data[player.teamId] = {...base};
+        }
+        data[player.teamId].damageDealt += player.totalDamageDealtToChampions;
+        data[player.teamId].gold += player.goldEarned;
+        data[player.teamId].vision += player.visionScore;
+    }
+    return data;
+}
+
+async function saveTeamGame(gameData, season) {
+    let bD = gameData.info.teams[0]; // BlueData
+    let rD = gameData.info.teams[1]; // RedData
+
+    let bO = bD.objectives;
+    let rO = rD.objectives;
+    // Me good coder. Me no duplicate code
     let btO = await TeamGameModel.create({
         gameId: gameData.gameId,
         season: season,
         gameDuration: gameData.gameDuration,
-        team: teams[0],
         side: 'blue',
-        towerKills: bD.towerKills,
-        riftHeraldKills: bD.riftHeraldKills,
-        firstBlood: bD.firstBlood,
-        inhibitorKills: bD.inhibitorKills,
+        towerKills: bO.tower.kills,
+        riftHeraldKills: bO.riftHerald.kills,
+        firstBlood: bO.champion.first,
+        inhibitorKills: bO.inhibitor.kills,
         bans: bD.bans.map(b => b.championId),
-        dragonKills: bD.dragonKills,
-        baronKills: bD.baronKills,
-        win: bD.win === "Win",
+        dragonKills: bO.dragon.kills,
+        baronKills: bO.baron.kills,
+        win: bD.win,
     });
 
     let rtO = await TeamGameModel.create({
         gameId: gameData.gameId,
         season: season,
         gameDuration: gameData.gameDuration,
-        team: teams[1],
         side: 'red',
-        towerKills: rD.towerKills,
-        riftHeraldKills: rD.riftHeraldKills,
-        firstBlood: rD.firstBlood,
-        inhibitorKills: rD.inhibitorKills,
-        bans: rD.bans.map(b => b.championId),
-        dragonKills: rD.dragonKills,
-        baronKills: rD.baronKills,
-        win: rD.win === "Win"
+        towerKills: rO.tower.kills,
+        riftHeraldKills: rO.riftHerald.kills,
+        firstBlood: rO.champion.first,
+        inhibitorKills: rO.inhibitor.kills,
+        bans: bD.bans.map(b => b.championId),
+        dragonKills: rO.dragon.kills,
+        baronKills: rO.baron.kills,
+        win: rD.win
     });
-    console.log("aa")
     return [btO, rtO];
 }
 
-async function saveGame(matchId, tCode) {
+async function saveGame(matchId) {
     const teamgames = await TeamGameModel.find({gameId: matchId});
     const games = await GameModel.find({gameId: matchId});
     if (teamgames.length > 0 && games.length > 0) {
@@ -122,21 +124,29 @@ async function saveGame(matchId, tCode) {
         return;
     }
 
-    let url = `https://na1.api.riotgames.com/lol/match/v4/matches/${matchId}/by-tournament-code/${tCode}`;
+    let url = `https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}`;
     // console.log(url)
     // Wait 1.3 seconds so we can't overload the api key. 
     // await setTimeout(() => {}, 1300);
     makeRequest(
-        url, "GET", process.env.RIOT_TOURNEY_API
+        url, "GET", process.env.RIOT_API
     ).then(
         async gameData => {
             gameData = await gameData.json();
-        
-            const teams = await getTeams(gameData.participantIdentities);
+            let tCode = gameData.info.tournamentCode;
+            if (!tCode) {
+                console.log("Will not save game! No associated tournament code");
+                return;
+            }
+            const metadata = gameData.metadata;
+            const info = gameData.info;
             const code = await CodeModel.findOne({code: tCode});
-
+            if (!code) {
+                console.log(`Will not save game! Code (${tCode}) was not generated by us`);
+                return;
+            }
             if (teamgames.length === 0) {
-                saveTeamGame(gameData, teams, code.season);
+                saveTeamGame(gameData, code.season);
             }
             if (games.length !== 0) {
                 return;
@@ -146,46 +156,38 @@ async function saveGame(matchId, tCode) {
                 // We already have this game in our db. Move on.
                 return;
             }
-            const timeline = (await leagueApi.Match.timeline(matchId, constants.Regions.AMERICA_NORTH)).response;
-            const laneAssignments = await getRoles(gameData, timeline);
+            // const timeline = (await leagueApi.Match.timeline(matchId, constants.Regions.AMERICA_NORTH)).response;
+            const timelineUrl = `https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}/timeline`
+            const timeline = await (await makeRequest(timelineUrl, "GET", process.env.RIOT_API)).json();
+            const laneAssignments = getRoles(gameData);
             
-            const timelineStats = timelineAnalyizer.getStats(timeline, laneAssignments);
-            
-            for (const [i, player] of Object.entries(gameData.participants)) {
-                console.log(matchId);
-                const playerTeam = await verifyExistence(
-                    gameData.participantIdentities[i].player.accountId,
-                    i < 5 ? teams[0] : teams[1]
-                );
-
-                updatePlayerName(gameData.participantIdentities[i].player);
+            const timelineStats = timelineAnalyizer.getStats(timeline.info, laneAssignments);
+            const teamTotals = calculateTeamTotal(gameData.info.participants);
+            for (const [i, player] of Object.entries(gameData.info.participants)) {
+                console.log("Saving match: " + matchId + " for player: " + player.summonerName);
+                let playerObject = await verifyPlayer(player);
                 
                 const stats = player.stats; // Just so I have to type less
-                if (!player.timeline.csDiffPerMinDeltas) {
-                    // Do this so it is set to 0 later and doesn't error out
-                    player.timeline.csDiffPerMinDeltas = {}
-                }
 
                 // Burn this code
                 await GameModel.create({
-                    player: playerTeam[0]._id,
-                    team: playerTeam[1]._id,
+                    player: playerObject._id,
                     season: code.season,
                     gameId: matchId,
-                    gameStart: gameData.gameCreation,
-                    patch: gameData.gameVersion,
-                    gameDuration: gameData.gameDuration,
+                    gameStart: info.gameCreation,
+                    patch: info.gameVersion,
+                    gameDuration: info.gameDuration,
                     championId: player.championId,
                     teamId: player.teamId, // 100 for blue, 200 for red
                     spell1Id: player.spell1Id,
                     spell2Id: player.spell2Id,
                 
                     // Base Stats
-                    kills: stats.kills ? stats.kills : 0,
-                    deaths: stats.deaths ? stats.deaths : 0,
-                    assists: stats.assists ? stats.assists : 0,
-                    champLevel: stats.champLevel,
-                    win: stats.win,
+                    kills: player.kills ? player.kills : 0,
+                    deaths: player.deaths ? player.deaths : 0,
+                    assists: player.assists ? player.assists : 0,
+                    champLevel: player.champLevel,
+                    win: player.win,
 
                     // Combat
                     kills15: timelineStats[+i+1].kills15,
@@ -200,54 +202,50 @@ async function saveGame(matchId, tCode) {
                     assistMap: timelineStats[+i+1].assistMap,
                 
                     // Income
-                    goldEarned: stats.goldEarned,
-                    totalMinionsKilled: stats.totalMinionsKilled ? stats.totalMinionsKilled : 0,
-                    neutralMinionsKilled: stats.neutralMinionsKilled ? stats.neutralMinionsKilled : 0,
-                    neutralMinionsKilledTeamJungle: stats.neutralMinionsKilledTeamJungle ? stats.neutralMinionsKilledTeamJungle : 0,
-                    neutralMinionsKilledEnemyJungle: stats.neutralMinionsKilledEnemyJungle ? stats.neutralMinionsKilledEnemyJungle : 0,
+                    goldEarned: player.goldEarned,
+                    totalMinionsKilled: player.totalMinionsKilled ? player.totalMinionsKilled : 0,
+                    neutralMinionsKilled: player.neutralMinionsKilled ? player.neutralMinionsKilled : 0,
                     firstItemTime: timelineStats[+i+1].firstItemTime,
-                    goldGen10: player.timeline.goldPerMinDeltas["0-10"],
-                    goldGen20: player.timeline.goldPerMinDeltas["10-20"],
-                    goldGen30: player.timeline.goldPerMinDeltas["20-30"],
-                    xpGen10: player.timeline.xpPerMinDeltas["0-10"],
-                    xpGen20: player.timeline.xpPerMinDeltas["10-20"],
-                    xpGen30: player.timeline.xpPerMinDeltas["20-30"],
-                    csGen10: player.timeline.creepsPerMinDeltas["0-10"],
-                    csGen20: player.timeline.creepsPerMinDeltas["10-20"],
-                    csGen30: player.timeline.creepsPerMinDeltas["20-30"],
                 
                     // Damage
-                    physicalDamageDealtToChampions: stats.physicalDamageDealtToChampions,
-                    magicDamageDealtToChampions: stats.magicDamageDealtToChampions,
-                    trueDamageDealtToChampions: stats.trueDamageDealtToChampions,
-                    totalDamageDealtToChampions: stats.totalDamageDealtToChampions,
-                    physicalDamageTaken: stats.physicalDamageTaken,
-                    magicalDamageTaken: stats.magicalDamageTaken,
-                    trueDamageTaken: stats.trueDamageTaken,
-                    totalDamageTaken: stats.totalDamageTaken,
-                    damageDealtToObjectives: stats.damageDealtToObjectives,
-                    damageSelfMitigated: stats.damageSelfMitigated,
-                
-                    totalHeal: stats.totalHeal,
-                
+                    physicalDamageDealtToChampions: player.physicalDamageDealtToChampions,
+                    magicDamageDealtToChampions: player.magicDamageDealtToChampions,
+                    trueDamageDealtToChampions: player.trueDamageDealtToChampions,
+                    totalDamageDealtToChampions: player.totalDamageDealtToChampions,
+                    physicalDamageTaken: player.physicalDamageTaken,
+                    magicalDamageTaken: player.magicalDamageTaken,
+                    trueDamageTaken: player.trueDamageTaken,
+                    totalDamageTaken: player.totalDamageTaken,
+                    damageSelfMitigated: player.damageSelfMitigated,
+                    
+                    totalHeal: player.totalHeal,
+                    totalHealsOnTeammates: player.totalHealsOnTeammates,
+                    totalDamageShieldedOnTeammates: player.totalDamageShieldedOnTeammates,
+                    
                     // Vision
-                    visionScore: stats.visionScore,
+                    visionScore: player.visionScore,
                     wardsPlaced15: timelineStats[+i+1].wardsPlaced15,
-                    wardsPlaced: stats.wardsPlaced ? stats.wardsPlaced : 0,
+                    wardsPlaced: player.wardsPlaced ? player.wardsPlaced : 0,
                     wardsKilled15: timelineStats[+i+1].wardsKilled15,
-                    wardsKilled: stats.wardsKilled ? stats.wardsKilled : 0,
-                    visionWardsBoughtInGame: stats.visionWardsBoughtInGame,
+                    wardsKilled: player.wardsKilled ? player.wardsKilled : 0,
+                    visionWardsBoughtInGame: player.visionWardsBoughtInGame,
+                    
+                    // Objectives
+                    damageDealtToObjectives: player.damageDealtToObjectives,
+                    dragonKills: player.dragonKills,
+                    firstTowerTakedown: player.firstTowerKill || player.firstTowerAssist,
+                    firstBloodTakedown: player.firstBloodKill || player.firstBloodAssist,
                 
                     // Fun
-                    firstBloodKill: stats.firstBloodKill,
-                    firstBloodAssist: stats.firstBloodAssist,
-                    firstTowerKill: stats.firstTowerKill,
-                    firstTowerAssist: stats.firstTowerAssist,
-                    turretKills: stats.turretKills,
-                    doubleKills: stats.doubleKills,
-                    tripleKills: stats.tripleKills,
-                    quadraKills: stats.quadraKills,
-                    pentaKills: stats.pentaKills,
+                    firstBloodKill: player.firstBloodKill,
+                    firstBloodAssist: player.firstBloodAssist,
+                    firstTowerKill: player.firstTowerKill,
+                    firstTowerAssist: player.firstTowerAssist,
+                    turretKills: player.turretKills,
+                    doubleKills: player.doubleKills,
+                    tripleKills: player.tripleKills,
+                    quadraKills: player.quadraKills,
+                    pentaKills: player.pentaKills,
                 
                     // Timeline
                     csDiff10: timelineStats[+i+1].CSD10,
@@ -259,50 +257,53 @@ async function saveGame(matchId, tCode) {
                     goldDiff10: timelineStats[+i+1].GDD10,
                     goldDiff20: timelineStats[+i+1].GDD20,
                     goldDiff30: timelineStats[+i+1].GDD30,
-                    lane: laneAssignments[+i+1],
+                    lane: laneAssignments[String(player.participantId)],
 
                     goldMap: timelineStats[+i+1].goldMap,
                     csMap: timelineStats[+i+1].csMap,
                     xpMap: timelineStats[+i+1].xpMap,
                     
                     items: [
-                        stats.item0,
-                        stats.item1,
-                        stats.item2,
-                        stats.item3,
-                        stats.item4,
-                        stats.item5
+                        player.item0,
+                        player.item1,
+                        player.item2,
+                        player.item3,
+                        player.item4,
+                        player.item5
                     ],
-                    trinket: stats.item6,
+                    trinket: player.item6,
 
                     primaryRunes: [
-                      stats.perk0,
-                      stats.perk1,
-                      stats.perk2,
-                      stats.perk3  
+                        player.perks.styles[0].selections[0].perk,
+                        player.perks.styles[0].selections[1].perk,
+                        player.perks.styles[0].selections[2].perk,
+                        player.perks.styles[0].selections[3].perk
                     ],
 
                     secondaryRunes: [
-                        stats.perk4,
-                        stats.perk5
+                        player.perks.styles[1].selections[0].perk,
+                        player.perks.styles[1].selections[1].perk
                     ],
 
                     shards: [
-                        stats.statPerk0,
-                        stats.statPerk1,
-                        stats.statPerk2,
+                        player.perks.statPerks.defense,
+                        player.perks.statPerks.flex,
+                        player.perks.statPerks.offense
                     ],
 
-                    summoners: [
-                        player.spell1Id,
-                        player.spell2Id
-                    ],
+                    summoner1Id: player.summoner1Id,
+                    summoner1Casts: player.summoner1Casts,
+                    summoner2Id: player.summoner2Id,
+                    summoner2Casts: player.summoner2Casts,
 
-                    primaryStyle: stats.perkPrimaryStyle,
-                    secondaryStyle: stats.perkSubStyle,
+                    primaryStyle :player.perks.styles[1].style,
+                    secondaryStyle: player.perks.styles[1].style,
 
                     // Computed
-                    damagePerGold: stats.totalDamageDealtToChampions / stats.goldEarned,
+                    damagePerGold: player.totalDamageDealtToChampions / player.goldEarned,
+                    goldShare: player.goldEarned / teamTotals[player.teamId].gold,
+                    damageShare: player.totalDamageDealtToChampions / teamTotals[player.teamId].damageDealt,
+                    visionShare: player.visionScore / teamTotals[player.teamId].vision
                 });
             }
             console.log(`Added ${matchId} to db`);
@@ -311,99 +312,6 @@ async function saveGame(matchId, tCode) {
             console.log(error.message);
         }
     )
-}
-
-
-// Get the backend teams for participants
-// Participants is 10 length. first 5 are blue team, second 5 are red team
-// Returns [blueTeam, redTeam]
-async function getTeams(participants) {
-    let participantsCopy = JSON.parse(JSON.stringify(participants));
-
-    function getTeam(members) {
-        let teamCounter = {}
-        for (const member of members) {
-            for (const teamId of member.teams) {
-                if (!teamCounter[teamId]) { teamCounter[teamId] = 0 }
-                teamCounter[teamId] += 1;
-            }
-        }
-
-        if (0 === Object.keys(teamCounter).length) {
-            return "000000000000";
-        }
-
-        // Get the key with the largest value. This will be the valid team
-        // https://stackoverflow.com/questions/27376295/getting-key-with-the-highest-value-from-object
-        return Object.keys(teamCounter).reduce((a, b) => teamCounter[a] > teamCounter[b] ? a : b);
-    }
-    for ( let p of participantsCopy ) {
-        await createPlayer(p);
-    }
-
-    let ids = participantsCopy.splice(0, 5).map((p) => {
-        return p.player.accountId;
-    });
-    
-    const teams1 = await PlayerModel.find(
-        { 'accountId': { "$in": ids } }
-    );
-    
-    let team1 = getTeam(teams1);
-    team1 = await verifyTeam(team1);
-    // participants has already been spliced
-    ids = participantsCopy.map((p) => {
-        return p.player.accountId;
-    });
-
-    const teams2 = await PlayerModel.find(
-        { 'accountId': { "$in": ids } }
-    );
-    let team2 = getTeam(teams2);
-    team2 = await verifyTeam(team2);
-    // [blue, red]
-    return [team1._id, team2._id];
-}
-
-// Ensure team exists and create if it doesn't
-async function verifyTeam(teamId) {
-    let team = await TeamModel.findById(mongoose.Types.ObjectId(teamId));
-    if (team === null) {
-        team = await TeamModel.findOne({teamname: 'Unknown'});
-        if (team === null) {
-            team = await TeamModel.create({
-                teamshortname: 'UKN',
-                teamname: 'Unknown',
-            });
-        }
-    }
-    console.log(team);
-    return team;
-}
-
-// Verifies player exists within our database, if not, it creates the player
-// Returns mongo [player, team] objects
-async function verifyExistence(accountId, teamId) {
-
-    // Check/create player
-    let player = await verifyPlayer(accountId);
-    
-    // Check/create Team
-    let team = await verifyTeam(teamId);
-    console.log("p");    
-
-    if (!player.teams.includes(team._id)) {
-        player.teams.push(team._id);
-        player.save();
-    }
-
-    if (!team.players.includes(player._id)) {
-        team.players.push(player._id);
-        team.save();
-    }
-
-    return [player, team];
-    
 }
 
 
@@ -428,8 +336,10 @@ async function verifyExistence(accountId, teamId) {
 // ]).then(() => {
 //     console.log("donezo")
 // });
-
+saveGame("NA1_4039543209");
+saveGame("NA1_4039703136");
 module.exports = {
     'saveGames': saveGames,
-    'saveGame': saveGame
+    'saveGame': saveGame,
+    'updateGames': updateGames
 }

@@ -13,7 +13,7 @@ async function createNewTournament(name) {
   }
   console.log(url);
   return makeRequest(url, "POST",
-    process.env.RIOT_TOURNEY_API,
+    process.env.RIOT_API,
     {
         "name": name,
         "providerId": process.env.TOURNEY_ID
@@ -58,7 +58,7 @@ async function requestMatchCodes(count, id) {
     // url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   console.log(url);
-  return makeRequest(url, "POST", process.env.RIOT_TOURNEY_API,
+  return makeRequest(url, "POST", process.env.RIOT_API,
       {
           "mapType": "SUMMONERS_RIFT",
           "metadata": `${id}`,
@@ -79,7 +79,7 @@ async function updateCodes(codes) {
   for (let code of codes) {
     let url = process.env.NA_BASE + `/lol/match/v4/matches/by-tournament-code/${code.code}/ids`
     try {
-      let response = await makeRequest(url, "GET", process.env.RIOT_TOURNEY_API);
+      let response = await makeRequest(url, "GET", process.env.RIOT_API);
       let ids = await response.json();
       saveGames(ids, code.code);
     } catch (error) { }

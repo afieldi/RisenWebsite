@@ -1,5 +1,4 @@
 const router = require('express').Router();
-let Team = require('../models/team.model');
 const Season = require("../models/season.model");
 let Game = require('../models/game.model');
 let TeamGame = require('../models/teamgame.model');
@@ -54,33 +53,33 @@ router.route('/new').post((req, res) => {
   }
 });
 
-router.route('/:season').get((req, res) => {
-  const season = req.params.season;
-  let id;
-  try {
-    id = mongoose.Types.ObjectId(season);
-  } catch (error) {
-    res.status(400).json("Invalid season ID");
-    return;
-  }
-  Season.findById().then(season => {
-    Team.aggregate(
-      [
-          {$match: {season: season._id}},
-          {$lookup: {
-              from: 'players',
-              localField: 'players',
-              foreignField: '_id',
-              as: 'playerObject'
-          }}
-      ])
-      .then(teams => res.json({
-          season: season,
-          teams: teams
-      }))
-      .catch(err => res.status(400).json('Error: ' + err));
-  }).catch(err => res.status(404).json("Couldn't find season: " + err));
-})
+// router.route('/:season').get((req, res) => {
+//   const season = req.params.season;
+//   let id;
+//   try {
+//     id = mongoose.Types.ObjectId(season);
+//   } catch (error) {
+//     res.status(400).json("Invalid season ID");
+//     return;
+//   }
+//   Season.findById().then(season => {
+//     Team.aggregate(
+//       [
+//           {$match: {season: season._id}},
+//           {$lookup: {
+//               from: 'players',
+//               localField: 'players',
+//               foreignField: '_id',
+//               as: 'playerObject'
+//           }}
+//       ])
+//       .then(teams => res.json({
+//           season: season,
+//           teams: teams
+//       }))
+//       .catch(err => res.status(400).json('Error: ' + err));
+//   }).catch(err => res.status(404).json("Couldn't find season: " + err));
+// })
 
 router.route('/games/:season').delete((req, res) => {
   const season = req.params.season;

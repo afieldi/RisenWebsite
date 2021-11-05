@@ -127,23 +127,38 @@ function getStats(timeline, playerRoles) {
 
                     stats[event.victimId].deathMap.push([event.position.x, event.position.y, event.timestamp]);
 
-                    if (event.assistingParticipantIds.length === 0) {
-                        if(event.killerId > 0) {
-                            stats[event.killerId].soloKills += 1;
+                    let assistIds = [];
+                    for (let dmgInstance of event.victimDamageReceived) {
+                        if (dmgInstance.participantId &&
+                            dmgInstance.participantId !== event.killerId) {
+                            assistIds.push(dmgInstance.participantId);
                         }
-                        stats[event.victimId].soloDeaths += 1;
                     }
-                    else {
-                        for(const id of event.assistingParticipantIds) {
-                            stats[id].assistMap.push([event.position.x, event.position.y, event.timestamp]);
-                            if (event.timestamp < 900000) { // 15 min
-                                stats[id].assists15 += 1;
 
-                                if(playerRoles[id] === "JUNGLE") {
-                                    if(event.killerId > 0) {
-                                        stats[event.killerId].gankKills += 1;
+                    // Only count these kills pre-15
+                    // (solo + jungle camp)
+                    if (event.timestamp < 900000)
+                    {
+                        if (assistIds.length === 0) {
+                            // Solo bolo
+                            if(event.killerId > 0) {
+                                stats[event.killerId].soloKills += 1;
+                            }
+                            stats[event.victimId].soloDeaths += 1;
+                        }
+                        else {
+                            // Camping nerds
+                            for(const id of assistIds) {
+                                stats[id].assistMap.push([event.position.x, event.position.y, event.timestamp]);
+                                if (event.timestamp < 900000) { // 15 min
+                                    stats[id].assists15 += 1;
+    
+                                    if(playerRoles[id] === "JUNGLE") {
+                                        if(event.killerId > 0) {
+                                            stats[event.killerId].gankKills += 1;
+                                        }
+                                        stats[event.victimId].gankDeaths += 1;
                                     }
-                                    stats[event.victimId].gankDeaths += 1;
                                 }
                             }
                         }

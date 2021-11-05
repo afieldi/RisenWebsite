@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { customRound, getChampName } from '../../Helpers';
+import { customRound, getChampName, msToMin } from '../../Helpers';
 import { withRouter } from 'react-router-dom';
 import { Button, Dropdown, Container, ProgressBar } from "react-bootstrap";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, ResponsiveContainer } from 'recharts';
@@ -67,6 +67,7 @@ class BasicStats extends Component {
 
   createRadarChartData() {
       // TODO: Your text values don't change when changing the targeted role in filter
+      let gameTime = msToMin(this.accStats['avg_gameDuration']);
       let radarElements = [
           () => {
               let v1 = customRound((this.accStats['avg_kills'] + this.accStats['avg_assists']) / this.accStats['avg_deaths'], 4);
@@ -81,8 +82,8 @@ class BasicStats extends Component {
               }
             },
             () => { 
-              let v1 = customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.accStats['avg_gameDuration'], 4);
-              let v2 = customRound(((this.avgData['avg_totalMinionsKilled'] + this.avgData['avg_neutralMinionsKilled'])*60)/this.avgData['avg_gameDuration'], 4);
+              let v1 = customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled']))/gameTime, 4);
+              let v2 = customRound(((this.avgData['avg_totalMinionsKilled'] + this.avgData['avg_neutralMinionsKilled']))/gameTime, 4);
               v1 = v1 ? v1 : 0;
               v2 = v2 ? v2 : 0;
               let vm = v2 * 1.25;
@@ -93,8 +94,8 @@ class BasicStats extends Component {
               }
           },
           () => { 
-              let v1 = customRound((this.accStats['avg_totalDamageDealtToChampions']*60)/this.accStats['avg_gameDuration'], 4);
-              let v2 = customRound((this.avgData['avg_totalDamageDealtToChampions']*60)/this.avgData['avg_gameDuration'], 4);
+              let v1 = customRound((this.accStats['avg_totalDamageDealtToChampions'])/gameTime, 4);
+              let v2 = customRound((this.avgData['avg_totalDamageDealtToChampions'])/gameTime, 4);
               v1 = v1 ? v1 : 0;
               v2 = v2 ? v2 : 0;
               let vm = v2 * 1.25;
@@ -106,8 +107,8 @@ class BasicStats extends Component {
           },
           () => {
               
-              let v1 = customRound((this.accStats['avg_visionScore']*60)/this.accStats['avg_gameDuration'], 4);
-              let v2 = customRound((this.avgData['avg_visionScore']*60)/this.avgData['avg_gameDuration'], 4);
+              let v1 = customRound((this.accStats['avg_visionScore'])/gameTime, 4);
+              let v2 = customRound((this.avgData['avg_visionScore'])/gameTime, 4);
               v1 = v1 ? v1 : 0;
               v2 = v2 ? v2 : 0;
               let vm = v2 * 1.25;
@@ -119,8 +120,8 @@ class BasicStats extends Component {
           },
           () => {
               
-              let v1 = customRound((this.accStats['avg_goldEarned']*60)/this.accStats['avg_gameDuration'], 4);
-              let v2 = customRound((this.avgData['avg_goldEarned']*60)/this.avgData['avg_gameDuration'], 4);
+              let v1 = customRound((this.accStats['avg_goldEarned'])/gameTime, 4);
+              let v2 = customRound((this.avgData['avg_goldEarned'])/gameTime, 4);
               v1 = v1 ? v1 : 0;
               v2 = v2 ? v2 : 0;
               let vm = v2 * 1.25;
@@ -132,8 +133,8 @@ class BasicStats extends Component {
           },
           () => {
               
-              let v1 = customRound((this.accStats['avg_wardsKilled']*60)/this.accStats['avg_gameDuration'], 4);
-              let v2 = customRound((this.avgData['avg_wardsKilled']*60)/this.avgData['avg_gameDuration'], 4);
+              let v1 = customRound((this.accStats['avg_wardsKilled'])/gameTime, 4);
+              let v2 = customRound((this.avgData['avg_wardsKilled'])/gameTime, 4);
               v1 = v1 ? v1 : 0;
               v2 = v2 ? v2 : 0;
               let vm = v2 * 1.25;
@@ -170,7 +171,8 @@ class BasicStats extends Component {
     return customRound((this.props.accStats['avg_kills'] + this.props.accStats['avg_assists'])/d, 2);
   }
   getCspm() {
-    return customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled'])*60)/this.props.accStats['avg_gameDuration']);
+    console.log(this.props.accStats)
+    return customRound(((this.accStats['avg_totalMinionsKilled'] + this.accStats['avg_neutralMinionsKilled']))/msToMin(this.props.accStats['avg_gameDuration']));
   }
   getKDAP() {
       // return
