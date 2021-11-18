@@ -11,12 +11,12 @@ async function createNewTournament(name) {
   else {
     url += `/lol/tournament-stub/v4/tournaments`;
   }
-  console.log(url);
+
   return makeRequest(url, "POST",
-    process.env.RIOT_API,
+    process.env.RIOT_TOURNEY_API,
     {
         "name": name,
-        "providerId": process.env.TOURNEY_ID
+        "providerId": Number(process.env.TOURNEY_ID)
     },
   ).then(response => {
     
@@ -58,7 +58,7 @@ async function requestMatchCodes(count, id) {
     // url += `/lol/tournament/v4/codes?count=${count}&tournamentId=${id}`;
   }
   console.log(url);
-  return makeRequest(url, "POST", process.env.RIOT_API,
+  return makeRequest(url, "POST", process.env.RIOT_TOURNEY_API,
       {
           "mapType": "SUMMONERS_RIFT",
           "metadata": `${id}`,

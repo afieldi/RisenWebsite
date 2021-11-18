@@ -336,8 +336,8 @@ async function saveGame(matchId) {
 // ]).then(() => {
 //     console.log("donezo")
 // });
-saveGame("NA1_4039543209");
-saveGame("NA1_4039703136");
+// saveGame("NA1_4039543209");
+// saveGame("NA1_4039703136");
 module.exports = {
     'saveGames': saveGames,
     'saveGame': saveGame,

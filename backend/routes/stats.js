@@ -476,7 +476,7 @@ router.route('/brief').get((req, res) => {
                     "dpm": 0,
                     "gpm": 0
                 }
-            ])
+            ]);
         }
         res.json(games)
     }, (err) => {
