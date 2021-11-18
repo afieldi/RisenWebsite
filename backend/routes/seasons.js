@@ -7,9 +7,9 @@ const { findCreateSeason } = require('../src/season');
 const { blockAll, blockNotGet, blockNone } = require('../helper');
 const mongoose = require('mongoose');
 
-// router.use('/', (req, res, next) => {
-//   blockNotGet(req, res, next, 1);
-// });
+router.use('/', (req, res, next) => {
+  blockNotGet(req, res, next, 1);
+});
 router.use('/new', (req, res, next) => {
   blockAll(req, res, next, 1);
 });
@@ -45,6 +45,7 @@ router.route('/new').post((req, res) => {
     findCreateSeason(body.name).then(seasonBO => {
       res.json(seasonBO);
     }).catch(err => {
+      console.log(err);
       res.status(500).json(err);
     });
   }

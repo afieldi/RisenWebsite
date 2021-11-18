@@ -29,7 +29,7 @@ function makeRequest(url, method, key, body) {
             return await makeRequest(url, method, key, body)
         }
         else {
-            throw new Error(response.text);
+            throw new Error(await response.text());
         }
     });
 }
